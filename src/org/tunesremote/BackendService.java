@@ -1,0 +1,157 @@
+/*
+    TunesRemote+ - http://code.google.com/p/tunesremote-plus/
+    
+    Copyright (C) 2008 Jeffrey Sharkey, http://jsharkey.org/
+    Copyright (C) 2010 TunesRemote+, http://code.google.com/p/tunesremote-plus/
+    
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+    The Initial Developer of the Original Code is Jeffrey Sharkey.
+    Portions created by Jeffrey Sharkey are
+    Copyright (C) 2008. Jeffrey Sharkey, http://jsharkey.org/
+    All Rights Reserved.
+ */
+
+package org.tunesremote;
+
+import org.tunesremote.daap.Session;
+import org.tunesremote.util.PairingDatabase;
+
+import android.app.Service;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.os.Binder;
+import android.os.IBinder;
+import android.util.Log;
+
+public class BackendService extends Service {
+
+   public final static String TAG = BackendService.class.toString();
+   public final static String PREFS = "tunesremote", PREF_LASTADDR = "lastaddress";
+   public final static String EXTRA_LIBRARY = "library", EXTRA_ADDRESS = "address", EXTRA_CODE = "code";
+
+   // this service keeps a single session active that others can attach to
+   // also handles incoming control information from libraryactivity
+
+   protected Session session = null;
+   protected String lastaddress = null;
+   protected SharedPreferences prefs;
+   protected PairingDatabase pairdb;
+   private final IBinder binder = new BackendBinder();
+
+   public Session getSession() {
+      // make sure we have an active session
+      // create from last-known connection if needed
+
+      if (session == null) {
+         // try finding last library opened by user
+         this.lastaddress = prefs.getString(PREF_LASTADDR, null);
+         Log.d(TAG, String.format("tried looking for lastaddr=%s", lastaddress));
+         if (this.lastaddress != null) {
+            try {
+               this.setLibrary(this.lastaddress, null, null);
+            } catch (Exception e) {
+               Log.w(TAG, "getSession:" + e.getMessage());
+            }
+         }
+      }
+
+      return session;
+
+   }
+
+   public void setLibrary(String address, String library, String code) throws Exception {
+      // try starting a new session
+      // if failed, launch pairing activity
+
+      // try looking up code in database if null
+      if (code == null) {
+         if (library != null) {
+            code = pairdb.findCodeLibrary(library);
+         } else if (address != null) {
+            code = pairdb.findCodeAddress(address);
+         }
+      }
+
+      Log.d(TAG, String.format("Session with address=%s, library=%s, code=%s", address, library, code));
+
+      this.session = new Session(address, code);
+
+      // if we made it past this point, then we logged in successfully yay
+      Log.d(TAG, "yay found session!  were gonna update our db a new code maybe?");
+
+      // if we have a library, we should make sure that its stored in our db
+      // create a new entry, otherwise just update the ip address
+      if (library != null) {
+         // if (!pairdb.libraryExists(library)) {
+         pairdb.insertCode(address, library, code);
+         // } else {
+         pairdb.updateAddress(library, address);
+         // }
+      }
+
+      // save this ip address to help us start faster
+      Editor edit = prefs.edit();
+      edit.putString(PREF_LASTADDR, address);
+      edit.commit();
+
+   }
+
+   @Override
+   public void onCreate() {
+      Log.d(TAG, "starting backend service");
+      this.pairdb = new PairingDatabase(this);
+   }
+
+   @Override
+   public void onDestroy() {
+      // close any dns services and current status threads
+      // store information about last-connected library
+
+      Log.d(TAG, "stopping backend service");
+
+      this.pairdb.close();
+   }
+
+   public class BackendBinder extends Binder {
+      public BackendService getService() {
+         return BackendService.this;
+      }
+   }
+
+   @Override
+   public IBinder onBind(Intent intent) {
+      return binder;
+   }
+
+   /**
+    * Gets the prefs.
+    * <p>
+    * @return Returns the prefs.
+    */
+   public SharedPreferences getPrefs() {
+      return prefs;
+   }
+
+   /**
+    * Sets the prefs.
+    * <p>
+    * @param prefs The prefs to set.
+    */
+   public void setPrefs(SharedPreferences prefs) {
+      this.prefs = prefs;
+   }
+
+}
