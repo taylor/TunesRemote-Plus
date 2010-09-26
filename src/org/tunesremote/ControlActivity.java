@@ -256,6 +256,7 @@ public class ControlActivity extends Activity implements ViewFactory {
    @Override
    public void onStop() {
       super.onStop();
+      Log.w(TAG, "Stopping TunesRemote...");
       try {
          if (!this.stayConnected && session != null)
             session.purgeAllStatus();
@@ -273,9 +274,6 @@ public class ControlActivity extends Activity implements ViewFactory {
       try {
          if (session != null)
             session.purgeAllStatus();
-         if (backend != null) {
-            this.unbindService(connection);
-         }
          session = null;
          backend = null;
       } catch (Exception ex) {
