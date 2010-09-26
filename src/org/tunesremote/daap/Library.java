@@ -29,8 +29,7 @@ import java.net.URLEncoder;
 import java.util.regex.Pattern;
 
 import org.tunesremote.PlaylistsAdapter;
-import org.tunesremote.daap.ResponseParser.TagListener;
-import org.tunesremote.daap.Session.Playlist;
+import org.tunesremote.TagListener;
 
 import android.util.Log;
 
@@ -52,7 +51,6 @@ public class Library {
    public long readSearch(TagListener listener, String search, long start, long items) {
 
       long total = -1;
-      long hits = -1;
       try {
 
          // http://192.168.254.128:3689/databases/36/containers/113/items?session-id=1535976870&revision-number=61&meta=dmap.itemname,dmap.itemid,daap.songartist,daap.songalbum&type=music&sort=name&include-sort-headers=1&query='dmap.itemname:*sea*'&index=0-7
@@ -75,7 +73,7 @@ public class Library {
 
       Log.d(TAG, String.format("readSearch() finished start=%d, items=%d, total=%d", start, items, total));
 
-      return hits;
+      return total;
    }
 
    public void readArtists(TagListener listener) {

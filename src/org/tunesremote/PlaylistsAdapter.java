@@ -27,7 +27,7 @@ package org.tunesremote;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.tunesremote.daap.Session.Playlist;
+import org.tunesremote.daap.Playlist;
 
 import android.content.Context;
 import android.os.Handler;

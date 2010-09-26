@@ -25,6 +25,7 @@
 
 package org.tunesremote.daap;
 
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.tunesremote.util.ThreadExecutor;
@@ -33,32 +34,68 @@ import android.graphics.Bitmap;
 import android.os.Handler;
 import android.util.Log;
 
+/**
+ * Status handles status information, including background timer thread also
+ * subscribes to keep-alive event updates.
+ * <p>
+ */
 public class Status {
-
-   // handles status information, including background timer thread
-   // also subscribes to keep-alive event updates
 
    public final static String TAG = Status.class.toString();
 
-   public final static int REPEAT_OFF = 0, REPEAT_SINGLE = 1, REPEAT_ALL = 2, SHUFFLE_OFF = 0, SHUFFLE_ON = 1,
-            STATE_PAUSED = 3, STATE_PLAYING = 4;
+   /**
+    * Constants
+    */
+   public final static int REPEAT_OFF = 0;
+   public final static int REPEAT_SINGLE = 1;
+   public final static int REPEAT_ALL = 2;
+   public final static int SHUFFLE_OFF = 0;
+   public final static int SHUFFLE_ON = 1;
+   public final static int STATE_PAUSED = 3;
+   public final static int STATE_PLAYING = 4;
+   public final static int UPDATE_PROGRESS = 2;
+   public final static int UPDATE_STATE = 3;
+   public final static int UPDATE_TRACK = 4;
+   public final static int UPDATE_COVER = 5;
+   private final static int MAX_FAILURES = 10;
 
-   protected int repeatStatus = REPEAT_OFF, shuffleStatus = SHUFFLE_OFF, playStatus = STATE_PAUSED;
-   protected String trackName = "", trackArtist = "", trackAlbum = "";
-   protected long progressTotal = 0, progressRemain = 0;
+   /**
+    * Fields
+    */
+   public boolean coverEmpty = true;
+   public Bitmap coverCache = null;
    public String albumId = "";
-   protected final Session session;
-   protected Handler update = null;
-   protected static AtomicInteger failures = new AtomicInteger(0);
-   public final static int MAX_FAILURES = 10;
+   protected int repeatStatus = REPEAT_OFF, shuffleStatus = SHUFFLE_OFF, playStatus = STATE_PAUSED;
+   protected final AtomicBoolean destroyThread = new AtomicBoolean(false);
+   private String trackName = "", trackArtist = "", trackAlbum = "";
+   private long progressTotal = 0, progressRemain = 0;
+   private final Session session;
+   private Handler update = null;
+   private static AtomicInteger failures = new AtomicInteger(0);
+   private long revision = 1;
+
+   /**
+    * Constructor accepts a Session and UI Handler to update the UI.
+    * @param session
+    * @param update
+    */
+   public Status(Session session, Handler update) {
+      this.session = session;
+      this.update = update;
+
+      // create two threads, one for backend keep-alive updates
+      // and a second one to update running time and fire gui events
+
+      this.progress.start();
+      this.keepalive.start();
+
+      // keep our status updated with server however we need to
+      // end thread when getting any 404 responses, etc
+   }
 
    public void updateHandler(Handler handler) {
       this.update = handler;
    }
-
-   public final static int UPDATE_PROGRESS = 2, UPDATE_STATE = 3, UPDATE_TRACK = 4, UPDATE_COVER = 5;
-
-   protected boolean destroyThread = false;
 
    protected final Thread progress = new Thread(new Runnable() {
       public void run() {
@@ -66,7 +103,7 @@ public class Status {
             // when in playing state, keep moving progress forward
             while (playStatus == STATE_PLAYING) {
                // Log.d(TAG, "thread entering playing loop");
-               if (destroyThread)
+               if (destroyThread.get())
                   break;
                long anchor = System.currentTimeMillis();
                try {
@@ -78,7 +115,7 @@ public class Status {
                   continue;
                }
 
-               if (destroyThread)
+               if (destroyThread.get())
                   break;
 
                // update progress and gui
@@ -103,7 +140,7 @@ public class Status {
                   Log.d(TAG, "someone jolted us during STATE_PAUSED loop");
                }
 
-               if (destroyThread)
+               if (destroyThread.get())
                   break;
             }
 
@@ -115,7 +152,7 @@ public class Status {
                Log.d(TAG, "someone jolted us during OVERALL loop");
             }
 
-            if (destroyThread)
+            if (destroyThread.get())
                break;
          }
          Log.w(TAG, "Status Progress Thread Killed!");
@@ -128,7 +165,7 @@ public class Status {
             try {
                // sleep a few seconds to make sure we dont kill stuff
                Thread.sleep(1000);
-               if (destroyThread)
+               if (destroyThread.get())
                   break;
 
                // try fetching next revision update using socket keepalive
@@ -152,33 +189,12 @@ public class Status {
    public void destroy() {
       // destroy our internal thread
       Log.w(TAG, "trying to destroy internal status thread");
-      if (this.destroyThread)
+      if (this.destroyThread.get())
          return;
-      this.destroyThread = true;
+      this.destroyThread.set(true);
       this.progress.interrupt();
       this.keepalive.interrupt();
    }
-
-   public Status(Session session, Handler update) {
-      this.session = session;
-      this.update = update;
-
-      // create two threads, one for backend keep-alive updates
-      // and a second one to update running time and fire gui events
-
-      this.progress.start();
-      this.keepalive.start();
-
-      // keep our status updated with server however we need to
-      // end thread when getting any 404 responses, etc
-
-      // http://192.168.254.128:3689/ctrl-int/1/playstatusupdate?revision-number=1&session-id=1940361390
-      // call handleUpdate() with any responses
-
-   }
-
-   protected long revision = 1;
-   protected int errors = 0;
 
    public void fetchUpdate() {
       Log.d(TAG, "Fetching Update From Server...");
@@ -223,9 +239,9 @@ public class Status {
          this.progress.interrupt();
       }
 
-      String trackName = resp.getString("cann");
-      String trackArtist = resp.getString("cana");
-      String trackAlbum = resp.getString("canl");
+      final String trackName = resp.getString("cann");
+      final String trackArtist = resp.getString("cana");
+      final String trackAlbum = resp.getString("canl");
 
       this.albumId = resp.getNumberString("asai");
 
@@ -254,13 +270,7 @@ public class Status {
       // send off updated event to gui
       if (update != null)
          this.update.sendEmptyMessage(updateType);
-
-      // TODO: retrigger the keepalive thread with new revision number
-
    }
-
-   public boolean coverEmpty = true;
-   public Bitmap coverCache = null;
 
    public void fetchCover() {
       if (coverCache == null) {
@@ -298,7 +308,6 @@ public class Status {
       /*
        * cmgt --+ mstt 4 000000c8 == 200 cmvo 4 00000054 == 84
        */
-
    }
 
    public int getProgress() {

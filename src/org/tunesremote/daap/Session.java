@@ -35,14 +35,13 @@ import android.os.Handler;
 import android.util.Log;
 
 public class Session {
-
    public final static String TAG = Session.class.toString();
 
-   protected String host;
+   private final String host;
+   private static Status singleton = null;
    public String sessionId;
    public long databaseId, musicId;
    public String databasePersistentId;
-   private static Status singleton = null;
    public final List<Playlist> playlists = new LinkedList<Playlist>();
 
    public Session(String host, String pairingGuid) throws Exception {
@@ -90,17 +89,6 @@ public class Session {
          }
       }
       Log.d(TAG, String.format("found music-id=%s", this.musicId));
-
-      /*
-       * aply --+ mstt 4 000000c8 == 200 muty 1 00 == 0 mtco 4 0000000c == 12
-       * mrco 4 0000000c == 12 mlcl --+ mlit --+ miid 4 0000360b == 13835 mper 8
-       * a0d34e8b826151fd == 11588692627249254909 minm 16
-       * 75736572e2809973204c696272617279 abpl 1 01 == 1 mpco 4 00000000 == 0
-       * meds 4 00000000 == 0 mimc 4 000017f5 == 6133 mlit --+ miid 4 0000692c
-       * == 26924 mper 8 a0d34e8b82615207 == 11588692627249254919 minm 5 Music
-       * aeSP 1 01 == 1 mpco 4 00000000 == 0 aePS 1 06 == 6 meds 4 00000000 == 0
-       * mimc 4 000017d8 == 6104
-       */
    }
 
    private Status createStatus(Handler handler) {
@@ -111,7 +99,7 @@ public class Session {
    }
 
    public Status singletonStatus(Handler handler) {
-      if (singleton == null || singleton.destroyThread)
+      if (singleton == null || singleton.destroyThread.get())
          singleton = this.createStatus(handler);
       return singleton;
    }
@@ -219,7 +207,6 @@ public class Session {
    }
 
    public void controlQueueAlbum(final String albumid) {
-
       ThreadExecutor.runTask(new Runnable() {
          public void run() {
             RequestHelper.attemptRequest(String.format(
@@ -229,11 +216,9 @@ public class Session {
             notifyStatus();
          }
       });
-
    }
 
    public void controlPlayArtist(String artist, int index) {
-
       // http://192.168.254.128:3689/ctrl-int/1/cue?command=clear&session-id=130883770
       // /ctrl-int/1/cue?command=play&query=(('com.apple.itunes.mediakind:1','com.apple.itunes.mediakind:32')+'daap.songartist:Family%20Force%205')&index=0&sort=album&session-id=130883770
       // /ctrl-int/1/cue?command=play&query='daap.songartist:%s'&index=0&sort=album&session-id=%s
@@ -252,11 +237,9 @@ public class Session {
             notifyStatus();
          }
       });
-
    }
 
    public void controlQueueArtist(String artist) {
-
       final String encodedArtist = URLEncoder.encode(artist).replaceAll("\\+", "%20");
 
       ThreadExecutor.runTask(new Runnable() {
@@ -267,11 +250,9 @@ public class Session {
             notifyStatus();
          }
       });
-
    }
 
    public void controlQueueTrack(final String track) {
-
       ThreadExecutor.runTask(new Runnable() {
          public void run() {
             RequestHelper.attemptRequest(String.format(
@@ -280,7 +261,6 @@ public class Session {
             notifyStatus();
          }
       });
-
    }
 
    public void controlPlaySearch(final String search, final int index) {
@@ -305,7 +285,6 @@ public class Session {
 
    public void controlPlayPlaylist(final String playlistPersistentId, final String containerItemId) {
       // /ctrl-int/1/playspec?database-spec='dmap.persistentid:0x9031099074C14E05'&container-spec='dmap.persistentid:0xA1E1854E0B9A1B'&container-item-spec='dmap.containeritemid:0x1b47'&session-id=7491138
-
       final String databasePersistentId = this.databasePersistentId;
 
       ThreadExecutor.runTask(new Runnable() {
@@ -319,7 +298,6 @@ public class Session {
             notifyStatus();
          }
       });
-
    }
 
    public void controlPlayIndex(final String albumid, final int tracknum) {
@@ -327,7 +305,6 @@ public class Session {
       // album
       ThreadExecutor.runTask(new Runnable() {
          public void run() {
-
             try {
                RequestHelper.request(String.format("%s/ctrl-int/1/cue?command=play&index=%d&sort=album&session-id=%s",
                         getRequestBase(), tracknum, sessionId), false);
@@ -348,36 +325,5 @@ public class Session {
             notifyStatus();
          }
       });
-
    }
-
-   public class Playlist {
-      protected long ID;
-      protected String name, persistentId;
-      protected long count;
-
-      public Playlist(long ID, String name, long count, String persistentId) {
-         this.ID = ID;
-         this.name = name;
-         this.count = count;
-         this.persistentId = persistentId;
-      }
-
-      public long getID() {
-         return this.ID;
-      }
-
-      public String getName() {
-         return this.name;
-      }
-
-      public long getCount() {
-         return this.count;
-      }
-
-      public String getPersistentId() {
-         return this.persistentId;
-      }
-   }
-
 }

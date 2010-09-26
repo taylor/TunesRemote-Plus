@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- 
+/*
     TunesRemote+ - http://code.google.com/p/tunesremote-plus/
     
     Copyright (C) 2008 Jeffrey Sharkey, http://jsharkey.org/
@@ -22,30 +21,22 @@
     Portions created by Jeffrey Sharkey are
     Copyright (C) 2008. Jeffrey Sharkey, http://jsharkey.org/
     All Rights Reserved.
--->
+ */
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent"
-	android:layout_height="wrap_content"
-	android:padding="10dip"
-	android:orientation="horizontal"
-	android:gravity="center_vertical"
-	>
-	
-	<ProgressBar
-        android:id="@+id/fetchProgress"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:paddingRight="10dip"
-		style="?android:attr/progressBarStyleSmall"
-		/>
-	
-	<TextView
-		android:id="@+id/fetchText"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:textAppearance="?android:attr/textAppearanceMedium"
-		android:text="@string/item_fetch"
-		/>
-		
-</LinearLayout>
+package org.tunesremote;
+
+import org.tunesremote.daap.Response;
+
+/**
+ * Interface used to process a binary HTTP response from the HTTP Server and
+ * look for specific tag values. When complete the searchDone() method is used
+ * as a callback to let the UI know it is complete.
+ * <p>
+ */
+public interface TagListener {
+
+   public void foundTag(String tag, Response resp);
+
+   public void searchDone();
+
+}

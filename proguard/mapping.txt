@@ -1304,7 +1304,7 @@ org.tunesremote.PlaylistsActivity$3 -> org.tunesremote.bd:
     void onItemClick(android.widget.AdapterView,android.view.View,int,long) -> onItemClick
 org.tunesremote.PlaylistsActivity$4 -> org.tunesremote.be:
     java.lang.String val$playlistid -> a
-    org.tunesremote.daap.Session$Playlist val$ply -> b
+    org.tunesremote.daap.Playlist val$ply -> b
     org.tunesremote.PlaylistsActivity this$0 -> c
     boolean onMenuItemClick(android.view.MenuItem) -> onMenuItemClick
 org.tunesremote.PlaylistsAdapter -> org.tunesremote.bf:
@@ -1316,7 +1316,7 @@ org.tunesremote.PlaylistsAdapter -> org.tunesremote.bf:
     java.lang.Object getItem(int) -> getItem
     long getItemId(int) -> getItemId
     android.view.View getView(int,android.view.View,android.view.ViewGroup) -> getView
-    void foundPlaylist(org.tunesremote.daap.Session$Playlist) -> a
+    void foundPlaylist(org.tunesremote.daap.Playlist) -> a
     void searchDone() -> a
     boolean hasStableIds() -> hasStableIds
 org.tunesremote.PrefsActivity -> org.tunesremote.PrefsActivity:
@@ -1384,6 +1384,9 @@ org.tunesremote.SearchActivity$SearchAdapter -> org.tunesremote.bm:
 org.tunesremote.SearchActivity$SearchAdapter$1 -> org.tunesremote.bn:
     org.tunesremote.SearchActivity$SearchAdapter this$1 -> a
     void run() -> run
+org.tunesremote.TagListener -> org.tunesremote.bo:
+    void foundTag$535923e9(org.tunesremote.daap.Response) -> a
+    void searchDone() -> a
 org.tunesremote.TracksActivity -> org.tunesremote.TracksActivity:
     org.tunesremote.BackendService backend -> a
     org.tunesremote.daap.Session session -> b
@@ -1400,35 +1403,35 @@ org.tunesremote.TracksActivity -> org.tunesremote.TracksActivity:
     void onStop() -> onStop
     void onCreate(android.os.Bundle) -> onCreate
     void onCreateContextMenu(android.view.ContextMenu,android.view.View,android.view.ContextMenu$ContextMenuInfo) -> onCreateContextMenu
-org.tunesremote.TracksActivity$1 -> org.tunesremote.bo:
+org.tunesremote.TracksActivity$1 -> org.tunesremote.bp:
     org.tunesremote.TracksActivity this$0 -> a
     void onServiceConnected(android.content.ComponentName,android.os.IBinder) -> onServiceConnected
     void onServiceDisconnected(android.content.ComponentName) -> onServiceDisconnected
-org.tunesremote.TracksActivity$2 -> org.tunesremote.bp:
+org.tunesremote.TracksActivity$2 -> org.tunesremote.bq:
     org.tunesremote.TracksActivity this$0 -> a
     void handleMessage(android.os.Message) -> handleMessage
-org.tunesremote.TracksActivity$3 -> org.tunesremote.bq:
+org.tunesremote.TracksActivity$3 -> org.tunesremote.br:
     org.tunesremote.TracksActivity this$0 -> a
     void onItemClick(android.widget.AdapterView,android.view.View,int,long) -> onItemClick
-org.tunesremote.TracksActivity$4 -> org.tunesremote.br:
+org.tunesremote.TracksActivity$4 -> org.tunesremote.bs:
     java.lang.String val$containerItemId -> a
     org.tunesremote.TracksActivity this$0 -> b
     boolean onMenuItemClick(android.view.MenuItem) -> onMenuItemClick
-org.tunesremote.TracksActivity$5 -> org.tunesremote.bs:
+org.tunesremote.TracksActivity$5 -> org.tunesremote.bt:
     org.tunesremote.TracksActivity this$0 -> a
     boolean onMenuItemClick(android.view.MenuItem) -> onMenuItemClick
-org.tunesremote.TracksActivity$6 -> org.tunesremote.bt:
+org.tunesremote.TracksActivity$6 -> org.tunesremote.bu:
     org.tunesremote.TracksActivity this$0 -> a
     boolean onMenuItemClick(android.view.MenuItem) -> onMenuItemClick
-org.tunesremote.TracksActivity$7 -> org.tunesremote.bu:
+org.tunesremote.TracksActivity$7 -> org.tunesremote.bv:
     android.widget.AdapterView$AdapterContextMenuInfo val$info -> a
     org.tunesremote.TracksActivity this$0 -> b
     boolean onMenuItemClick(android.view.MenuItem) -> onMenuItemClick
-org.tunesremote.TracksActivity$8 -> org.tunesremote.bv:
+org.tunesremote.TracksActivity$8 -> org.tunesremote.bw:
     java.lang.String val$trackid -> a
     org.tunesremote.TracksActivity this$0 -> b
     boolean onMenuItemClick(android.view.MenuItem) -> onMenuItemClick
-org.tunesremote.TracksActivity$TracksAdapter -> org.tunesremote.bw:
+org.tunesremote.TracksActivity$TracksAdapter -> org.tunesremote.bx:
     android.view.LayoutInflater inflater -> b
     java.util.List results -> a
     java.text.SimpleDateFormat format -> c
@@ -1450,23 +1453,23 @@ org.tunesremote.WizardActivity -> org.tunesremote.WizardActivity:
     boolean isFirstDisplayed() -> a
     boolean isLastDisplayed() -> b
     void updateButtons() -> c
-org.tunesremote.WizardActivity$1 -> org.tunesremote.bx:
+org.tunesremote.WizardActivity$1 -> org.tunesremote.by:
     org.tunesremote.WizardActivity this$0 -> a
     void onClick(android.view.View) -> onClick
-org.tunesremote.WizardActivity$2 -> org.tunesremote.by:
+org.tunesremote.WizardActivity$2 -> org.tunesremote.bz:
     org.tunesremote.WizardActivity this$0 -> a
     void onClick(android.view.View) -> onClick
 org.tunesremote.daap.Library -> org.tunesremote.a.a:
     java.util.regex.Pattern MLIT_PATTERN -> a
     org.tunesremote.daap.Session session -> b
-    long readSearch(org.tunesremote.daap.ResponseParser$TagListener,java.lang.String,long,long) -> a
-    void readArtists(org.tunesremote.daap.ResponseParser$TagListener) -> a
-    void readAlbums(org.tunesremote.daap.ResponseParser$TagListener,java.lang.String) -> a
-    void readTracks(java.lang.String,org.tunesremote.daap.ResponseParser$TagListener) -> a
-    void readAllTracks(java.lang.String,org.tunesremote.daap.ResponseParser$TagListener) -> b
+    long readSearch(org.tunesremote.TagListener,java.lang.String,long,long) -> a
+    void readArtists(org.tunesremote.TagListener) -> a
+    void readAlbums(org.tunesremote.TagListener,java.lang.String) -> a
+    void readTracks(java.lang.String,org.tunesremote.TagListener) -> a
+    void readAllTracks(java.lang.String,org.tunesremote.TagListener) -> b
     void readPlaylists(org.tunesremote.PlaylistsAdapter) -> a
-    void readPlaylist(java.lang.String,org.tunesremote.daap.ResponseParser$TagListener) -> c
-    void readNowPlaying(java.lang.String,org.tunesremote.daap.ResponseParser$TagListener) -> d
+    void readPlaylist(java.lang.String,org.tunesremote.TagListener) -> c
+    void readNowPlaying(java.lang.String,org.tunesremote.TagListener) -> d
 org.tunesremote.daap.PairingServer -> org.tunesremote.a.b:
     byte[] CHAR_TABLE -> a
     byte[] PAIRING_RAW -> b
@@ -1476,13 +1479,22 @@ org.tunesremote.daap.PairingServer -> org.tunesremote.a.b:
     void destroy() -> destroy
     void run() -> run
     java.lang.String toHex(byte[]) -> a
-org.tunesremote.daap.RequestHelper -> org.tunesremote.a.c:
+org.tunesremote.daap.Playlist -> org.tunesremote.a.c:
+    long ID -> a
+    java.lang.String name -> b
+    java.lang.String persistentId -> c
+    long count -> d
+    long getID() -> a
+    java.lang.String getName() -> b
+    java.lang.String getPersistentId() -> c
+    long getCount() -> d
+org.tunesremote.daap.RequestHelper -> org.tunesremote.a.d:
     org.tunesremote.daap.Response requestParsed(java.lang.String,boolean) -> a
     void attemptRequest(java.lang.String) -> a
     byte[] request(java.lang.String,boolean) -> b
     android.graphics.Bitmap requestThumbnail(org.tunesremote.daap.Session,int) -> a
     android.graphics.Bitmap requestBitmap(java.lang.String) -> b
-org.tunesremote.daap.Response -> org.tunesremote.a.d:
+org.tunesremote.daap.Response -> org.tunesremote.a.e:
     org.tunesremote.daap.Response getNested(java.lang.String) -> a
     java.lang.String getString(java.lang.String) -> b
     java.math.BigInteger getNumber(java.lang.String) -> g
@@ -1490,25 +1502,22 @@ org.tunesremote.daap.Response -> org.tunesremote.a.d:
     java.lang.String getNumberString(java.lang.String) -> d
     java.lang.String getNumberHex(java.lang.String) -> e
     java.util.List findArray(java.lang.String) -> f
-org.tunesremote.daap.ResponseParser -> org.tunesremote.a.e:
+org.tunesremote.daap.ResponseParser -> org.tunesremote.a.f:
     java.util.regex.Pattern BRANCHES -> a
     java.util.regex.Pattern STRINGS -> b
-    int performSearch(byte[],org.tunesremote.daap.ResponseParser$TagListener,java.util.regex.Pattern,boolean) -> a
-    org.tunesremote.daap.Response performParse(byte[],org.tunesremote.daap.ResponseParser$TagListener,java.util.regex.Pattern) -> a
+    int performSearch(byte[],org.tunesremote.TagListener,java.util.regex.Pattern,boolean) -> a
+    org.tunesremote.daap.Response performParse(byte[],org.tunesremote.TagListener,java.util.regex.Pattern) -> a
     org.tunesremote.daap.Response performParse(byte[]) -> a
-    int search(java.io.DataInputStream,org.tunesremote.daap.ResponseParser$TagListener,java.util.regex.Pattern,int,boolean) -> a
-    org.tunesremote.daap.Response parse(java.io.DataInputStream,org.tunesremote.daap.ResponseParser$TagListener,java.util.regex.Pattern,int) -> a
+    int search(java.io.DataInputStream,org.tunesremote.TagListener,java.util.regex.Pattern,int,boolean) -> a
+    org.tunesremote.daap.Response parse(java.io.DataInputStream,org.tunesremote.TagListener,java.util.regex.Pattern,int) -> a
     java.lang.String readString(java.io.DataInputStream,int) -> a
-org.tunesremote.daap.ResponseParser$TagListener -> org.tunesremote.a.f:
-    void foundTag$535923e9(org.tunesremote.daap.Response) -> a
-    void searchDone() -> a
 org.tunesremote.daap.Session -> org.tunesremote.a.g:
     java.lang.String host -> d
+    org.tunesremote.daap.Status singleton -> e
     java.lang.String sessionId -> a
     long databaseId -> b
-    long musicId -> e
-    java.lang.String databasePersistentId -> f
-    org.tunesremote.daap.Status singleton -> g
+    long musicId -> f
+    java.lang.String databasePersistentId -> g
     java.util.List playlists -> c
     org.tunesremote.daap.Status singletonStatus(android.os.Handler) -> a
     java.lang.String getRequestBase() -> a
@@ -1571,34 +1580,25 @@ org.tunesremote.daap.Session$9 -> org.tunesremote.a.p:
     java.lang.String val$albumid -> b
     org.tunesremote.daap.Session this$0 -> c
     void run() -> run
-org.tunesremote.daap.Session$Playlist -> org.tunesremote.a.q:
-    long ID -> a
-    java.lang.String name -> b
-    java.lang.String persistentId -> c
-    long count -> d
-    long getID() -> a
-    java.lang.String getName() -> b
-    long getCount() -> c
-    java.lang.String getPersistentId() -> d
-org.tunesremote.daap.Status -> org.tunesremote.a.r:
-    int repeatStatus -> a
-    int shuffleStatus -> b
-    int playStatus -> c
-    java.lang.String trackName -> m
-    java.lang.String trackArtist -> n
-    java.lang.String trackAlbum -> o
-    long progressTotal -> p
-    long progressRemain -> d
-    java.lang.String albumId -> e
-    org.tunesremote.daap.Session session -> f
-    android.os.Handler update -> g
-    java.util.concurrent.atomic.AtomicInteger failures -> h
-    boolean destroyThread -> i
+org.tunesremote.daap.Status -> org.tunesremote.a.q:
+    boolean coverEmpty -> a
+    android.graphics.Bitmap coverCache -> b
+    java.lang.String albumId -> c
+    int repeatStatus -> d
+    int shuffleStatus -> e
+    int playStatus -> f
+    java.util.concurrent.atomic.AtomicBoolean destroyThread -> g
+    java.lang.String trackName -> h
+    java.lang.String trackArtist -> i
+    java.lang.String trackAlbum -> j
+    long progressTotal -> k
+    long progressRemain -> l
+    org.tunesremote.daap.Session session -> m
+    android.os.Handler update -> n
+    java.util.concurrent.atomic.AtomicInteger failures -> o
+    long revision -> p
     java.lang.Thread progress -> q
     java.lang.Thread keepalive -> r
-    long revision -> j
-    boolean coverEmpty -> k
-    android.graphics.Bitmap coverCache -> l
     void updateHandler(android.os.Handler) -> a
     void destroy() -> a
     void fetchUpdate() -> b
@@ -1613,16 +1613,22 @@ org.tunesremote.daap.Status -> org.tunesremote.a.r:
     java.lang.String getTrackName() -> j
     java.lang.String getTrackArtist() -> k
     java.lang.String getTrackAlbum() -> l
-org.tunesremote.daap.Status$1 -> org.tunesremote.a.s:
+    long access$022(org.tunesremote.daap.Status,long) -> a
+    android.os.Handler access$100(org.tunesremote.daap.Status) -> a
+    long access$000(org.tunesremote.daap.Status) -> b
+    org.tunesremote.daap.Session access$200(org.tunesremote.daap.Status) -> c
+    long access$300(org.tunesremote.daap.Status) -> d
+    java.util.concurrent.atomic.AtomicInteger access$400() -> m
+org.tunesremote.daap.Status$1 -> org.tunesremote.a.r:
     org.tunesremote.daap.Status this$0 -> a
     void run() -> run
-org.tunesremote.daap.Status$2 -> org.tunesremote.a.t:
+org.tunesremote.daap.Status$2 -> org.tunesremote.a.s:
     org.tunesremote.daap.Status this$0 -> a
     void run() -> run
-org.tunesremote.daap.Status$3 -> org.tunesremote.a.u:
+org.tunesremote.daap.Status$3 -> org.tunesremote.a.t:
     org.tunesremote.daap.Status this$0 -> a
     void run() -> run
-org.tunesremote.daap.Status$4 -> org.tunesremote.a.v:
+org.tunesremote.daap.Status$4 -> org.tunesremote.a.u:
     org.tunesremote.daap.Status this$0 -> a
     void run() -> run
 org.tunesremote.util.PairingDatabase -> org.tunesremote.util.a:

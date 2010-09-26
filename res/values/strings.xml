@@ -28,6 +28,7 @@
   <string name="app_desc">Remote control for DACP-compatible desktop music players such as Apple iTunes, MonkeyTunes for MediaMonkey, and Telescope for Songbird</string>
   <string name="search_label">TunesRemote+ Search</string>
   <string name="search_hint">Music keywords</string>
+  <string name="search_empty">No search results found</string>
   <string name="nowplaying_title">Now Playing</string>
   <string name="nowplaying_nothing_playing">Nothing Playing</string>
   <string name="albums_empty">No albums found\nfor this artist.</string>

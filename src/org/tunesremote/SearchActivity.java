@@ -35,7 +35,6 @@ import org.tunesremote.daap.Library;
 import org.tunesremote.daap.RequestHelper;
 import org.tunesremote.daap.Response;
 import org.tunesremote.daap.Session;
-import org.tunesremote.daap.ResponseParser.TagListener;
 import org.tunesremote.util.RecentProvider;
 import org.tunesremote.util.ThreadExecutor;
 import org.tunesremote.util.UserTask;
@@ -64,6 +63,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView.OnItemClickListener;
@@ -104,18 +104,33 @@ public class SearchActivity extends Activity {
       }
    };
 
-   public final static int FORCE_TOP = 2, REMOVE_FOOTER = 3;
+   public final static int FORCE_TOP = 2, REMOVE_FOOTER = 3, NO_RESULTS_FOUND = 4;
 
    public Handler resultsUpdated = new Handler() {
       @Override
       public void handleMessage(Message msg) {
-         if (msg.what == FORCE_TOP)
+         Log.d(TAG, String.format("MSG: % d", msg.what));
+         switch (msg.what) {
+         case FORCE_TOP:
             list.setSelection(0);
-         if (msg.what == REMOVE_FOOTER) {
+            adapter.notifyDataSetChanged();
+            break;
+         case REMOVE_FOOTER:
             list.removeFooterView(adapter.footerView);
             list.requestLayout();
+            adapter.notifyDataSetChanged();
+            break;
+         case NO_RESULTS_FOUND:
+            TextView txtFetch = (TextView) adapter.footerView.findViewById(R.id.fetchText);
+            txtFetch.setText(R.string.search_empty);
+            ProgressBar progressView = (ProgressBar) adapter.footerView.findViewById(R.id.fetchProgress);
+            progressView.setVisibility(View.INVISIBLE);
+            adapter.footerView.requestLayout();
+            break;
+         default:
+            adapter.notifyDataSetChanged();
+            break;
          }
-         adapter.notifyDataSetChanged();
       }
    };
 
@@ -279,23 +294,24 @@ public class SearchActivity extends Activity {
          this.fetchRequested = true;
 
          // trigger fetch of next page of results if available
-         // TODO: somehow make sure we dont double-trigger this from the gui
          if (this.totalResults > this.getCount()) {
-
             ThreadExecutor.runTask(new Runnable() {
                public void run() {
                   Log.d(TAG, "getView() is triggering a new page to be loaded");
                   int count = Integer.parseInt(backend.getPrefs().getString(
                            getResources().getString(R.string.pref_searchmax), "30"));
                   totalResults = library.readSearch(SearchAdapter.this, search, getCount(), count);
+                  if (totalResults <= 0) {
+                     Log.w(TAG, "No Search Results Found!");
+                     resultsUpdated.sendEmptyMessage(NO_RESULTS_FOUND);
+                  } else {
+                     Log.w(TAG, String.format("Search Results Found Count = %d", totalResults));
+                     // change our footer view to say no more results
+                     resultsUpdated.sendEmptyMessage(REMOVE_FOOTER);
+                  }
                }
             });
-
-         } else {
-            // change our footer view to say no more results
-            resultsUpdated.sendEmptyMessage(REMOVE_FOOTER);
          }
-
       }
 
       public View getView(int position, View convertView, ViewGroup parent) {

@@ -216,8 +216,8 @@ javax.jmdns.impl.tasks.state.DNSStateTask:
     55:56:public static void setDefaultTTL(int)
 org.tunesremote.ArtistsActivity:
     protected android.graphics.Bitmap blank
-    195:197:protected char startsWith(int)
-    206:236:public void scrollAlpha(char)
+    194:196:protected char startsWith(int)
+    205:235:public void scrollAlpha(char)
 org.tunesremote.BackendService:
     public static final java.lang.String PREFS
     public static final java.lang.String PREF_LASTADDR
@@ -257,9 +257,10 @@ org.tunesremote.R$xml
 org.tunesremote.SearchActivity:
     public static final int FORCE_TOP
     public static final int REMOVE_FOOTER
+    public static final int NO_RESULTS_FOUND
 org.tunesremote.daap.Library:
     protected static final int RESULT_INCREMENT
-    137:174:public void readAlbums(org.tunesremote.daap.ResponseParser$TagListener)
+    135:172:public void readAlbums(org.tunesremote.TagListener)
 org.tunesremote.daap.PairingServer:
     public static final int PORT
 org.tunesremote.daap.RequestHelper:
@@ -268,7 +269,7 @@ org.tunesremote.daap.RequestHelper:
     76:76:public static byte[] requestAlbums(org.tunesremote.daap.Session,int,int)
     86:86:public static byte[] requestPlaylists(org.tunesremote.daap.Session)
 org.tunesremote.daap.Session:
-    195:195:public void controlRating(long)
+    183:183:public void controlRating(long)
 org.tunesremote.daap.Status:
     public static final int REPEAT_OFF
     public static final int REPEAT_SINGLE
@@ -277,12 +278,12 @@ org.tunesremote.daap.Status:
     public static final int SHUFFLE_ON
     public static final int STATE_PAUSED
     public static final int STATE_PLAYING
-    public static final int MAX_FAILURES
     public static final int UPDATE_PROGRESS
     public static final int UPDATE_STATE
     public static final int UPDATE_TRACK
     public static final int UPDATE_COVER
-    342:342:public long getRating()
+    private static final int MAX_FAILURES
+    351:351:public long getRating()
 org.tunesremote.util.PairingDatabase:
     public static final java.lang.String DB_NAME
     public static final int DB_VERSION

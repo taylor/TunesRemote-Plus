@@ -32,7 +32,6 @@ import java.util.List;
 import org.tunesremote.daap.Library;
 import org.tunesremote.daap.Response;
 import org.tunesremote.daap.Session;
-import org.tunesremote.daap.ResponseParser.TagListener;
 
 import android.app.ListActivity;
 import android.content.ComponentName;

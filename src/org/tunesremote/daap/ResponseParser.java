@@ -31,20 +31,20 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.util.regex.Pattern;
 
+import org.tunesremote.TagListener;
+
 import android.util.Log;
 
+/**
+ * Class responsible for parsing binary HTTP responses from a DACP Server.
+ * <p>
+ */
 public class ResponseParser {
 
    public final static String TAG = ResponseParser.class.toString();
    public final static Pattern BRANCHES = Pattern
             .compile("(cmst|mlog|agal|mlcl|mshl|mlit|abro|abar|apso|caci|avdb|cmgt|aply|adbs)");
    public final static Pattern STRINGS = Pattern.compile("(minm|cann|cana|cang|canl|asaa|asal|asar)");
-
-   public interface TagListener {
-      public void foundTag(String tag, Response resp);
-
-      public void searchDone();
-   }
 
    public static int performSearch(byte[] raw, TagListener listener, Pattern listenFor, boolean haltmlit)
             throws IOException {
@@ -71,7 +71,7 @@ public class ResponseParser {
 
    private static int search(DataInputStream raw, TagListener listener, Pattern listenFor, int handle, boolean haltmlit)
             throws IOException {
-      // Log.d(TAG, "ResponseParser Searching...");
+      Log.d(TAG, "ResponseParser Searching...");
       int progress = 0;
       int hits = 0;
 

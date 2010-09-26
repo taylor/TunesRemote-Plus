@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- 
+/*
     TunesRemote+ - http://code.google.com/p/tunesremote-plus/
     
     Copyright (C) 2008 Jeffrey Sharkey, http://jsharkey.org/
@@ -22,30 +21,57 @@
     Portions created by Jeffrey Sharkey are
     Copyright (C) 2008. Jeffrey Sharkey, http://jsharkey.org/
     All Rights Reserved.
--->
+ */
+package org.tunesremote.daap;
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent"
-	android:layout_height="wrap_content"
-	android:padding="10dip"
-	android:orientation="horizontal"
-	android:gravity="center_vertical"
-	>
-	
-	<ProgressBar
-        android:id="@+id/fetchProgress"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:paddingRight="10dip"
-		style="?android:attr/progressBarStyleSmall"
-		/>
-	
-	<TextView
-		android:id="@+id/fetchText"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:textAppearance="?android:attr/textAppearanceMedium"
-		android:text="@string/item_fetch"
-		/>
-		
-</LinearLayout>
+/**
+ * POJO representing a Playlist object.
+ */
+public class Playlist {
+   private final long ID;
+   private final String name, persistentId;
+   private final long count;
+
+   public Playlist(final long ID, final String name, final long count, final String persistentId) {
+      this.ID = ID;
+      this.name = name;
+      this.count = count;
+      this.persistentId = persistentId;
+   }
+
+   /**
+    * Gets the iD.
+    * <p>
+    * @return Returns the iD.
+    */
+   public long getID() {
+      return ID;
+   }
+
+   /**
+    * Gets the name.
+    * <p>
+    * @return Returns the name.
+    */
+   public String getName() {
+      return name;
+   }
+
+   /**
+    * Gets the persistentId.
+    * <p>
+    * @return Returns the persistentId.
+    */
+   public String getPersistentId() {
+      return persistentId;
+   }
+
+   /**
+    * Gets the count.
+    * <p>
+    * @return Returns the count.
+    */
+   public long getCount() {
+      return count;
+   }
+}

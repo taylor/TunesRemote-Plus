@@ -25,8 +25,8 @@
 package org.tunesremote;
 
 import org.tunesremote.daap.Library;
+import org.tunesremote.daap.Playlist;
 import org.tunesremote.daap.Session;
-import org.tunesremote.daap.Session.Playlist;
 
 import android.content.ComponentName;
 import android.content.Context;

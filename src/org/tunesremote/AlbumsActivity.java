@@ -35,7 +35,6 @@ import org.tunesremote.daap.Library;
 import org.tunesremote.daap.RequestHelper;
 import org.tunesremote.daap.Response;
 import org.tunesremote.daap.Session;
-import org.tunesremote.daap.ResponseParser.TagListener;
 import org.tunesremote.util.ThreadExecutor;
 import org.tunesremote.util.UserTask;
 
