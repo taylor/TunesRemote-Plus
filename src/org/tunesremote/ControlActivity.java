@@ -439,12 +439,14 @@ public class ControlActivity extends Activity implements ViewFactory {
 
    @Override
    public boolean onKeyDown(int keyCode, KeyEvent event) {
+      final int increment = Integer.parseInt(backend.getPrefs().getString(
+               getResources().getString(R.string.pref_volumeincrement), "5"));
       // check for volume keys
       if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
-         this.incrementVolume(+5);
+         this.incrementVolume(+increment);
          return true;
       } else if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
-         this.incrementVolume(-5);
+         this.incrementVolume(-increment);
          return true;
       }
 

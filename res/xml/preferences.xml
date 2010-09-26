@@ -38,6 +38,13 @@
                 android:numeric="integer"
                 android:title="Search Result Maximum"
                 android:key="@string/pref_searchmax" />
+    
+    <EditTextPreference
+                android:summary="Increase or decrease the volume by this amount when changing volume"
+                android:defaultValue="5"
+                android:numeric="integer"
+                android:title="Volume Change Increment"
+                android:key="@string/pref_volumeincrement" />
 		
 	<PreferenceCategory
 		android:title="Interface settings">
