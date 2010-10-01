@@ -65,8 +65,11 @@ public class Library {
          byte[] raw = RequestHelper.request(query, false);
          Response resp = ResponseParser.performParse(raw, listener, MLIT_PATTERN);
          // apso or adbs
-         total = resp.getNested("apso").getNumberLong("mtco");
-
+         Response nested = resp.getNested("apso");
+         if (nested == null)
+             nested = resp.getNested("adbs");
+         if (nested != null)
+             total = nested.getNumberLong("mtco");
       } catch (Exception e) {
          Log.w(TAG, "readSearch Exception:" + e.getMessage());
       }
