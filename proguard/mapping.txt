@@ -1125,12 +1125,13 @@ org.tunesremote.daap.Status -> org.tunesremote.a.q:
     java.lang.String getTrackName() -> j
     java.lang.String getTrackArtist() -> k
     java.lang.String getTrackAlbum() -> l
+    java.lang.String getAlbumId() -> m
     long access$022(org.tunesremote.daap.Status,long) -> a
     android.os.Handler access$100(org.tunesremote.daap.Status) -> a
     long access$000(org.tunesremote.daap.Status) -> b
     org.tunesremote.daap.Session access$200(org.tunesremote.daap.Status) -> c
     long access$300(org.tunesremote.daap.Status) -> d
-    java.util.concurrent.atomic.AtomicInteger access$400() -> m
+    java.util.concurrent.atomic.AtomicInteger access$400() -> n
 org.tunesremote.daap.Status$1 -> org.tunesremote.a.r:
     org.tunesremote.daap.Status this$0 -> a
     void run() -> run
