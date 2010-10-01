@@ -273,7 +273,7 @@ public class Library {
 
       } catch (Exception e) {
          // Fall back to reading album
-         if (albumid != "")
+         if (albumid != null && albumid.length() > 0)
             readTracks(albumid, listener);
          else
             readCurrentSong(listener);

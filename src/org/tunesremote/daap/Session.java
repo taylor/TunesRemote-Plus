@@ -310,9 +310,8 @@ public class Session {
                         getRequestBase(), tracknum, sessionId), false);
                // on iTunes this generates a 501 Not Implemented response
             } catch (Exception e) {
-               if (albumid != "") // Fall back to choosing from the current
-               // album if there is one
-               {
+               if (albumid != null && albumid.length() > 0) { 
+                  // Fall back to choosing from the current album if there is one
                   RequestHelper.attemptRequest(String.format("%s/ctrl-int/1/cue?command=clear&session-id=%s",
                            getRequestBase(), sessionId));
                   RequestHelper

@@ -351,4 +351,7 @@ public class Status {
       return -1;
    }
 
+   public String getAlbumId() {
+      return this.albumId;
+   }
 }

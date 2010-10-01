@@ -191,9 +191,8 @@ public class ControlActivity extends Activity implements ViewFactory {
 
          // launch tracks view for current album
          Intent intent = new Intent(ControlActivity.this, NowPlayingActivity.class);
-         intent.putExtra(Intent.EXTRA_TITLE, "");
+         intent.putExtra(Intent.EXTRA_TITLE, status.getAlbumId());
          ControlActivity.this.startActivity(intent);
-
       }
    };
 
