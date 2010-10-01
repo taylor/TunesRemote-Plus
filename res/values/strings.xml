@@ -29,6 +29,7 @@
   <string name="search_label">TunesRemote+ Search</string>
   <string name="search_hint">Music keywords</string>
   <string name="search_empty">No search results found</string>
+  <string name="no_servers_found">No servers found</string>
   <string name="nowplaying_title">Now Playing</string>
   <string name="nowplaying_nothing_playing">Nothing Playing</string>
   <string name="albums_empty">No albums found\nfor this artist.</string>
@@ -47,7 +48,8 @@
   <string name="notif_caption">%s - %s</string>
   <string name="control_menu_search">Search</string>
   <string name="control_menu_artists">Artists</string>
-  <string name="control_menu_pick">Pick library</string>
+  <string name="control_menu_picklibrary">Pick Library</string>
+  <string name="control_menu_addlibrary">Add Library</string>
   <string name="control_menu_repeat_none">No repeat</string>
   <string name="control_menu_repeat_one">Repeat single</string>
   <string name="control_menu_repeat_all">Repeat all</string>

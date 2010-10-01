@@ -542,12 +542,22 @@ public class ControlActivity extends Activity implements ViewFactory {
          }
       });
 
-      MenuItem pick = menu.add(R.string.control_menu_pick);
-      pick.setIcon(android.R.drawable.ic_menu_share);
-      pick.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+      MenuItem pickLibrary = menu.add(R.string.control_menu_addlibrary);
+      pickLibrary.setIcon(android.R.drawable.ic_menu_add);
+      pickLibrary.setOnMenuItemClickListener(new OnMenuItemClickListener() {
          public boolean onMenuItemClick(MenuItem item) {
             // launch off library picking
             ControlActivity.this.startActivity(new Intent(ControlActivity.this, LibraryActivity.class));
+            return true;
+         }
+      });
+
+      MenuItem addLibrary = menu.add(R.string.control_menu_picklibrary);
+      addLibrary.setIcon(android.R.drawable.ic_menu_share);
+      addLibrary.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+         public boolean onMenuItemClick(MenuItem item) {
+            // launch off library picking
+            ControlActivity.this.startActivity(new Intent(ControlActivity.this, ServerActivity.class));
             return true;
          }
       });

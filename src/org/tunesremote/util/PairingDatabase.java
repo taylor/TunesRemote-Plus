@@ -27,6 +27,7 @@ package org.tunesremote.util;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -39,6 +40,7 @@ public class PairingDatabase extends SQLiteOpenHelper {
    public final static int DB_VERSION = 1;
 
    public final static String TABLE_PAIR = "pairing";
+   public final static String FIELD_PAIR_ID = "_id";
    public final static String FIELD_PAIR_LIBRARY = "library";
    public final static String FIELD_PAIR_ADDRESS = "address";
    public final static String FIELD_PAIR_GUID = "guid";
@@ -49,8 +51,8 @@ public class PairingDatabase extends SQLiteOpenHelper {
 
    @Override
    public void onCreate(SQLiteDatabase db) {
-      db.execSQL("CREATE TABLE " + TABLE_PAIR + " (_id INTEGER PRIMARY KEY, " + FIELD_PAIR_LIBRARY + " TEXT, "
-               + FIELD_PAIR_ADDRESS + " TEXT, " + FIELD_PAIR_GUID + " INTEGER)");
+      db.execSQL("CREATE TABLE " + TABLE_PAIR + " (" + FIELD_PAIR_ID + " INTEGER PRIMARY KEY, " + FIELD_PAIR_LIBRARY
+               + " TEXT, " + FIELD_PAIR_ADDRESS + " TEXT, " + FIELD_PAIR_GUID + " INTEGER)");
    }
 
    @Override
@@ -85,6 +87,39 @@ public class PairingDatabase extends SQLiteOpenHelper {
    public String findCodeAddress(String address) {
       return this.findCode(FIELD_PAIR_ADDRESS, address);
 
+   }
+
+   /**
+    * Return a Cursor positioned at the Server that matches the given rowId
+    * @param rowId id of Server to retrieve
+    * @return Cursor positioned to matching Server, if found
+    * @throws SQLException if Server could not be found/retrieved
+    */
+   public Cursor fetchServer(long rowid) throws SQLException {
+
+      SQLiteDatabase db = this.getWritableDatabase();
+      Cursor mCursor =
+
+      db.query(true, TABLE_PAIR,
+               new String[] { FIELD_PAIR_ID, FIELD_PAIR_ADDRESS, FIELD_PAIR_LIBRARY, FIELD_PAIR_GUID }, FIELD_PAIR_ID
+                        + "=" + rowid, null, null, null, null, null);
+      if (mCursor != null) {
+         mCursor.moveToFirst();
+      }
+      return mCursor;
+
+   }
+
+   /**
+    * Return a Cursor over the list of all Servers in the database
+    * @return Cursor over all Servers
+    */
+   public Cursor fetchAllServers() {
+
+      SQLiteDatabase db = this.getReadableDatabase();
+      return db.query(TABLE_PAIR,
+               new String[] { FIELD_PAIR_ID, FIELD_PAIR_ADDRESS, FIELD_PAIR_LIBRARY, FIELD_PAIR_GUID }, null, null,
+               null, null, null);
    }
 
    public void deleteLibrary(String library) {

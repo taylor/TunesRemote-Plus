@@ -42,6 +42,7 @@
     <activity android:name=".BrowseActivity" android:configChanges="keyboardHidden|orientation" />
     <activity android:name=".PrefsActivity" android:configChanges="keyboardHidden|orientation" />
     <activity android:name=".WizardActivity" android:configChanges="keyboardHidden|orientation" />
+    <activity android:name=".ServerActivity" android:configChanges="keyboardHidden|orientation" />
     <provider android:name="org.tunesremote.util.RecentProvider" android:authorities="org.tunesremote.recent" />
     <meta-data android:name="android.app.default_searchable" android:value=".SearchActivity" />
     <activity android:name=".SearchActivity" android:launchMode="singleTop" android:configChanges="keyboardHidden|orientation">

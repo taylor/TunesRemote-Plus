@@ -113,12 +113,10 @@ public class SearchActivity extends Activity {
          switch (msg.what) {
          case FORCE_TOP:
             list.setSelection(0);
-            adapter.notifyDataSetChanged();
             break;
          case REMOVE_FOOTER:
             list.removeFooterView(adapter.footerView);
             list.requestLayout();
-            adapter.notifyDataSetChanged();
             break;
          case NO_RESULTS_FOUND:
             TextView txtFetch = (TextView) adapter.footerView.findViewById(R.id.fetchText);
@@ -128,9 +126,9 @@ public class SearchActivity extends Activity {
             adapter.footerView.requestLayout();
             break;
          default:
-            adapter.notifyDataSetChanged();
             break;
          }
+         adapter.notifyDataSetChanged();
       }
    };
 
