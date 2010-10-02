@@ -183,16 +183,20 @@ public class ControlActivity extends Activity implements ViewFactory {
       }
    };
 
+   protected void StartNowPlaying() {
+      if (status == null)
+         return;
+
+      // launch tracks view for current album
+      Intent intent = new Intent(ControlActivity.this, NowPlayingActivity.class);
+      intent.putExtra(Intent.EXTRA_TITLE, status.getAlbumId());
+      ControlActivity.this.startActivity(intent);
+   }
+   
    protected Handler doubleTapHandler = new Handler() {
       @Override
       public void handleMessage(Message msg) {
-         if (status == null)
-            return;
-
-         // launch tracks view for current album
-         Intent intent = new Intent(ControlActivity.this, NowPlayingActivity.class);
-         intent.putExtra(Intent.EXTRA_TITLE, status.getAlbumId());
-         ControlActivity.this.startActivity(intent);
+         StartNowPlaying();
       }
    };
 
@@ -558,6 +562,15 @@ public class ControlActivity extends Activity implements ViewFactory {
          public boolean onMenuItemClick(MenuItem item) {
             // launch off library picking
             ControlActivity.this.startActivity(new Intent(ControlActivity.this, ServerActivity.class));
+            return true;
+         }
+      });
+
+      MenuItem nowPlaying = menu.add(R.string.control_menu_nowplaying);
+      nowPlaying.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+         public boolean onMenuItemClick(MenuItem item) {
+            // launch now playing
+            StartNowPlaying();
             return true;
          }
       });
