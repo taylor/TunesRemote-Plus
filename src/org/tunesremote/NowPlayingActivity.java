@@ -59,6 +59,7 @@ public class NowPlayingActivity extends ListActivity {
    protected Library library;
    protected NowPlayingAdapter adapter;
    protected String albumid;
+   protected boolean iTunes = false;
 
    public ServiceConnection connection = new ServiceConnection() {
       public void onServiceConnected(ComponentName className, IBinder service) {
@@ -72,7 +73,7 @@ public class NowPlayingActivity extends ListActivity {
 
          // begin search now that we have a backend
          library = new Library(session);
-         library.readNowPlaying(albumid, adapter);
+         iTunes = library.readNowPlaying(albumid, adapter);
       }
 
       public void onServiceDisconnected(ComponentName className) {
@@ -112,7 +113,11 @@ public class NowPlayingActivity extends ListActivity {
 
       this.getListView().setOnItemClickListener(new OnItemClickListener() {
          public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            session.controlPlayIndex(albumid, position);
+            if (iTunes) {
+               session.controlPlayAlbum(albumid, position);
+            } else {
+               session.controlPlayIndex(albumid, position);
+            }
             setResult(RESULT_OK, new Intent());
             finish();
          }

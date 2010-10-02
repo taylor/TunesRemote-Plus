@@ -259,7 +259,7 @@ public class Library {
       }
    }
 
-   public void readNowPlaying(String albumid, TagListener listener) {
+   public boolean readNowPlaying(String albumid, TagListener listener) {
 
       // Try Wilco (Alex W)'s nowplaying extension /ctrl-int/1/items
 
@@ -273,6 +273,7 @@ public class Library {
 
          // parse list, passing off events in the process
          ResponseParser.performSearch(raw, listener, MLIT_PATTERN, false);
+         return false;
 
       } catch (Exception e) {
          // Fall back to reading album
@@ -280,6 +281,8 @@ public class Library {
             readTracks(albumid, listener);
          else
             readCurrentSong(listener);
+         
+         return true;
       }
 
    }
