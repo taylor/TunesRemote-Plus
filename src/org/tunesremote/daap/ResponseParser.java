@@ -71,7 +71,6 @@ public class ResponseParser {
 
    private static int search(DataInputStream raw, TagListener listener, Pattern listenFor, int handle, boolean haltmlit)
             throws IOException {
-      Log.d(TAG, "ResponseParser Searching...");
       int progress = 0;
       int hits = 0;
 

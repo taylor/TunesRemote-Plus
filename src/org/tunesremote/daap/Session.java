@@ -132,6 +132,15 @@ public class Session {
       });
    }
 
+   /**
+    * Logout method disconnects the session on the server. This is being a good
+    * DACP citizen that was not happening in previous versions.
+    */
+   public void logout() {
+      Log.w(TAG, String.format("Logging Out session-id=%s", this.sessionId));
+      this.fireAction(String.format("%s/logout?session-id=%s", this.getRequestBase(), this.sessionId), false);
+   }
+
    public void controlPlayPause() {
       // http://192.168.254.128:3689/ctrl-int/1/playpause?session-id=130883770
       this.fireAction(String.format("%s/ctrl-int/1/playpause?session-id=%s", this.getRequestBase(), this.sessionId),
@@ -310,8 +319,9 @@ public class Session {
                         getRequestBase(), tracknum, sessionId), false);
                // on iTunes this generates a 501 Not Implemented response
             } catch (Exception e) {
-               if (albumid != null && albumid.length() > 0) { 
-                  // Fall back to choosing from the current album if there is one
+               if (albumid != null && albumid.length() > 0) {
+                  // Fall back to choosing from the current album if there is
+                  // one
                   RequestHelper.attemptRequest(String.format("%s/ctrl-int/1/cue?command=clear&session-id=%s",
                            getRequestBase(), sessionId));
                   RequestHelper

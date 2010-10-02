@@ -30,6 +30,9 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.Inflater;
+import java.util.zip.InflaterInputStream;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -104,33 +107,56 @@ public class RequestHelper {
       }
    }
 
-   public static byte[] request(String remote, boolean keepalive) throws Exception {
-
+   /**
+    * Performs the HTTP request and gathers the response from the server. The
+    * gzip and deflate headers are sent in case the server can respond with
+    * compressed answers saving network bandwidth and speeding up responses.
+    * <p>
+    * @param remoteUrl the HTTP URL to connect to
+    * @param keepalive true if keepalive false if not
+    * @return a byte array containing the HTTPResponse
+    * @throws Exception if any error occurs
+    */
+   public static byte[] request(String remoteUrl, boolean keepalive) throws Exception {
+      Log.d(TAG, String.format("started request(remote=%s)", remoteUrl));
       Process.setThreadPriority(Process.THREAD_PRIORITY_LOWEST);
-
-      Log.d(TAG, String.format("started request(remote=%s)", remote));
 
       byte[] buffer = new byte[1024];
 
-      URL url = new URL(remote);
+      URL url = new URL(remoteUrl);
       HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+      connection.setAllowUserInteraction(false);
       connection.setRequestProperty("Viewer-Only-Client", "1");
+      // allow both GZip and Deflate (ZLib) encodings
+      connection.setRequestProperty("Accept-Encoding", "gzip, deflate");
+
       if (!keepalive) {
          connection.setConnectTimeout(10000);
          connection.setReadTimeout(10000);
       }
       connection.connect();
-      InputStream is = null;
 
-      if (connection.getResponseCode() >= 400)
-         throw new Exception("HTTP Error Response Code");
+      if (connection.getResponseCode() >= HttpURLConnection.HTTP_UNAUTHORIZED)
+         throw new Exception("HTTP Error Response Code: " + connection.getResponseCode());
+
+      // obtain the encoding returned by the server
+      String encoding = connection.getContentEncoding();
+
+      InputStream inputStream = null;
+
+      // create the appropriate stream wrapper based on the encoding type
+      if (encoding != null && encoding.equalsIgnoreCase("gzip")) {
+         inputStream = new GZIPInputStream(connection.getInputStream());
+      } else if (encoding != null && encoding.equalsIgnoreCase("deflate")) {
+         inputStream = new InflaterInputStream(connection.getInputStream(), new Inflater(true));
+      } else {
+         inputStream = connection.getInputStream();
+      }
 
       ByteArrayOutputStream os = new ByteArrayOutputStream();
       try {
-         is = connection.getInputStream();
-
          int bytesRead;
-         while ((bytesRead = is.read(buffer)) != -1) {
+         while ((bytesRead = inputStream.read(buffer)) != -1) {
             os.write(buffer, 0, bytesRead);
          }
       } finally {
@@ -138,8 +164,8 @@ public class RequestHelper {
             os.flush();
             os.close();
          }
-         if (is != null) {
-            is.close();
+         if (inputStream != null) {
+            inputStream.close();
          }
       }
 

@@ -48,14 +48,19 @@ public class Library {
 
    }
 
+   /**
+    * Performs a search of the DACP Server sending it search criteria and an
+    * index of how many items to find.
+    * <p>
+    * @param listener the TagListener to capture records coming in for the UI
+    * @param search the search criteria
+    * @param start items to start with for paging (usually 0)
+    * @param items the total items to return in this search
+    * @return the count of records returned or -1 if nothing found
+    */
    public long readSearch(TagListener listener, String search, long start, long items) {
-
       long total = -1;
       try {
-
-         // http://192.168.254.128:3689/databases/36/containers/113/items?session-id=1535976870&revision-number=61&meta=dmap.itemname,dmap.itemid,daap.songartist,daap.songalbum&type=music&sort=name&include-sort-headers=1&query='dmap.itemname:*sea*'&index=0-7
-         // byte[] raw = RequestHelper.requestSearch(session, search, (int)
-         // start, (int) (start + items));
          String encodedSearch = URLEncoder.encode(search).replaceAll("\\+", "%20");
          String query = String
                   .format(
@@ -67,9 +72,9 @@ public class Library {
          // apso or adbs
          Response nested = resp.getNested("apso");
          if (nested == null)
-             nested = resp.getNested("adbs");
+            nested = resp.getNested("adbs");
          if (nested != null)
-             total = nested.getNumberLong("mtco");
+            total = nested.getNumberLong("mtco");
       } catch (Exception e) {
          Log.w(TAG, "readSearch Exception:" + e.getMessage());
       }
@@ -281,7 +286,7 @@ public class Library {
             readTracks(albumid, listener);
          else
             readCurrentSong(listener);
-         
+
          return true;
       }
 

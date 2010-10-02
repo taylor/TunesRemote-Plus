@@ -77,9 +77,9 @@ public class ControlActivity extends Activity implements ViewFactory {
 
    public final static String TAG = ControlActivity.class.toString();
 
-   protected BackendService backend;
-   protected Session session;
-   protected Status status;
+   protected static BackendService backend;
+   protected static Session session;
+   protected static Status status;
    protected boolean dragging = false;
    protected String showingAlbumId = null;
 
@@ -120,7 +120,6 @@ public class ControlActivity extends Activity implements ViewFactory {
          status.updateHandler(null);
 
          backend = null;
-         session = null;
          status = null;
       }
    };
@@ -192,7 +191,7 @@ public class ControlActivity extends Activity implements ViewFactory {
       intent.putExtra(Intent.EXTRA_TITLE, status.getAlbumId());
       ControlActivity.this.startActivity(intent);
    }
-   
+
    protected Handler doubleTapHandler = new Handler() {
       @Override
       public void handleMessage(Message msg) {
@@ -223,6 +222,8 @@ public class ControlActivity extends Activity implements ViewFactory {
    protected ProgressBar volumeBar;
    protected Toast volumeToast;
    protected FadeView fadeview;
+   protected Toast shuffleToast;
+   protected Toast repeatToast;
 
    protected boolean stayConnected = false, fadeDetails = true, fadeUpNew = true, vibrate = true;
 
@@ -261,8 +262,9 @@ public class ControlActivity extends Activity implements ViewFactory {
       super.onStop();
       Log.w(TAG, "Stopping TunesRemote...");
       try {
-         if (!this.stayConnected && session != null)
+         if (!this.stayConnected && session != null) {
             session.purgeAllStatus();
+         }
 
          this.unbindService(connection);
       } catch (Exception ex) {
@@ -275,9 +277,11 @@ public class ControlActivity extends Activity implements ViewFactory {
       super.onDestroy();
       Log.w(TAG, "Destroying TunesRemote...");
       try {
-         if (session != null)
+         if (session != null) {
             session.purgeAllStatus();
-         session = null;
+            session.logout();
+            session = null;
+         }
          backend = null;
       } catch (Exception ex) {
          Log.e(TAG, ex.getMessage(), ex);
@@ -345,6 +349,12 @@ public class ControlActivity extends Activity implements ViewFactory {
       this.volumeToast.setDuration(Toast.LENGTH_SHORT);
       this.volumeToast.setGravity(Gravity.CENTER, 0, 0);
       this.volumeToast.setView(this.volume);
+
+      this.shuffleToast = Toast.makeText(this, R.string.control_menu_shuffle_off, Toast.LENGTH_SHORT);
+      this.shuffleToast.setGravity(Gravity.CENTER, 0, 0);
+
+      this.repeatToast = Toast.makeText(this, R.string.control_menu_repeat_none, Toast.LENGTH_SHORT);
+      this.repeatToast.setGravity(Gravity.CENTER, 0, 0);
 
       // pull out interesting controls
       this.trackName = (TextView) findViewById(R.id.info_title);
@@ -425,13 +435,13 @@ public class ControlActivity extends Activity implements ViewFactory {
 
       // try assuming a cached volume instead of requesting it each time
       if (System.currentTimeMillis() - cachedTime > CACHE_TIME) {
-         this.cachedVolume = this.status.getVolume();
+         this.cachedVolume = status.getVolume();
          this.cachedTime = System.currentTimeMillis();
       }
 
       // increment the volume and send control signal off
       this.cachedVolume += increment;
-      this.session.controlVolume(this.cachedVolume);
+      session.controlVolume(this.cachedVolume);
 
       // update our volume gui and show
       this.volumeBar.setProgress((int) this.cachedVolume);
@@ -511,15 +521,19 @@ public class ControlActivity extends Activity implements ViewFactory {
             switch (status.getRepeat()) {
             case Status.REPEAT_ALL:
                session.controlRepeat(Status.REPEAT_OFF);
+               repeatToast.setText(R.string.control_menu_repeat_none);
                break;
             case Status.REPEAT_OFF:
                session.controlRepeat(Status.REPEAT_SINGLE);
+               repeatToast.setText(R.string.control_menu_repeat_one);
                break;
             case Status.REPEAT_SINGLE:
                session.controlRepeat(Status.REPEAT_ALL);
+               repeatToast.setText(R.string.control_menu_repeat_all);
                break;
             }
 
+            repeatToast.show();
             return true;
          }
       });
@@ -536,12 +550,15 @@ public class ControlActivity extends Activity implements ViewFactory {
             switch (status.getShuffle()) {
             case Status.SHUFFLE_OFF:
                session.controlShuffle(Status.SHUFFLE_ON);
+               shuffleToast.setText(R.string.control_menu_shuffle_on);
                break;
             case Status.SHUFFLE_ON:
                session.controlShuffle(Status.SHUFFLE_OFF);
+               shuffleToast.setText(R.string.control_menu_shuffle_off);
                break;
             }
 
+            shuffleToast.show();
             return true;
          }
       });
