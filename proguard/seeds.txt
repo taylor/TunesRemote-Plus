@@ -14,6 +14,7 @@ org.tunesremote.ArtistsActivity
 org.tunesremote.PlaylistsActivity
 org.tunesremote.TracksActivity
 org.tunesremote.NowPlayingActivity
+org.tunesremote.ServerActivity
 org.tunesremote.PrefsActivity
 org.tunesremote.BackendService
 org.tunesremote.util.RecentProvider

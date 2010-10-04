@@ -120,6 +120,7 @@ org.tunesremote.R$drawable
 org.tunesremote.R$id
 org.tunesremote.R$layout
 org.tunesremote.R$string
+org.tunesremote.R$style
 org.tunesremote.R$xml
 org.tunesremote.SearchActivity:
     public static final int FORCE_TOP
@@ -127,16 +128,16 @@ org.tunesremote.SearchActivity:
     public static final int NO_RESULTS_FOUND
 org.tunesremote.daap.Library:
     protected static final int RESULT_INCREMENT
-    135:172:public void readAlbums(org.tunesremote.TagListener)
+    143:180:public void readAlbums(org.tunesremote.TagListener)
 org.tunesremote.daap.PairingServer:
     public static final int PORT
 org.tunesremote.daap.RequestHelper:
-    55:56:public static byte[] requestSearch(org.tunesremote.daap.Session,java.lang.String,int,int)
-    66:66:public static byte[] requestTracks(org.tunesremote.daap.Session,java.lang.String)
-    76:76:public static byte[] requestAlbums(org.tunesremote.daap.Session,int,int)
-    86:86:public static byte[] requestPlaylists(org.tunesremote.daap.Session)
+    58:59:public static byte[] requestSearch(org.tunesremote.daap.Session,java.lang.String,int,int)
+    69:69:public static byte[] requestTracks(org.tunesremote.daap.Session,java.lang.String)
+    79:79:public static byte[] requestAlbums(org.tunesremote.daap.Session,int,int)
+    89:89:public static byte[] requestPlaylists(org.tunesremote.daap.Session)
 org.tunesremote.daap.Session:
-    183:183:public void controlRating(long)
+    192:192:public void controlRating(long)
 org.tunesremote.daap.Status:
     public static final int REPEAT_OFF
     public static final int REPEAT_SINGLE
@@ -155,10 +156,11 @@ org.tunesremote.util.PairingDatabase:
     public static final java.lang.String DB_NAME
     public static final int DB_VERSION
     public static final java.lang.String TABLE_PAIR
+    public static final java.lang.String FIELD_PAIR_ID
     public static final java.lang.String FIELD_PAIR_LIBRARY
     public static final java.lang.String FIELD_PAIR_ADDRESS
     public static final java.lang.String FIELD_PAIR_GUID
-    120:126:public boolean libraryExists(java.lang.String)
+    155:161:public boolean libraryExists(java.lang.String)
 org.tunesremote.util.RecentProvider:
     public static final java.lang.String AUTHORITY
     public static final int MODE

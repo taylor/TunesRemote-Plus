@@ -34,13 +34,13 @@
   <string name="nowplaying_nothing_playing">Nothing Playing</string>
   <string name="albums_empty">No albums found\nfor this artist.</string>
   <string name="albums_menu_play">Play album</string>
-  <string name="albums_menu_browse">Browse tracks</string>
+  <string name="albums_menu_browse">Browse Tracks</string>
   <string name="albums_album_caption">%d tracks</string>
   <string name="playlists_empty">No playlists found</string>
   <string name="playlists_playlist_caption">%d tracks</string>
   <string name="playlists_menu_play">Play playlist</string>
-  <string name="playlists_menu_browse">Browse playlist</string>
-  <string name="playlists_menu_queue">Queue playlist</string>
+  <string name="playlists_menu_browse">Browse Playlist</string>
+  <string name="playlists_menu_queue">Queue Playlist</string>
   <string name="artists_empty">No artists found\nin this library.</string>
   <string name="artists_menu_play">Play artist</string>
   <string name="artists_menu_browse">Browse albums</string>
@@ -48,8 +48,8 @@
   <string name="notif_caption">%s - %s</string>
   <string name="control_menu_search">Search</string>
   <string name="control_menu_artists">Artists</string>
-  <string name="control_menu_picklibrary">Pick Library</string>
-  <string name="control_menu_addlibrary">Add Library</string>
+  <string name="control_menu_picklibrary">Pick Library...</string>
+  <string name="control_menu_addlibrary">Add Library...</string>
   <string name="control_menu_repeat_none">No repeat</string>
   <string name="control_menu_repeat_one">Repeat single</string>
   <string name="control_menu_repeat_all">Repeat all</string>
@@ -57,8 +57,8 @@
   <string name="control_menu_shuffle_off">Shuffle off</string>
   <string name="control_menu_nowplaying">Now Playing</string>
   <string name="library_menu_refresh">Refresh</string>
-  <string name="library_menu_manual">Manual add</string>
-  <string name="library_menu_forget">Forget all</string>
+  <string name="library_menu_manual">Manual Add</string>
+  <string name="library_menu_forget">Forget All</string>
   <string name="library_forget">Are you sure you want to forget all libraries ever paired with?</string>
   <string name="library_forget_pos">Yes, forget</string>
   <string name="library_forget_neg">No</string>
@@ -99,7 +99,7 @@
   <string name="albums_menu_queue">Queue Album</string>
   <string name="tracks_menu_play">Play Track</string>
   <string name="tracks_menu_queue">Queue Track</string>
-  <string name="search_menu_play_found">Play found Tracks</string>
+  <string name="search_menu_play_found">Play Found Tracks</string>
   <string name="search_menu_open_album">Open Album</string>
   <string name="search_menu_open_artist">Open Artist</string>
 </resources>
