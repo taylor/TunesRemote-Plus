@@ -48,6 +48,8 @@
   <string name="notif_caption">%s - %s</string>
   <string name="control_menu_search">Search</string>
   <string name="control_menu_artists">Artists</string>
+  <string name="control_menu_playlists">Playlists</string>
+  <string name="control_menu_albums">Albums</string>
   <string name="control_menu_picklibrary">Pick Library...</string>
   <string name="control_menu_addlibrary">Add Library...</string>
   <string name="control_menu_repeat_none">No repeat</string>

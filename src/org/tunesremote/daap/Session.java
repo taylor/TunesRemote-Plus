@@ -116,7 +116,9 @@ public class Session {
    }
 
    protected void notifyStatus() {
-      singleton.fetchUpdate();
+      if (singleton != null) {
+         singleton.fetchUpdate();
+      }
    }
 
    // some control helper functions
