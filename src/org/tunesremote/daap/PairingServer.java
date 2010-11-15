@@ -42,7 +42,7 @@ public class PairingServer extends Thread {
    // the pairing service waits for any incoming requests from itunes
    // it always returns a valid pairing code
    public final static String TAG = PairingServer.class.toString();
-   public final static int PORT = 55555;
+   public final static int PORT = 1024;
 
    protected final static byte[] CHAR_TABLE = new byte[] { (byte) '0', (byte) '1', (byte) '2', (byte) '3', (byte) '4',
             (byte) '5', (byte) '6', (byte) '7', (byte) '8', (byte) '9', (byte) 'A', (byte) 'B', (byte) 'C', (byte) 'D',
