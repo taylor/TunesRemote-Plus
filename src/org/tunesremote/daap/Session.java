@@ -303,7 +303,7 @@ public class Session {
             RequestHelper
                      .attemptRequest(String
                               .format(
-                                       "%s/ctrl-int/1/playspec?database-spec='dmap.persistentid:0x%s'&container-spec='dmap.persistentid:0x%s'&container-item-spec='dmap.containeritemid:%s'&session-id=%s",
+                                       "%s/ctrl-int/1/playspec?database-spec='dmap.persistentid:0x%s'&container-spec='dmap.persistentid:0x%s'&container-item-spec='dmap.containeritemid:0x%s'&session-id=%s",
                                        getRequestBase(), databasePersistentId, playlistPersistentId, containerItemId,
                                        sessionId));
             notifyStatus();
