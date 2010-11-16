@@ -24,7 +24,7 @@
     All Rights Reserved.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.tunesremote"
-  android:versionCode="6" android:versionName="2.0.4">
+  android:versionCode="7" android:versionName="2.0.5">
   <application android:icon="@drawable/icon" android:label="@string/app_name">
     <service android:name=".BackendService" />\
     <activity android:name=".ControlActivity" android:configChanges="keyboardHidden|orientation">

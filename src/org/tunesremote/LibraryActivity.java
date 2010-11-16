@@ -25,6 +25,7 @@
 
 package org.tunesremote;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.util.LinkedList;
 import java.util.List;
@@ -126,8 +127,13 @@ public class LibraryActivity extends Activity implements ServiceListener {
    protected void stopProbe() {
       zeroConf.removeServiceListener(TOUCH_ABLE_TYPE, this);
       zeroConf.removeServiceListener(DACP_TYPE, this);
-      zeroConf.close();
-      zeroConf = null;
+
+      try {
+         zeroConf.close();
+         zeroConf = null;
+      } catch (IOException e) {
+         Log.d(TAG, String.format("ZeroConf Error: %s", e.getMessage()));
+      }
 
       mLock.release();
       mLock = null;
@@ -301,6 +307,7 @@ public class LibraryActivity extends Activity implements ServiceListener {
             final View view = inflater.inflate(R.layout.dia_text, null);
             final TextView address = (TextView) view.findViewById(android.R.id.text1);
             final TextView code = (TextView) view.findViewById(android.R.id.text2);
+            code.setText("0000000000000001");
 
             new AlertDialog.Builder(LibraryActivity.this).setView(view).setPositiveButton(R.string.library_manual_pos,
                      new DialogInterface.OnClickListener() {

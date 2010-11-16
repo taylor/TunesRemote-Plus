@@ -1,86 +1,273 @@
 javax.jmdns.JmDNS:
-    41:41:public static javax.jmdns.JmDNS create(java.net.InetAddress)
+    public static final java.lang.String VERSION
+    35:35:public static javax.jmdns.JmDNS create()
+    48:48:public static javax.jmdns.JmDNS create(java.net.InetAddress)
+    61:61:public static javax.jmdns.JmDNS create(java.lang.String)
+    public abstract java.lang.String getName()
     public abstract java.lang.String getHostName()
     public abstract java.net.InetAddress getInterface()
-    public abstract javax.jmdns.ServiceInfo getServiceInfo(java.lang.String,java.lang.String,int)
+    public abstract javax.jmdns.ServiceInfo getServiceInfo(java.lang.String,java.lang.String,long)
+    public abstract javax.jmdns.ServiceInfo getServiceInfo(java.lang.String,java.lang.String,boolean)
+    public abstract javax.jmdns.ServiceInfo getServiceInfo(java.lang.String,java.lang.String,boolean,long)
     public abstract void requestServiceInfo(java.lang.String,java.lang.String)
+    public abstract void requestServiceInfo(java.lang.String,java.lang.String,boolean)
+    public abstract void requestServiceInfo(java.lang.String,java.lang.String,long)
+    public abstract void requestServiceInfo(java.lang.String,java.lang.String,boolean,long)
     public abstract void addServiceTypeListener(javax.jmdns.ServiceTypeListener)
     public abstract void removeServiceTypeListener(javax.jmdns.ServiceTypeListener)
     public abstract void unregisterAllServices()
-    public abstract void registerServiceType(java.lang.String)
+    public abstract boolean registerServiceType(java.lang.String)
     public abstract void printServices()
     public abstract javax.jmdns.ServiceInfo[] list(java.lang.String)
+    public abstract javax.jmdns.ServiceInfo[] list(java.lang.String,long)
+    public abstract java.util.Map listBySubtype(java.lang.String)
+    public abstract java.util.Map listBySubtype(java.lang.String,long)
+javax.jmdns.JmmDNS:
+    public abstract java.lang.String[] getNames()
+    public abstract java.lang.String[] getHostNames()
+    public abstract java.net.InetAddress[] getInterfaces()
+    public abstract javax.jmdns.ServiceInfo[] getServiceInfos(java.lang.String,java.lang.String)
+    public abstract javax.jmdns.ServiceInfo[] getServiceInfos(java.lang.String,java.lang.String,long)
+    public abstract javax.jmdns.ServiceInfo[] getServiceInfos(java.lang.String,java.lang.String,boolean)
+    public abstract javax.jmdns.ServiceInfo[] getServiceInfos(java.lang.String,java.lang.String,boolean,long)
+    public abstract void requestServiceInfo(java.lang.String,java.lang.String)
+    public abstract void requestServiceInfo(java.lang.String,java.lang.String,boolean)
+    public abstract void requestServiceInfo(java.lang.String,java.lang.String,long)
+    public abstract void requestServiceInfo(java.lang.String,java.lang.String,boolean,long)
+    public abstract void addServiceTypeListener(javax.jmdns.ServiceTypeListener)
+    public abstract void removeServiceTypeListener(javax.jmdns.ServiceTypeListener)
+    public abstract void addServiceListener(java.lang.String,javax.jmdns.ServiceListener)
+    public abstract void removeServiceListener(java.lang.String,javax.jmdns.ServiceListener)
+    public abstract void registerService(javax.jmdns.ServiceInfo)
+    public abstract void unregisterService(javax.jmdns.ServiceInfo)
+    public abstract void unregisterAllServices()
+    public abstract void registerServiceType(java.lang.String)
+    public abstract javax.jmdns.ServiceInfo[] list(java.lang.String)
+    public abstract javax.jmdns.ServiceInfo[] list(java.lang.String,long)
+    public abstract java.util.Map listBySubtype(java.lang.String)
+    public abstract java.util.Map listBySubtype(java.lang.String,long)
+    public abstract void addNetworkTopologyListener(javax.jmdns.NetworkTopologyListener)
+    public abstract void removeNetworkTopologyListener(javax.jmdns.NetworkTopologyListener)
+    public abstract javax.jmdns.NetworkTopologyListener[] networkListeners()
+javax.jmdns.JmmDNS$Factory
+javax.jmdns.JmmDNS$Factory$ClassDelegate
+javax.jmdns.JmmDNS$NetworkTopologyDiscovery:
+    public abstract boolean useInetAddress(java.net.NetworkInterface,java.net.InetAddress)
+javax.jmdns.JmmDNS$NetworkTopologyDiscovery$Factory:
+    194:195:public static void setClassDelegate(javax.jmdns.JmmDNS$NetworkTopologyDiscovery$Factory$ClassDelegate)
+    206:206:public static javax.jmdns.JmmDNS$NetworkTopologyDiscovery$Factory$ClassDelegate classDelegate()
+javax.jmdns.NetworkTopologyEvent
+javax.jmdns.NetworkTopologyListener
+javax.jmdns.ServiceEvent:
+    private static final long serialVersionUID
 javax.jmdns.ServiceInfo:
-    26:26:public static javax.jmdns.ServiceInfo create(java.lang.String,java.lang.String,int,java.lang.String)
-    41:41:public static javax.jmdns.ServiceInfo create(java.lang.String,java.lang.String,int,int,int,java.lang.String)
-    72:72:public static javax.jmdns.ServiceInfo create(java.lang.String,java.lang.String,int,int,int,byte[])
-    public abstract java.lang.String getType()
-    public abstract java.lang.String getName()
-    public abstract java.lang.String getQualifiedName()
+    57:57:public static javax.jmdns.ServiceInfo create(java.lang.String,java.lang.String,int,java.lang.String)
+    77:77:public static javax.jmdns.ServiceInfo create(java.lang.String,java.lang.String,java.lang.String,int,java.lang.String)
+    99:99:public static javax.jmdns.ServiceInfo create(java.lang.String,java.lang.String,int,int,int,java.lang.String)
+    123:123:public static javax.jmdns.ServiceInfo create(java.lang.String,java.lang.String,java.lang.String,int,int,int,java.lang.String)
+    169:169:public static javax.jmdns.ServiceInfo create(java.lang.String,java.lang.String,java.lang.String,int,int,int,java.util.Map)
+    191:191:public static javax.jmdns.ServiceInfo create(java.lang.String,java.lang.String,int,int,int,byte[])
+    215:215:public static javax.jmdns.ServiceInfo create(java.lang.String,java.lang.String,java.lang.String,int,int,int,byte[])
+    239:239:public static javax.jmdns.ServiceInfo create(java.lang.String,java.lang.String,int,int,int,boolean,java.lang.String)
+    265:265:public static javax.jmdns.ServiceInfo create(java.lang.String,java.lang.String,java.lang.String,int,int,int,boolean,java.lang.String)
+    289:289:public static javax.jmdns.ServiceInfo create(java.lang.String,java.lang.String,int,int,int,boolean,java.util.Map)
+    315:315:public static javax.jmdns.ServiceInfo create(java.lang.String,java.lang.String,java.lang.String,int,int,int,boolean,java.util.Map)
+    339:339:public static javax.jmdns.ServiceInfo create(java.lang.String,java.lang.String,int,int,int,boolean,byte[])
+    365:365:public static javax.jmdns.ServiceInfo create(java.lang.String,java.lang.String,java.lang.String,int,int,int,boolean,byte[])
+    387:387:public static javax.jmdns.ServiceInfo create(java.util.Map,int,int,int,boolean,java.util.Map)
+    public abstract java.lang.String getTypeWithSubtype()
     public abstract java.net.InetAddress getAddress()
     public abstract java.net.InetAddress getInetAddress()
-    public abstract int getPriority()
-    public abstract int getWeight()
-    public abstract byte[] getTextBytes()
     public abstract java.lang.String getTextString()
     public abstract java.lang.String getURL()
     public abstract java.lang.String getURL(java.lang.String)
     public abstract byte[] getPropertyBytes(java.lang.String)
     public abstract java.util.Enumeration getPropertyNames()
     public abstract java.lang.String getNiceTextString()
-javax.jmdns.impl.DNSCache:
-    200:205:public synchronized void print()
-javax.jmdns.impl.DNSConstants
-javax.jmdns.impl.DNSIncoming:
-    189:189:boolean isResponse()
-    297:352:java.lang.String print(boolean)
+    public abstract void setText(byte[])
+    public abstract void setText(java.util.Map)
+    public abstract java.util.Map getQualifiedNameMap()
+javax.jmdns.impl.DNSCache$_CacheEntry:
+    172:177:protected DNSCache$_CacheEntry(java.util.Map$Entry)
+    210:210:public boolean isEmpty()
+javax.jmdns.impl.DNSEntry:
+    public abstract boolean isStale(long)
+javax.jmdns.impl.DNSIncoming$MessageInputStream:
+    56:56:public int readByte()
+    112:112:protected synchronized int peek()
+javax.jmdns.impl.DNSMessage:
+    public static final boolean MULTICAST
+    public static final boolean UNICAST
+    228:228:public boolean isResponse()
 javax.jmdns.impl.DNSOutgoing:
-    int len
-    92:97:void addAdditionalAnswer(javax.jmdns.impl.DNSIncoming,javax.jmdns.impl.DNSRecord)
-    148:152:void writeBytes(java.lang.String,int,int)
-    156:160:void writeBytes(byte[])
+    private static final int HEADER_SIZE
+    249:250:public DNSOutgoing(int,boolean)
+    378:390:public void addAdditionalAnswer(javax.jmdns.impl.DNSIncoming,javax.jmdns.impl.DNSRecord)
+    439:445:java.lang.String print(boolean)
+javax.jmdns.impl.DNSOutgoing$MessageOutputStream:
+    57:61:void writeBytes(java.lang.String,int,int)
+    65:69:void writeBytes(byte[])
+javax.jmdns.impl.DNSQuestion:
+    320:320:public boolean isStale(long)
 javax.jmdns.impl.DNSRecord:
     abstract javax.jmdns.impl.DNSOutgoing addAnswer(javax.jmdns.impl.JmDNSImpl,javax.jmdns.impl.DNSIncoming,java.net.InetAddress,int,javax.jmdns.impl.DNSOutgoing)
-    140:140:boolean isStale(long)
-    627:628:public void setTtl(int)
+    1096:1097:public void setTTL(int)
 javax.jmdns.impl.DNSRecord$Address:
-    213:213:boolean same(javax.jmdns.impl.DNSRecord)
-    325:325:javax.jmdns.impl.DNSOutgoing addAnswer(javax.jmdns.impl.JmDNSImpl,javax.jmdns.impl.DNSIncoming,java.net.InetAddress,int,javax.jmdns.impl.DNSOutgoing)
+    324:324:boolean same(javax.jmdns.impl.DNSRecord)
+    421:421:javax.jmdns.impl.DNSOutgoing addAnswer(javax.jmdns.impl.JmDNSImpl,javax.jmdns.impl.DNSIncoming,java.net.InetAddress,int,javax.jmdns.impl.DNSOutgoing)
+javax.jmdns.impl.DNSRecord$HostInformation:
+    952:952:javax.jmdns.impl.DNSOutgoing addAnswer(javax.jmdns.impl.JmDNSImpl,javax.jmdns.impl.DNSIncoming,java.net.InetAddress,int,javax.jmdns.impl.DNSOutgoing)
 javax.jmdns.impl.DNSRecord$Pointer:
-    377:377:javax.jmdns.impl.DNSOutgoing addAnswer(javax.jmdns.impl.JmDNSImpl,javax.jmdns.impl.DNSIncoming,java.net.InetAddress,int,javax.jmdns.impl.DNSOutgoing)
+    525:525:javax.jmdns.impl.DNSOutgoing addAnswer(javax.jmdns.impl.JmDNSImpl,javax.jmdns.impl.DNSIncoming,java.net.InetAddress,int,javax.jmdns.impl.DNSOutgoing)
 javax.jmdns.impl.DNSRecord$Service:
-    597:605:javax.jmdns.impl.DNSOutgoing addAnswer(javax.jmdns.impl.JmDNSImpl,javax.jmdns.impl.DNSIncoming,java.net.InetAddress,int,javax.jmdns.impl.DNSOutgoing)
+    863:872:javax.jmdns.impl.DNSOutgoing addAnswer(javax.jmdns.impl.JmDNSImpl,javax.jmdns.impl.DNSIncoming,java.net.InetAddress,int,javax.jmdns.impl.DNSOutgoing)
 javax.jmdns.impl.DNSRecord$Text:
-    436:436:javax.jmdns.impl.DNSOutgoing addAnswer(javax.jmdns.impl.JmDNSImpl,javax.jmdns.impl.DNSIncoming,java.net.InetAddress,int,javax.jmdns.impl.DNSOutgoing)
+    642:642:javax.jmdns.impl.DNSOutgoing addAnswer(javax.jmdns.impl.JmDNSImpl,javax.jmdns.impl.DNSIncoming,java.net.InetAddress,int,javax.jmdns.impl.DNSOutgoing)
+javax.jmdns.impl.DNSStatefulObject:
+    public abstract javax.jmdns.impl.JmDNSImpl getDns()
+    public abstract void associateWithTask(javax.jmdns.impl.tasks.DNSTask,javax.jmdns.impl.constants.DNSState)
+    public abstract void removeAssociationWithTask(javax.jmdns.impl.tasks.DNSTask)
+    public abstract boolean isAssociatedWithTask(javax.jmdns.impl.tasks.DNSTask,javax.jmdns.impl.constants.DNSState)
+    public abstract boolean revertState()
+    public abstract boolean cancelState()
+    public abstract boolean recoverState()
+    public abstract boolean isProbing()
+    public abstract boolean isAnnouncing()
+    public abstract boolean isAnnounced()
+    public abstract boolean isCanceling()
+    public abstract boolean isCanceled()
+    public abstract boolean waitForAnnounced(long)
+    public abstract boolean waitForCanceled(long)
+javax.jmdns.impl.DNSStatefulObject$DefaultImplementation:
+    private static final long serialVersionUID
+javax.jmdns.impl.HostInfo:
+    248:248:public javax.jmdns.impl.JmDNSImpl getDns()
+    320:320:public boolean isAnnouncing()
+javax.jmdns.impl.HostInfo$HostInfoState:
+    private static final long serialVersionUID
 javax.jmdns.impl.JmDNSImpl:
-    192:198:public JmDNSImpl(java.net.InetAddress)
-    321:323:synchronized void cancel()
-    344:344:public java.lang.String getHostName()
-    397:398:public void requestServiceInfo(java.lang.String,java.lang.String)
-    441:452:public void addServiceTypeListener(javax.jmdns.ServiceTypeListener)
-    459:462:public void removeServiceTypeListener(javax.jmdns.ServiceTypeListener)
-    995:997:void print()
-    1005:1005:public void printServices()
-    1057:1079:public javax.jmdns.ServiceInfo[] list(java.lang.String)
-    1210:1211:public void setIoLock(java.lang.Object)
-    1226:1227:void setLocalHost(javax.jmdns.impl.HostInfo)
-    1238:1238:public boolean isClosed()
+    213:231:public static void main(java.lang.String[])
+    395:395:public javax.jmdns.impl.JmDNSImpl getDns()
+    435:435:public boolean isAnnouncing()
+    501:501:public java.lang.String getHostName()
+    536:536:public javax.jmdns.ServiceInfo getServiceInfo(java.lang.String,java.lang.String,long)
+    545:545:public javax.jmdns.ServiceInfo getServiceInfo(java.lang.String,java.lang.String,boolean)
+    660:661:public void requestServiceInfo(java.lang.String,java.lang.String)
+    669:670:public void requestServiceInfo(java.lang.String,java.lang.String,boolean)
+    678:679:public void requestServiceInfo(java.lang.String,java.lang.String,long)
+    687:689:public void requestServiceInfo(java.lang.String,java.lang.String,boolean,long)
+    719:728:public void addServiceTypeListener(javax.jmdns.ServiceTypeListener)
+    736:738:public void removeServiceTypeListener(javax.jmdns.ServiceTypeListener)
+    1315:1331:public javax.jmdns.impl.DNSOutgoing addAnswer(javax.jmdns.impl.DNSIncoming,java.net.InetAddress,int,javax.jmdns.impl.DNSOutgoing,javax.jmdns.impl.DNSRecord)
+    1514:1515:public void printServices()
+    1558:1558:public javax.jmdns.ServiceInfo[] list(java.lang.String)
+    1575:1595:public javax.jmdns.ServiceInfo[] list(java.lang.String,long)
+    1604:1604:public java.util.Map listBySubtype(java.lang.String)
+    1613:1628:public java.util.Map listBySubtype(java.lang.String,long)
+    1817:1818:public void ioLock()
+    1821:1822:public void ioUnlock()
+    1825:1826:public void setPlannedAnswer(javax.jmdns.impl.DNSIncoming)
+    1829:1829:public javax.jmdns.impl.DNSIncoming getPlannedAnswer()
+    1833:1834:void setLocalHost(javax.jmdns.impl.HostInfo)
+    1841:1842:public void setClosed(boolean)
+    1845:1845:public boolean isClosed()
 javax.jmdns.impl.JmDNSImpl$ServiceCollector:
-    1110:1112:public JmDNSImpl$ServiceCollector(java.lang.String)
-    1147:1149:public javax.jmdns.impl.ServiceInfoImpl[] list()
+    1737:1754:public javax.jmdns.ServiceInfo[] list(long)
+javax.jmdns.impl.JmDNSImpl$Shutdown
+javax.jmdns.impl.JmmDNSImpl
+javax.jmdns.impl.JmmDNSImpl$1
+javax.jmdns.impl.JmmDNSImpl$2
+javax.jmdns.impl.JmmDNSImpl$3
+javax.jmdns.impl.JmmDNSImpl$4
+javax.jmdns.impl.JmmDNSImpl$5
+javax.jmdns.impl.JmmDNSImpl$6
+javax.jmdns.impl.JmmDNSImpl$NetworkChecker
+javax.jmdns.impl.ListenerStatus$ServiceTypeListenerStatus:
+    199:201:public ListenerStatus$ServiceTypeListenerStatus(javax.jmdns.ServiceTypeListener)
+javax.jmdns.impl.NetworkTopologyEventImpl
+javax.jmdns.impl.ServiceEventImpl:
+    private static final long serialVersionUID
 javax.jmdns.impl.ServiceInfoImpl:
-    63:64:public ServiceInfoImpl(java.lang.String,java.lang.String,int,java.lang.String)
-    71:85:public ServiceInfoImpl(java.lang.String,java.lang.String,int,int,int,java.lang.String)
-    241:241:public java.net.InetAddress getInetAddress()
-    273:273:public byte[] getTextBytes()
-    281:285:public java.lang.String getTextString()
-    293:293:public java.lang.String getURL()
-    301:314:public java.lang.String getURL(java.lang.String)
-    322:322:public synchronized byte[] getPropertyBytes(java.lang.String)
-    347:348:public java.util.Enumeration getPropertyNames()
-javax.jmdns.impl.tasks.Canceler:
-    57:61:public Canceler(javax.jmdns.impl.JmDNSImpl,javax.jmdns.impl.ServiceInfoImpl[],java.lang.Object)
-javax.jmdns.impl.tasks.TypeResolver
+    private javax.jmdns.impl.ServiceInfoImpl$Delegate _delegate
+    124:134:public ServiceInfoImpl(java.lang.String,java.lang.String,java.lang.String,int,int,int,boolean,java.lang.String)
+    454:454:public java.net.InetAddress getAddress()
+    540:548:public java.lang.String getTextString()
+    557:557:public java.lang.String getURL()
+    566:575:public java.lang.String getURL(java.lang.String)
+    584:584:public synchronized byte[] getPropertyBytes(java.lang.String)
+    609:611:public java.util.Enumeration getPropertyNames()
+    949:949:public boolean isCanceling()
+    957:957:public boolean isCanceled()
+    1000:1014:public java.lang.String getNiceTextString()
+    1083:1087:public void setText(byte[])
+    1095:1096:public void setText(java.util.Map)
+    1192:1192:javax.jmdns.impl.ServiceInfoImpl$Delegate getDelegate()
+    1199:1200:void setDelegate(javax.jmdns.impl.ServiceInfoImpl$Delegate)
+javax.jmdns.impl.ServiceInfoImpl$Delegate
+javax.jmdns.impl.ServiceInfoImpl$ServiceInfoState:
+    private static final long serialVersionUID
+javax.jmdns.impl.SocketListener:
+    108:108:public javax.jmdns.impl.JmDNSImpl getDns()
+javax.jmdns.impl.constants.DNSConstants:
+    public static final java.lang.String MDNS_GROUP
+    public static final java.lang.String MDNS_GROUP_IPV6
+    public static final int DNS_PORT
+    public static final int DNS_TTL
+    public static final int MAX_MSG_TYPICAL
+    public static final int MAX_MSG_ABSOLUTE
+    public static final int FLAGS_QR_MASK
+    public static final int FLAGS_QR_QUERY
+    public static final int FLAGS_QR_RESPONSE
+    public static final int FLAGS_AA
+    public static final int FLAGS_TC
+    public static final int FLAGS_RD
+    public static final int FLAGS_RA
+    public static final int FLAGS_Z
+    public static final int FLAGS_AD
+    public static final int FLAGS_CD
+    public static final int SHARED_QUERY_TIME
+    public static final int QUERY_WAIT_INTERVAL
+    public static final int PROBE_WAIT_INTERVAL
+    public static final int RESPONSE_MIN_WAIT_INTERVAL
+    public static final int RESPONSE_MAX_WAIT_INTERVAL
+    public static final int PROBE_CONFLICT_INTERVAL
+    public static final int PROBE_THROTTLE_COUNT
+    public static final int PROBE_THROTTLE_COUNT_INTERVAL
+    public static final int ANNOUNCE_WAIT_INTERVAL
+    public static final int RECORD_REAPER_INTERVAL
+    public static final int KNOWN_ANSWER_TTL
+    public static final int ANNOUNCED_RENEWAL_TTL_INTERVAL
+    public static final long CLOSE_TIMEOUT
+    public static final long SERVICE_INFO_TIMEOUT
+    public static final int NETWORK_CHECK_INTERVAL
+javax.jmdns.impl.constants.DNSLabel:
+    static final int LABEL_MASK
+    static final int LABEL_NOT_MASK
+    54:54:public java.lang.String externalName()
+javax.jmdns.impl.constants.DNSOperationCode
+javax.jmdns.impl.constants.DNSOptionCode:
+    53:53:public java.lang.String externalName()
+javax.jmdns.impl.constants.DNSRecordClass:
+    public static final int CLASS_MASK
+    public static final int CLASS_UNIQUE
+    public static final boolean UNIQUE
+    public static final boolean NOT_UNIQUE
+    87:87:public java.lang.String externalName()
+    118:128:public static javax.jmdns.impl.constants.DNSRecordClass classForName(java.lang.String)
+javax.jmdns.impl.constants.DNSRecordType:
+    272:272:public java.lang.String externalName()
+    291:301:public static javax.jmdns.impl.constants.DNSRecordType typeForName(java.lang.String)
+javax.jmdns.impl.constants.DNSResultCode:
+    static final int RCode_MASK
+    static final int ExtendedRCode_MASK
+    116:116:public java.lang.String externalName()
+    135:141:public static javax.jmdns.impl.constants.DNSResultCode resultCodeForFlags(int)
+javax.jmdns.impl.tasks.DNSTask:
+    public abstract void start(java.util.Timer)
+    227:246:public javax.jmdns.impl.DNSOutgoing addAdditionalAnswer(javax.jmdns.impl.DNSOutgoing,javax.jmdns.impl.DNSIncoming,javax.jmdns.impl.DNSRecord)
+javax.jmdns.impl.tasks.resolver.TypeResolver
+javax.jmdns.impl.tasks.state.DNSStateTask:
+    55:56:public static void setDefaultTTL(int)
 org.tunesremote.ArtistsActivity:
     protected android.graphics.Bitmap blank
     194:196:protected char startsWith(int)
@@ -137,7 +324,7 @@ org.tunesremote.daap.RequestHelper:
     79:79:public static byte[] requestAlbums(org.tunesremote.daap.Session,int,int)
     89:89:public static byte[] requestPlaylists(org.tunesremote.daap.Session)
 org.tunesremote.daap.Session:
-    192:192:public void controlRating(long)
+    194:194:public void controlRating(long)
 org.tunesremote.daap.Status:
     public static final int REPEAT_OFF
     public static final int REPEAT_SINGLE
