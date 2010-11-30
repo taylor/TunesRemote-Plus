@@ -21,7 +21,7 @@
     The Initial Developer of the Original Code is Jeffrey Sharkey.
     Portions created by Jeffrey Sharkey are
     Copyright (C) 2008. Jeffrey Sharkey, http://jsharkey.org/
-    All Rights Reserved.
+    All Rights Reserved. 
 -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -29,24 +29,32 @@
 		android:key="@string/pref_background"
 		android:title="Stay connected in background"
 		android:summary="Keep background service running to speed up launch"
-		android:defaultValue="false"
-		/>
+		android:defaultValue="false"/>
     
     <EditTextPreference
                 android:summary="The maximum number of search results so not to crash your device on returning too many results from a large search"
                 android:defaultValue="30"
                 android:numeric="integer"
                 android:title="Search Result Maximum"
-                android:key="@string/pref_searchmax" />
+                android:key="@string/pref_searchmax" 
+                />
     
     <EditTextPreference
                 android:summary="Increase or decrease the volume by this amount when changing volume"
                 android:defaultValue="5"
                 android:numeric="integer"
                 android:title="Volume Change Increment"
-                android:key="@string/pref_volumeincrement" />
+                android:key="@string/pref_volumeincrement"
+                />
 		
-	<PreferenceCategory
+	<CheckBoxPreference
+				android:summary="When calls or made or received have your player automatically pause, and resume after the call."
+                android:defaultValue="false"
+                android:title="Pause music during calls"
+                android:key="@string/pref_autopause"
+                />
+                
+  <PreferenceCategory
 		android:title="Interface settings">
 	
 		<CheckBoxPreference

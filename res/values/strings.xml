@@ -97,6 +97,7 @@
   <string name="pref_vibrate">vibrate</string>
   <string name="pref_searchmax">searchmax</string>
   <string name="pref_volumeincrement">volumeincrement</string>
+  <string name="pref_autopause">autopause</string>
   <string name="artists_menu_queue">Queue Artist</string>
   <string name="albums_menu_queue">Queue Album</string>
   <string name="tracks_menu_play">Play Track</string>

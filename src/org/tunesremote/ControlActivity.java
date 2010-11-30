@@ -182,6 +182,40 @@ public class ControlActivity extends Activity implements ViewFactory {
       }
    };
 
+   public android.telephony.PhoneStateListener psListener = new android.telephony.PhoneStateListener() {
+      private boolean wasPlaying = false;
+
+      @Override
+      public void onCallStateChanged(int state, java.lang.String incomingNumber) {
+
+         if (ControlActivity.this.autoPause) {
+            switch (state) {
+            case android.telephony.TelephonyManager.CALL_STATE_IDLE:
+               if (wasPlaying && session != null && ControlActivity.status.getPlayStatus() == Status.STATE_PAUSED) {
+                  session.controlPlayPause();
+                  wasPlaying = false;
+               }
+               break;
+            case android.telephony.TelephonyManager.CALL_STATE_OFFHOOK:
+               if (session != null && ControlActivity.status.getPlayStatus() == Status.STATE_PLAYING) {
+                  session.controlPlayPause();
+                  wasPlaying = true;
+               }
+               break;
+            case android.telephony.TelephonyManager.CALL_STATE_RINGING:
+               if (session != null && ControlActivity.status.getPlayStatus() == Status.STATE_PLAYING) {
+                  session.controlPlayPause();
+                  wasPlaying = true;
+               }
+               break;
+            default:
+               break;
+            }
+         }
+      }
+
+   };
+
    protected void StartNowPlaying() {
       if (status == null)
          return;
@@ -226,6 +260,7 @@ public class ControlActivity extends Activity implements ViewFactory {
    protected Toast repeatToast;
 
    protected boolean stayConnected = false, fadeDetails = true, fadeUpNew = true, vibrate = true;
+   protected boolean autoPause = false;
 
    @Override
    public void onStart() {
@@ -235,6 +270,7 @@ public class ControlActivity extends Activity implements ViewFactory {
       this.fadeDetails = this.prefs.getBoolean(this.getString(R.string.pref_fade), this.fadeDetails);
       this.fadeUpNew = this.prefs.getBoolean(this.getString(R.string.pref_fadeupnew), this.fadeUpNew);
       this.vibrate = this.prefs.getBoolean(this.getString(R.string.pref_vibrate), this.vibrate);
+      this.autoPause = this.prefs.getBoolean(this.getString(R.string.pref_autopause), this.autoPause);
 
       this.fadeview.allowFade = this.fadeDetails;
       this.fadeview.keepAwake();
@@ -255,6 +291,9 @@ public class ControlActivity extends Activity implements ViewFactory {
       // for this activity
       this.bindService(service, connection, Context.BIND_AUTO_CREATE);
 
+      android.telephony.TelephonyManager tm = (android.telephony.TelephonyManager) ControlActivity.this
+               .getSystemService(android.content.Context.TELEPHONY_SERVICE);
+      tm.listen(psListener, android.telephony.PhoneStateListener.LISTEN_CALL_STATE);
    }
 
    @Override
