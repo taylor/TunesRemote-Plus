@@ -323,6 +323,8 @@ org.tunesremote.daap.RequestHelper:
     69:69:public static byte[] requestTracks(org.tunesremote.daap.Session,java.lang.String)
     79:79:public static byte[] requestAlbums(org.tunesremote.daap.Session,int,int)
     89:89:public static byte[] requestPlaylists(org.tunesremote.daap.Session)
+org.tunesremote.daap.Response:
+    private static final long serialVersionUID
 org.tunesremote.daap.Status:
     public static final int REPEAT_OFF
     public static final int REPEAT_SINGLE
@@ -353,16 +355,3 @@ org.tunesremote.util.ThreadExecutor:
     private static final int CORE_POOL_SIZE
     private static final int MAXIMUM_POOL_SIZE
     private static final int KEEP_ALIVE
-org.tunesremote.util.UserTask:
-    private static final java.lang.String LOG_TAG
-    private static final int CORE_POOL_SIZE
-    private static final int MAXIMUM_POOL_SIZE
-    private static final int KEEP_ALIVE
-    private static final int MESSAGE_POST_RESULT
-    private static final int MESSAGE_POST_PROGRESS
-    250:250:public final org.tunesremote.util.UserTask$Status getStatus()
-    303:303:public final boolean isCancelled()
-    322:322:public final boolean cancel(boolean)
-    335:335:public final java.lang.Object get()
-    350:350:public final java.lang.Object get(long,java.util.concurrent.TimeUnit)
-    396:397:protected final void publishProgress(java.lang.Object[])

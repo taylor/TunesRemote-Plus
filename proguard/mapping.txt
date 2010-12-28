@@ -935,9 +935,9 @@ org.tunesremote.AlbumsActivity$AlbumsAdapter -> org.tunesremote.h:
     android.view.View getView(int,android.view.View,android.view.ViewGroup) -> getView
 org.tunesremote.AlbumsActivity$LoadPhotoTask -> org.tunesremote.i:
     org.tunesremote.AlbumsActivity this$0 -> a
-    java.lang.Object[] doInBackground(java.lang.Object[]) -> c
-    void end(java.lang.Object) -> a
-    java.lang.Object doInBackground(java.lang.Object[]) -> a
+    java.lang.Object[] doInBackground(java.lang.Object[]) -> a
+    void onPostExecute(java.lang.Object) -> onPostExecute
+    java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
 org.tunesremote.AlphaView -> org.tunesremote.AlphaView:
     java.lang.String[] alpha -> a
     boolean touching -> b
@@ -1304,9 +1304,7 @@ org.tunesremote.PairingActivity -> org.tunesremote.PairingActivity:
     java.lang.String address -> c
     java.lang.String library -> d
     android.os.Handler paired -> e
-    char[] _nibbleToHex -> f
     void onCreate(android.os.Bundle) -> onCreate
-    java.lang.String toHex(byte[]) -> a
     void onStart() -> onStart
     void onStop() -> onStop
     java.lang.String access$000(org.tunesremote.PairingActivity) -> a
@@ -1399,9 +1397,9 @@ org.tunesremote.SearchActivity$5 -> org.tunesremote.bo:
     boolean onMenuItemClick(android.view.MenuItem) -> onMenuItemClick
 org.tunesremote.SearchActivity$LoadPhotoTask -> org.tunesremote.bp:
     org.tunesremote.SearchActivity this$0 -> a
-    java.lang.Object[] doInBackground(java.lang.Object[]) -> c
-    void end(java.lang.Object) -> a
-    java.lang.Object doInBackground(java.lang.Object[]) -> a
+    java.lang.Object[] doInBackground(java.lang.Object[]) -> a
+    void onPostExecute(java.lang.Object) -> onPostExecute
+    java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
 org.tunesremote.SearchActivity$SearchAdapter -> org.tunesremote.bq:
     android.view.LayoutInflater inflater -> h
     org.tunesremote.daap.Library library -> a
@@ -1564,14 +1562,9 @@ org.tunesremote.daap.RequestHelper -> org.tunesremote.a.d:
     android.graphics.Bitmap requestThumbnail(org.tunesremote.daap.Session,int) -> a
     android.graphics.Bitmap requestBitmap(java.lang.String) -> b
 org.tunesremote.daap.Response -> org.tunesremote.a.e:
-    org.tunesremote.daap.Response getNested(java.lang.String) -> a
-    java.lang.String getString(java.lang.String) -> b
-    java.math.BigInteger getNumber(java.lang.String) -> h
-    long getNumberLong(java.lang.String) -> c
-    java.lang.String getNumberString(java.lang.String) -> d
-    java.lang.String getNumberHex(java.lang.String) -> e
-    byte[] getRaw(java.lang.String) -> f
-    java.util.List findArray(java.lang.String) -> g
+    java.lang.String getString(java.lang.String) -> a
+    java.math.BigInteger getNumber(java.lang.String) -> b
+    java.util.List findArray(java.lang.String) -> c
 org.tunesremote.daap.ResponseParser -> org.tunesremote.a.f:
     java.util.regex.Pattern BRANCHES -> a
     java.util.regex.Pattern STRINGS -> b
@@ -1733,41 +1726,3 @@ org.tunesremote.util.ThreadExecutor -> org.tunesremote.util.b:
 org.tunesremote.util.ThreadExecutor$1 -> org.tunesremote.util.c:
     java.util.concurrent.atomic.AtomicInteger mCount -> a
     java.lang.Thread newThread(java.lang.Runnable) -> newThread
-org.tunesremote.util.UserTask -> org.tunesremote.util.d:
-    java.util.concurrent.BlockingQueue sWorkQueue -> a
-    java.util.concurrent.ThreadFactory sThreadFactory -> b
-    java.util.concurrent.ThreadPoolExecutor sExecutor -> c
-    org.tunesremote.util.UserTask$InternalHandler sHandler -> d
-    org.tunesremote.util.UserTask$WorkerRunnable mWorker -> e
-    java.util.concurrent.FutureTask mFuture -> f
-    org.tunesremote.util.UserTask$Status mStatus -> g
-    java.lang.Object doInBackground(java.lang.Object[]) -> a
-    void end(java.lang.Object) -> a
-    org.tunesremote.util.UserTask execute(java.lang.Object[]) -> b
-    org.tunesremote.util.UserTask$InternalHandler access$200() -> a
-    void access$300(org.tunesremote.util.UserTask,java.lang.Object) -> a
-org.tunesremote.util.UserTask$1 -> org.tunesremote.util.e:
-    java.util.concurrent.atomic.AtomicInteger mCount -> a
-    java.lang.Thread newThread(java.lang.Runnable) -> newThread
-org.tunesremote.util.UserTask$2 -> org.tunesremote.util.f:
-    org.tunesremote.util.UserTask this$0 -> b
-    java.lang.Object call() -> call
-org.tunesremote.util.UserTask$3 -> org.tunesremote.util.g:
-    org.tunesremote.util.UserTask this$0 -> a
-    void done() -> done
-org.tunesremote.util.UserTask$4 -> org.tunesremote.util.h:
-    int[] $SwitchMap$org$tunesremote$util$UserTask$Status -> a
-org.tunesremote.util.UserTask$InternalHandler -> org.tunesremote.util.i:
-    void handleMessage(android.os.Message) -> handleMessage
-org.tunesremote.util.UserTask$Status -> org.tunesremote.util.j:
-    org.tunesremote.util.UserTask$Status PENDING -> a
-    org.tunesremote.util.UserTask$Status RUNNING -> b
-    org.tunesremote.util.UserTask$Status FINISHED -> c
-    org.tunesremote.util.UserTask$Status[] $VALUES -> d
-    org.tunesremote.util.UserTask$Status[] values() -> values
-    org.tunesremote.util.UserTask$Status valueOf(java.lang.String) -> valueOf
-org.tunesremote.util.UserTask$UserTaskResult -> org.tunesremote.util.k:
-    org.tunesremote.util.UserTask mTask -> a
-    java.lang.Object[] mData -> b
-org.tunesremote.util.UserTask$WorkerRunnable -> org.tunesremote.util.l:
-    java.lang.Object[] mParams -> a

@@ -43,110 +43,95 @@ import android.util.Log;
 
 public class PairingActivity extends Activity {
 
-   public final static String TAG = PairingActivity.class.toString();
+	public final static String TAG = PairingActivity.class.toString();
 
-   private volatile PairingServer pairingServer;
-   private ServiceInfo pairservice;
-   private String address, library;
+	private volatile PairingServer pairingServer;
+	private ServiceInfo pairservice;
+	private String address, library;
 
-   public Handler paired = new Handler() {
-      @Override
-      public void handleMessage(Message msg) {
+	public Handler paired = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
 
-         // someone has paried with us, so try returning with result
-         // also be sure to pack along the pairing code used
+			// someone has paried with us, so try returning with result
+			// also be sure to pack along the pairing code used
 
-         Intent packed = new Intent();
-         packed.putExtra(BackendService.EXTRA_ADDRESS, address);
-         packed.putExtra(BackendService.EXTRA_LIBRARY, library);
-         packed.putExtra(BackendService.EXTRA_CODE, (String) msg.obj);
-         setResult(Activity.RESULT_OK, packed);
-         finish();
+			Intent packed = new Intent();
+			packed.putExtra(BackendService.EXTRA_ADDRESS, address);
+			packed.putExtra(BackendService.EXTRA_LIBRARY, library);
+			packed.putExtra(BackendService.EXTRA_CODE, (String) msg.obj);
+			setResult(Activity.RESULT_OK, packed);
+			finish();
 
-      }
-   };
+		}
+	};
 
-   @Override
-   public void onCreate(Bundle savedInstanceState) {
-      super.onCreate(savedInstanceState);
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-      // show dialog to user, explaining what happens next
-      setContentView(R.layout.act_pairing);
-      Log.d(TAG, "Begin pairing process...");
+		// show dialog to user, explaining what happens next
+		setContentView(R.layout.act_pairing);
+		Log.d(TAG, "Begin pairing process...");
 
-      this.address = this.getIntent().getStringExtra(BackendService.EXTRA_ADDRESS);
-      this.library = this.getIntent().getStringExtra(BackendService.EXTRA_LIBRARY);
+		this.address = this.getIntent().getStringExtra(
+				BackendService.EXTRA_ADDRESS);
+		this.library = this.getIntent().getStringExtra(
+				BackendService.EXTRA_LIBRARY);
 
-      // this activity should start the pairing service
-      // the pairing server will report to us when someone tries pairing
-      pairingServer = new PairingServer(paired);
+		// this activity should start the pairing service
+		// the pairing server will report to us when someone tries pairing
+		pairingServer = new PairingServer(paired);
 
-      Random random = new Random();
-      int id = random.nextInt(100000);
-      final Hashtable values = new Hashtable();
-      values.put("DvNm", "Android " + id);
-      values.put("RemV", "10000");
-      values.put("DvTy", "iPod");
-      values.put("RemN", "Remote");
-      values.put("txtvers", "1");
-      byte[] pair = new byte[8];
-      random.nextBytes(pair);
-      values.put("Pair", toHex(pair));
+		Random random = new Random();
+		int id = random.nextInt(100000);
+		final Hashtable values = new Hashtable();
+		values.put("DvNm", "Android " + id);
+		values.put("RemV", "10000");
+		values.put("DvTy", "iPod");
+		values.put("RemN", "Remote");
+		values.put("txtvers", "1");
+		values.put("Pair", "0000000000000001");
 
-      // NOTE: this "Pair" above is *not* the guid--we generate and return that
-      // in PairingServer
+		// NOTE: this "Pair" above is *not* the guid--we generate and return
+		// that
+		// in PairingServer
+		pairservice = ServiceInfo.create(LibraryActivity.REMOTE_TYPE,
+				"0000000000000000000000000000000000000006", PairingServer.PORT,
+				0, 0, values);
+	}
 
-      byte[] name = new byte[20];
-      random.nextBytes(name);
-      pairservice = ServiceInfo.create(LibraryActivity.REMOTE_TYPE, toHex(name), PairingServer.PORT, 0, 0, values);
-   }
+	@Override
+	public void onStart() {
+		super.onStart();
 
-   private static final char[] _nibbleToHex = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd',
-            'e', 'f' };
+		ThreadExecutor.runTask(new Runnable() {
+			public void run() {
+				try {
+					Log.i(TAG, "Starting PairingServer...");
+					pairingServer.start();
+					LibraryActivity.getZeroConf().registerService(pairservice);
+				} catch (IOException ex) {
+					Log.w(TAG, ex);
+				}
+			}
+		});
 
-   private static String toHex(byte[] code) {
-      StringBuilder result = new StringBuilder(2 * code.length);
+	}
 
-      for (int i = 0; i < code.length; i++) {
-         int b = code[i] & 0xFF;
-         result.append(_nibbleToHex[b / 16]);
-         result.append(_nibbleToHex[b % 16]);
-      }
+	@Override
+	public void onStop() {
+		super.onStop();
 
-      return result.toString();
-   }
+		ThreadExecutor.runTask(new Runnable() {
+			public void run() {
+				Log.i(TAG, "Stopping PairingServer...");
+				pairingServer.destroy();
+				pairingServer = null;
+				LibraryActivity.getZeroConf().unregisterService(pairservice);
+			}
+		});
 
-   @Override
-   public void onStart() {
-      super.onStart();
-
-      ThreadExecutor.runTask(new Runnable() {
-         public void run() {
-            try {
-               Log.i(TAG, "Starting PairingServer...");
-               pairingServer.start();
-               LibraryActivity.getZeroConf().registerService(pairservice);
-            } catch (IOException ex) {
-               Log.w(TAG, ex);
-            }
-         }
-      });
-
-   }
-
-   @Override
-   public void onStop() {
-      super.onStop();
-
-      ThreadExecutor.runTask(new Runnable() {
-         public void run() {
-            Log.i(TAG, "Stopping PairingServer...");
-            pairingServer.destroy();
-            pairingServer = null;
-            LibraryActivity.getZeroConf().unregisterService(pairservice);
-         }
-      });
-
-   }
+	}
 
 }

@@ -20,8 +20,6 @@ javax.jmdns.impl.constants.DNSState$StateClass: javax.jmdns.impl.constants.DNSSt
 javax.jmdns.impl.constants.DNSState$StateClass: javax.jmdns.impl.constants.DNSState$StateClass valueOf(java.lang.String)
 org.tunesremote.FadeView$AnimationState: org.tunesremote.FadeView$AnimationState[] values()
 org.tunesremote.FadeView$AnimationState: org.tunesremote.FadeView$AnimationState valueOf(java.lang.String)
-org.tunesremote.util.UserTask$Status: org.tunesremote.util.UserTask$Status[] values()
-org.tunesremote.util.UserTask$Status: org.tunesremote.util.UserTask$Status valueOf(java.lang.String)
 org.tunesremote.BrowseActivity
 org.tunesremote.ControlActivity
 org.tunesremote.LibraryActivity
