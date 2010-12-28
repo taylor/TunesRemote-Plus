@@ -323,8 +323,6 @@ org.tunesremote.daap.RequestHelper:
     69:69:public static byte[] requestTracks(org.tunesremote.daap.Session,java.lang.String)
     79:79:public static byte[] requestAlbums(org.tunesremote.daap.Session,int,int)
     89:89:public static byte[] requestPlaylists(org.tunesremote.daap.Session)
-org.tunesremote.daap.Session:
-    194:194:public void controlRating(long)
 org.tunesremote.daap.Status:
     public static final int REPEAT_OFF
     public static final int REPEAT_SINGLE
@@ -337,8 +335,8 @@ org.tunesremote.daap.Status:
     public static final int UPDATE_STATE
     public static final int UPDATE_TRACK
     public static final int UPDATE_COVER
+    public static final int UPDATE_RATING
     private static final int MAX_FAILURES
-    351:351:public long getRating()
 org.tunesremote.util.PairingDatabase:
     public static final java.lang.String DB_NAME
     public static final int DB_VERSION

@@ -64,6 +64,11 @@ public class Response extends HashMap<String, Object> {
    public String getNumberHex(String key) throws Exception {
       return Long.toHexString(getNumberLong(key));
    }
+   
+   public byte[] getRaw(String key) throws Exception {       
+       Object obj = this.get(key);
+       return (byte[]) obj;
+   }
 
    public List<Response> findArray(String prefix) throws Exception {
       List<Response> found = new LinkedList<Response>();

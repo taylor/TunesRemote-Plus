@@ -168,10 +168,43 @@
 			</LinearLayout>
 		
 		</RelativeLayout>
-					
-		</org.tunesremote.FadeView>
-	
-	</RelativeLayout>
+    
+    <RelativeLayout
+            android:id="@+id/rating_box"
+            android:layout_above="@id/control_box"
+            android:layout_width="fill_parent" 
+            android:layout_height="wrap_content" 
+            android:orientation="vertical"
+            android:background="#a000"
+            >
+    
+            <LinearLayout
+                android:id="@+id/rating_buttons"
+                android:layout_centerHorizontal="true"
+                android:layout_width="wrap_content" 
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+                
+            <RatingBar 
+               android:layout_width="wrap_content" 
+               android:layout_height="wrap_content" 
+               android:id="@+id/rating_bar"
+               android:numStars="5"
+               android:stepSize="0.5"
+               android:layout_above="@id/control_box"
+               android:layout_centerHorizontal="true"
+               android:visibility="invisible"/>
+        
+            </LinearLayout>
+        
+        </RelativeLayout>
+
+        
+			
+	</org.tunesremote.FadeView>
+		
+</RelativeLayout>
 	
 	            
 	   

@@ -53,8 +53,8 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.MenuItem.OnMenuItemClickListener;
+import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.animation.AnimationUtils;
@@ -62,10 +62,12 @@ import android.widget.ImageButton;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RatingBar;
+import android.widget.RatingBar.OnRatingBarChangeListener;
 import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.ViewSwitcher.ViewFactory;
 
 /**
@@ -134,6 +136,9 @@ public class ControlActivity extends Activity implements ViewFactory {
             trackArtist.setText(status.getTrackArtist());
             trackAlbum.setText(status.getTrackAlbum());
 
+            // Set to invisible until rating is known
+            ratingBar.setVisibility(RatingBar.INVISIBLE);
+
             // fade new details up if requested
             if (fadeUpNew)
                fadeview.keepAwake();
@@ -158,7 +163,6 @@ public class ControlActivity extends Activity implements ViewFactory {
                }
                showingAlbumId = status.albumId;
             }
-
          case Status.UPDATE_STATE:
             controlPause
                      .setImageResource((status.getPlayStatus() == Status.STATE_PLAYING) ? android.R.drawable.ic_media_pause
@@ -174,11 +178,25 @@ public class ControlActivity extends Activity implements ViewFactory {
             }
             seekPosition.setText(formatTime(status.getProgress()));
             seekRemain.setText("-" + formatTime(status.getRemaining()));
-            if (!dragging)
+            if (!dragging) {
                seekBar.setProgress(status.getProgress());
+            }
+            break;
 
+         // This one is triggered by a thread, so should not be used to update
+         // progress, etc...
+         case Status.UPDATE_RATING:
+            long rating = status.getRating();
+            if (rating >= 0) {
+               ratingBar.setRating(((float) status.getRating() / 100) * 5);
+               ratingBar.setVisibility(RatingBar.VISIBLE);
+
+               // fade new details up if requested
+               if (fadeUpNew)
+                  fadeview.keepAwake();
+            }
+            break;
          }
-
       }
    };
 
@@ -233,6 +251,7 @@ public class ControlActivity extends Activity implements ViewFactory {
       }
    };
 
+   protected RatingBar ratingBar;
    protected TextView trackName, trackArtist, trackAlbum, seekPosition, seekRemain;
    protected SeekBar seekBar;
    protected ImageSwitcher cover;
@@ -370,11 +389,6 @@ public class ControlActivity extends Activity implements ViewFactory {
 
       setContentView(R.layout.act_control);
 
-      // this.notifman =
-      // (NotificationManager)this.getSystemService(Context.NOTIFICATION_SERVICE);
-      // this.shouldPause =
-      // PAUSE.equals(this.getIntent().getStringExtra(Intent.EXTRA_KEY_EVENT));
-
       this.vibrator = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
 
       // prepare volume toast view
@@ -399,6 +413,7 @@ public class ControlActivity extends Activity implements ViewFactory {
       this.trackName = (TextView) findViewById(R.id.info_title);
       this.trackArtist = (TextView) findViewById(R.id.info_artist);
       this.trackAlbum = (TextView) findViewById(R.id.info_album);
+      this.ratingBar = (RatingBar) findViewById(R.id.rating_bar);
 
       this.cover = (ImageSwitcher) findViewById(R.id.cover);
       this.cover.setFactory(this);
@@ -462,6 +477,15 @@ public class ControlActivity extends Activity implements ViewFactory {
 
       // cover.setImageDrawable(this.getResources().getDrawable(R.drawable.folder));
 
+      this.ratingBar.setOnRatingBarChangeListener(new OnRatingBarChangeListener() {
+
+         public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+            // TODO Auto-generated method stub
+            if (fromUser && rating <= 5) {
+               session.controlRating((long) ((rating / 5) * 100));
+            }
+         }
+      });
    }
 
    protected long cachedTime = -1;

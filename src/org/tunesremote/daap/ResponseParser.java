@@ -45,6 +45,7 @@ public class ResponseParser {
    public final static Pattern BRANCHES = Pattern
             .compile("(cmst|mlog|agal|mlcl|mshl|mlit|abro|abar|apso|caci|avdb|cmgt|aply|adbs)");
    public final static Pattern STRINGS = Pattern.compile("(minm|cann|cana|cang|canl|asaa|asal|asar)");
+   public final static Pattern RAWS = Pattern.compile("(canp)");
 
    public static int performSearch(byte[] raw, TagListener listener, Pattern listenFor, boolean haltmlit)
             throws IOException {
@@ -136,11 +137,12 @@ public class ResponseParser {
          } else if (STRINGS.matcher(key).matches()) {
             // force handling as string
             resp.put(nicekey, ResponseParser.readString(raw, length));
-
+         } else if (RAWS.matcher(key).matches()) {
+            // force handling as raw
+            resp.put(nicekey, ResponseParser.readRaw(raw, length));
          } else if (length == 1 || length == 2 || length == 4 || length == 8) {
             // handle parsing unsigned bytes, ints, longs
             resp.put(nicekey, new BigInteger(1, ResponseParser.readRaw(raw, length)));
-
          } else {
             // fallback to just parsing as string
             resp.put(nicekey, ResponseParser.readString(raw, length));

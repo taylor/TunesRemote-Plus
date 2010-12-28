@@ -57,6 +57,7 @@ public class Status {
    public final static int UPDATE_STATE = 3;
    public final static int UPDATE_TRACK = 4;
    public final static int UPDATE_COVER = 5;
+   public final static int UPDATE_RATING = 6;
    private final static int MAX_FAILURES = 10;
 
    /**
@@ -67,6 +68,8 @@ public class Status {
    public String albumId = "";
    protected int repeatStatus = REPEAT_OFF, shuffleStatus = SHUFFLE_OFF, playStatus = STATE_PAUSED;
    protected final AtomicBoolean destroyThread = new AtomicBoolean(false);
+   private long rating = -1;
+   private long songId = 0;
    private String trackName = "", trackArtist = "", trackAlbum = "";
    private long progressTotal = 0, progressRemain = 0;
    private final Session session;
@@ -173,9 +176,9 @@ public class Status {
                // using the next revision-number will make itunes keepalive
                // until something happens
                // http://192.168.254.128:3689/ctrl-int/1/playstatusupdate?revision-number=1&session-id=1034286700
-               parseUpdate(RequestHelper.requestParsed(String.format(
-                        "%s/ctrl-int/1/playstatusupdate?revision-number=%d&session-id=%s", session.getRequestBase(),
-                        revision, session.sessionId), true));
+               parseUpdate(RequestHelper.requestParsed(
+                        String.format("%s/ctrl-int/1/playstatusupdate?revision-number=%d&session-id=%s",
+                                 session.getRequestBase(), revision, session.sessionId), true));
             } catch (Exception e) {
                Log.d(TAG, String.format("Exception in keepalive thread, so killing try# %d", failures.get()), e);
                if (failures.incrementAndGet() > MAX_FAILURES)
@@ -204,9 +207,9 @@ public class Status {
             try {
                // using revision-number=1 will make sure we return instantly
                // http://192.168.254.128:3689/ctrl-int/1/playstatusupdate?revision-number=1&session-id=1034286700
-               parseUpdate(RequestHelper.requestParsed(String.format(
-                        "%s/ctrl-int/1/playstatusupdate?revision-number=%d&session-id=%s", session.getRequestBase(), 1,
-                        session.sessionId), false));
+               parseUpdate(RequestHelper.requestParsed(
+                        String.format("%s/ctrl-int/1/playstatusupdate?revision-number=%d&session-id=%s",
+                                 session.getRequestBase(), 1, session.sessionId), false));
             } catch (Exception e) {
                Log.w(TAG, e);
                if (failures.incrementAndGet() > MAX_FAILURES)
@@ -223,6 +226,7 @@ public class Status {
 
       resp = resp.getNested("cmst");
       this.revision = resp.getNumberLong("cmsr");
+      extractSongId(resp.getRaw("canp"));
 
       int playStatus = (int) resp.getNumberLong("caps");
       int shuffleStatus = (int) resp.getNumberLong("cash");
@@ -256,6 +260,10 @@ public class Status {
          // clear any coverart cache
          this.coverCache = null;
          this.fetchCover();
+
+         // clear rating
+         this.rating = -1;
+         this.fetchRating();
 
          // tell our progress updating thread about a new track
          // this makes sure he doesnt count progress from last song against this
@@ -293,12 +301,45 @@ public class Status {
       }
    }
 
+   private void extractSongId(byte[] bs) {
+      songId = 0;
+
+      // This is a PITA in Java....
+      songId = (bs[12] & 0xff) << 24;
+      songId |= (bs[13] & 0xff) << 16;
+      songId |= (bs[14] & 0xff) << 8;
+      songId |= bs[15] & 0xff;
+
+   }
+
+   public void fetchRating() {
+      // spawn thread to fetch rating
+      ThreadExecutor.runTask(new Runnable() {
+         public void run() {
+            try {
+               Response resp = RequestHelper.requestParsed(
+                        String.format(
+                                 "%s/databases/%d/items?session-id=%s&meta=dacp.userrating,daap.userrating&type=music&query='dmap.itemid:%d'",
+                                 session.getRequestBase(), session.databaseId, session.sessionId, songId), false);
+
+               if (update != null) {
+                  rating = resp.getNested("apso").getNested("mlcl").getNested("mlit").getNumberLong("asur");
+                  update.sendEmptyMessage(UPDATE_RATING);
+               }
+
+            } catch (Exception e) {
+               e.printStackTrace();
+            }
+         }
+      });
+   }
+
    public long getVolume() {
       try {
          // http://192.168.254.128:3689/ctrl-int/1/getproperty?properties=dmcp.volume&session-id=130883770
-         Response resp = RequestHelper.requestParsed(String.format(
-                  "%s/ctrl-int/1/getproperty?properties=dmcp.volume&session-id=%s", session.getRequestBase(),
-                  session.sessionId), false);
+         Response resp = RequestHelper.requestParsed(
+                  String.format("%s/ctrl-int/1/getproperty?properties=dmcp.volume&session-id=%s",
+                           session.getRequestBase(), session.sessionId), false);
          return resp.getNested("cmgt").getNumberLong("cmvo");
       } catch (Exception e) {
          e.printStackTrace();
@@ -347,8 +388,7 @@ public class Status {
    }
 
    public long getRating() {
-      // http://192.168.254.128:3689/ctrl-int/1/getproperty?properties=dmcp.volume&session-id=130883770
-      return -1;
+      return this.rating;
    }
 
    public String getAlbumId() {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="TunesRemotePlus" ><!-- default="help" -->
+<project name="TunesRemotePlus" default="help">
 
 <property environment="env"/>
 
@@ -42,11 +42,11 @@
         <pathelement path="${sdk.dir}/tools/lib/sdklib.jar" />
         <pathelement path="${sdk.dir}/tools/lib/androidprefs.jar" />
     </path>
-<!--
+
     <taskdef name="setup"
         classname="com.android.ant.SetupTask"
         classpathref="android.antlibs" />
--->
+
 <!-- extension targets. Uncomment the ones where you want to do custom work
      in between standard targets -->
 

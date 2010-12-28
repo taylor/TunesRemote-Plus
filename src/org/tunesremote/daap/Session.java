@@ -189,8 +189,8 @@ public class Session {
    }
 
    public void controlRating(long rating) {
-      // where rating 0-100
-      // /ctrl-int/1/setproperty?dacp.userrating=100&database-spec='dmap.persistentid:16090061681534800669'&playlist-spec='dmap.persistentid:16090061681534800670'&song-spec='dmap.itemid:0x57'&session-id=1873217009
+       this.fireAction(String.format("%s/ctrl-int/1/setproperty?dacp.userrating=%d&session-id=%s",  
+               this.getRequestBase(), rating, this.sessionId), false);
    }
 
    public void controlPlayAlbum(final String albumid, final int tracknum) {

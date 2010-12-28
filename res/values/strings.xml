@@ -45,7 +45,6 @@
   <string name="artists_menu_play">Play artist</string>
   <string name="artists_menu_browse">Browse albums</string>
   <string name="notif_title">Remote music playing</string>
-  <string name="notif_caption">%s - %s</string>
   <string name="control_menu_search">Search</string>
   <string name="control_menu_artists">Artists</string>
   <string name="control_menu_playlists">Playlists</string>
