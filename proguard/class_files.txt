@@ -67837,7 +67837,7 @@ Constant Pool (count = 236):
   - String [%s/ctrl-int/1/items?session-id=%s&meta=dmap.itemname,dmap.itemid,daap.songartist,daap.songalbum,daap.songalbum,daap.songtime,daap.songtracknumber&type=music&sort=album&query='daap.songalbumid:%s']
   - String [%s/ctrl-int/1/playstatusupdate?revision-number=1&session-id=%s]
   - String [%s/databases/%d/browse/artists?session-id=%s&include-sort-headers=1]
-  - String [%s/databases/%d/containers/%s/items?session-id=%s&meta=dmap.itemname,dmap.itemid,daap.songartst,daap.songalbum,dmap.containeritemid,com.apple.tunes.has-video]
+  - String [%s/databases/%d/containers/%s/items?session-id=%s&meta=dmap.itemname,dmap.itemid,daap.songartst,daap.songalbum,daap.songtime,dmap.containeritemid,com.apple.tunes.has-video]
   - String [%s/databases/%d/groups?session-id=%s&meta=dmap.itemname,dmap.itemid,dmap.persistentid,daap.songartist&type=music&group-type=albums&sort=artist&include-sort-headers=1&query='daap.songartist:%s']
   - String [%s/databases/%d/items?session-id=%s&meta=dmap.itemname,dmap.itemid,daap.songartist,daap.songalbum,daap.songalbum,daap.songtime,daap.songtracknumber&type=music&sort=album&query='daap.songalbumid:%s']
   - String [%s/databases/%d/items?session-id=%s&meta=dmap.itemname,dmap.itemid,daap.songartist,daap.songalbum,daap.songalbum,daap.songtime,daap.songtracknumber&type=music&sort=album&query='daap.songartist:%s']
@@ -67961,7 +67961,7 @@ Constant Pool (count = 236):
   + Utf8 [%s/ctrl-int/1/items?session-id=%s&meta=dmap.itemname,dmap.itemid,daap.songartist,daap.songalbum,daap.songalbum,daap.songtime,daap.songtracknumber&type=music&sort=album&query='daap.songalbumid:%s']
   + Utf8 [%s/ctrl-int/1/playstatusupdate?revision-number=1&session-id=%s]
   + Utf8 [%s/databases/%d/browse/artists?session-id=%s&include-sort-headers=1]
-  + Utf8 [%s/databases/%d/containers/%s/items?session-id=%s&meta=dmap.itemname,dmap.itemid,daap.songartst,daap.songalbum,dmap.containeritemid,com.apple.tunes.has-video]
+  + Utf8 [%s/databases/%d/containers/%s/items?session-id=%s&meta=dmap.itemname,dmap.itemid,daap.songartst,daap.songalbum,daap.songtime,dmap.containeritemid,com.apple.tunes.has-video]
   + Utf8 [%s/databases/%d/groups?session-id=%s&meta=dmap.itemname,dmap.itemid,dmap.persistentid,daap.songartist&type=music&group-type=albums&sort=artist&include-sort-headers=1&query='daap.songartist:%s']
   + Utf8 [%s/databases/%d/items?session-id=%s&meta=dmap.itemname,dmap.itemid,daap.songartist,daap.songalbum,daap.songalbum,daap.songtime,daap.songtracknumber&type=music&sort=album&query='daap.songalbumid:%s']
   + Utf8 [%s/databases/%d/items?session-id=%s&meta=dmap.itemname,dmap.itemid,daap.songartist,daap.songalbum,daap.songalbum,daap.songtime,daap.songtracknumber&type=music&sort=album&query='daap.songartist:%s']
@@ -68637,7 +68637,7 @@ Methods (count = 10):
     Class member attributes (count = 1):
     + Code attribute instructions (code length = 87, locals = 3, stack = 6):
       [0] ldc #5
-        - String [%s/databases/%d/containers/%s/items?session-id=%s&meta=dmap.itemname,dmap.itemid,daap.songartst,daap.songalbum,dmap.containeritemid,com.apple.tunes.has-video]
+        - String [%s/databases/%d/containers/%s/items?session-id=%s&meta=dmap.itemname,dmap.itemid,daap.songartst,daap.songalbum,daap.songtime,dmap.containeritemid,com.apple.tunes.has-video]
       [2] iconst_4
       [3] anewarray #36
         - Class [java/lang/Object]
