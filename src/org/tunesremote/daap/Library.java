@@ -36,21 +36,18 @@ import android.util.Log;
 public class Library {
 
    public final static String TAG = Library.class.toString();
-   protected final static int RESULT_INCREMENT = 50;
-   protected final static Pattern MLIT_PATTERN = Pattern.compile("mlit");
+   public final static int RESULT_INCREMENT = 50;
+   public final static Pattern MLIT_PATTERN = Pattern.compile("mlit");
 
-   // library keeps track of albums/tracks from itunes also caches requests as
-   // needed
+   // library keeps track of albums/tracks from itunes also caches requests as needed
    protected final Session session;
 
    public Library(Session session) {
       this.session = session;
-
    }
 
    /**
-    * Performs a search of the DACP Server sending it search criteria and an
-    * index of how many items to find.
+    * Performs a search of the DACP Server sending it search criteria and an index of how many items to find.
     * <p>
     * @param listener the TagListener to capture records coming in for the UI
     * @param search the search criteria
@@ -63,10 +60,8 @@ public class Library {
       try {
          String encodedSearch = URLEncoder.encode(search).replaceAll("\\+", "%20");
          String query = String
-                  .format(
-                           "%s/databases/%d/items?session-id=%s&meta=dmap.itemname,dmap.itemid,dmap.persistentid,daap.songartist,daap.songalbum,daap.songtime,daap.songtracknumber&type=music&sort=album&query=('dmap.itemname:*%s*','daap.songartist:*%s*','daap.songalbum:*%s*')&index=%d-%d",
-                           session.getRequestBase(), session.databaseId, session.sessionId, encodedSearch,
-                           encodedSearch, encodedSearch, start, items);
+                  .format("%s/databases/%d/items?session-id=%s&meta=dmap.itemname,dmap.itemid,dmap.persistentid,daap.songartist,daap.songalbum,daap.songtime,daap.songtracknumber&type=music&sort=album&query=('dmap.itemname:*%s*','daap.songartist:*%s*','daap.songalbum:*%s*')&index=%d-%d",
+                           session.getRequestBase(), session.databaseId, session.sessionId, encodedSearch, encodedSearch, encodedSearch, start, items);
          byte[] raw = RequestHelper.request(query, false);
          Response resp = ResponseParser.performParse(raw, listener, MLIT_PATTERN);
          // apso or adbs
@@ -85,16 +80,14 @@ public class Library {
    }
 
    public void readArtists(TagListener listener) {
-      // check if we have a local cache create a wrapping taglistener to create
-      // local cache
+      // check if we have a local cache create a wrapping taglistener to create local cache
       try {
          Log.d(TAG, "readArtists() requesting...");
 
          // request ALL artists for performance
          // GET
          // /databases/%d/browse/artists?session-id=%s&include-sort-headers=1&index=%d-%d
-         byte[] raw = RequestHelper.request(String.format(
-                  "%s/databases/%d/browse/artists?session-id=%s&include-sort-headers=1", session.getRequestBase(),
+         byte[] raw = RequestHelper.request(String.format("%s/databases/%d/browse/artists?session-id=%s&include-sort-headers=1", session.getRequestBase(),
                   session.databaseId, session.sessionId), false);
 
          // parse list, passing off events in the process
@@ -115,15 +108,11 @@ public class Library {
 
          // make albums request for this artist
          // http://192.168.254.128:3689/databases/36/groups?session-id=1034286700&meta=dmap.itemname,dmap.itemid,dmap.persistentid,daap.songartist&type=music&group-type=albums&sort=artist&include-sort-headers=1
-         // http://192.168.254.128:3689/databases/36/groups?session-id=1598562931&meta=dmap.itemname,dmap.itemid,dmap.persistentid,daap.songartist&type=music&group-type=albums&sort=artist&include-sort-headers=1&query='daap.songartist:*%s*'
 
          byte[] raw = RequestHelper
-                  .request(
-                           String
-                                    .format(
-                                             "%s/databases/%d/groups?session-id=%s&meta=dmap.itemname,dmap.itemid,dmap.persistentid,daap.songartist&type=music&group-type=albums&sort=artist&include-sort-headers=1&query='daap.songartist:%s'",
-                                             session.getRequestBase(), session.databaseId, session.sessionId,
-                                             encodedArtist), false);
+                  .request(String
+                           .format("%s/databases/%d/groups?session-id=%s&meta=dmap.itemname,dmap.itemid,dmap.persistentid,daap.songartist&type=music&group-type=albums&sort=artist&include-sort-headers=1&query='daap.songartist:%s'",
+                                    session.getRequestBase(), session.databaseId, session.sessionId, encodedArtist), false);
 
          // parse list, passing off events in the process
          ResponseParser.performSearch(raw, listener, MLIT_PATTERN, false);
@@ -136,8 +125,7 @@ public class Library {
 
    public void readAlbums(TagListener listener) {
 
-      // check if we have a local cache create a wrapping taglistener to create
-      // local cache
+      // check if we have a local cache create a wrapping taglistener to create local cache
 
       try {
          long start = 0, total = Integer.MAX_VALUE;
@@ -151,12 +139,9 @@ public class Library {
             // make partial album list request
             // http://192.168.254.128:3689/databases/36/groups?session-id=1034286700&meta=dmap.itemname,dmap.itemid,dmap.persistentid,daap.songartist&type=music&group-type=albums&sort=artist&include-sort-headers=1&index=0-50
             raw = RequestHelper
-                     .request(
-                              String
-                                       .format(
-                                                "%s/databases/%d/groups?session-id=%s&meta=dmap.itemname,dmap.itemid,dmap.persistentid,daap.songartist&type=music&group-type=albums&sort=artist&include-sort-headers=1&index=%d-%d",
-                                                session.getRequestBase(), session.databaseId, session.sessionId, start,
-                                                start + RESULT_INCREMENT), false);
+                     .request(String
+                              .format("%s/databases/%d/groups?session-id=%s&meta=dmap.itemname,dmap.itemid,dmap.persistentid,daap.songartist&type=music&group-type=albums&sort=artist&include-sort-headers=1&index=%d-%d",
+                                       session.getRequestBase(), session.databaseId, session.sessionId, start, start + RESULT_INCREMENT), false);
 
             // parse list, passing off events in the process
             final int hits = ResponseParser.performSearch(raw, listener, MLIT_PATTERN, false);
@@ -171,23 +156,15 @@ public class Library {
       } catch (Exception e) {
          Log.w(TAG, "readAlbums Exception:" + e.getMessage());
       }
-
-      /*
-       * agal --+ mstt 4 000000c8 == 200 muty 1 00 == 0 mtco 4 00000017 == 23
-       * mrco 4 00000017 == 23 mlcl --+
-       */
-
    }
 
    public void readTracks(String albumid, TagListener listener) {
 
-      // check if we have a local cache
-      // create a wrapping taglistener to create local cache
+      // check if we have a local cache create a wrapping taglistener to create local cache
 
       try {
          String temp = String
-                  .format(
-                           "%s/databases/%d/items?session-id=%s&meta=dmap.itemname,dmap.itemid,daap.songartist,daap.songalbum,daap.songalbum,daap.songtime,daap.songtracknumber&type=music&sort=album&query='daap.songalbumid:%s'",
+                  .format("%s/databases/%d/items?session-id=%s&meta=dmap.itemname,dmap.itemid,daap.songartist,daap.songalbum,daap.songalbum,daap.songtime,daap.songtracknumber&type=music&sort=album&query='daap.songalbumid:%s'",
                            session.getRequestBase(), session.databaseId, session.sessionId, albumid);
 
          // make tracks list request
@@ -205,27 +182,17 @@ public class Library {
 
    public void readAllTracks(String artist, TagListener listener) {
 
-      // check if we have a local cache
-      // create a wrapping taglistener to create local cache
+      // check if we have a local cache create a wrapping taglistener to create local cache
 
       final String encodedArtist = URLEncoder.encode(artist).replaceAll("\\+", "%20");
 
       try {
-         /*
-          * String temp =String.format(
-          * "%s/databases/%d/containers/%d/items?session-id=%s&meta=dmap.itemname,dmap.itemid,daap.songartist,daap.songalbum,daap.songalbum,daap.songtime,daap.songtracknumber&type=music&sort=album&query='daap.songalbumid:%s'"
-          * , session.getRequestBase(), session.databaseId, session.musicId,
-          * session.sessionId, albumid);
-          */
          // make tracks list request
          // http://192.168.254.128:3689/databases/36/containers/113/items?session-id=1301749047&meta=dmap.itemname,dmap.itemid,daap.songartist,daap.songalbum,daap.songalbum,daap.songtime,daap.songtracknumber&type=music&sort=album&query='daap.songalbumid:11624070975347817354'
          byte[] raw = RequestHelper
-                  .request(
-                           String
-                                    .format(
-                                             "%s/databases/%d/items?session-id=%s&meta=dmap.itemname,dmap.itemid,daap.songartist,daap.songalbum,daap.songalbum,daap.songtime,daap.songtracknumber&type=music&sort=album&query='daap.songartist:%s'",
-                                             session.getRequestBase(), session.databaseId, session.sessionId,
-                                             encodedArtist), false);
+                  .request(String
+                           .format("%s/databases/%d/items?session-id=%s&meta=dmap.itemname,dmap.itemid,daap.songartist,daap.songalbum,daap.songalbum,daap.songtime,daap.songtracknumber&type=music&sort=album&query='daap.songartist:%s'",
+                                    session.getRequestBase(), session.databaseId, session.sessionId, encodedArtist), false);
 
          // parse list, passing off events in the process
          ResponseParser.performSearch(raw, listener, MLIT_PATTERN, false);
@@ -236,11 +203,9 @@ public class Library {
    }
 
    public void readPlaylists(PlaylistsAdapter adapter) {
-
       for (Playlist ply : this.session.playlists) {
          adapter.foundPlaylist(ply);
       }
-
       adapter.searchDone();
    }
 
@@ -249,12 +214,9 @@ public class Library {
       try {
          // http://192.168.254.128:3689/databases/36/containers/1234/items?session-id=2025037772&meta=dmap.itemname,dmap.itemid,daap.songartist,daap.songalbum,dmap.containeritemid,com.apple.tunes.has-video
          byte[] raw = RequestHelper
-                  .request(
-                           String
-                                    .format(
-                                             "%s/databases/%d/containers/%s/items?session-id=%s&meta=dmap.itemname,dmap.itemid,daap.songartst,daap.songalbum,dmap.containeritemid,com.apple.tunes.has-video",
-                                             session.getRequestBase(), session.databaseId, playlistid,
-                                             session.sessionId), false);
+                  .request(String
+                           .format("%s/databases/%d/containers/%s/items?session-id=%s&meta=dmap.itemname,dmap.itemid,daap.songartst,daap.songalbum,daap.songtime,dmap.containeritemid,com.apple.tunes.has-video",
+                                    session.getRequestBase(), session.databaseId, playlistid, session.sessionId), false);
 
          // parse list, passing off events in the process
          ResponseParser.performSearch(raw, listener, MLIT_PATTERN, false);
@@ -270,8 +232,7 @@ public class Library {
 
       try {
          String temp = String
-                  .format(
-                           "%s/ctrl-int/1/items?session-id=%s&meta=dmap.itemname,dmap.itemid,daap.songartist,daap.songalbum,daap.songalbum,daap.songtime,daap.songtracknumber&type=music&sort=album&query='daap.songalbumid:%s'",
+                  .format("%s/ctrl-int/1/items?session-id=%s&meta=dmap.itemname,dmap.itemid,daap.songartist,daap.songalbum,daap.songalbum,daap.songtime,daap.songtracknumber&type=music&sort=album&query='daap.songalbumid:%s'",
                            session.getRequestBase(), session.sessionId, albumid);
 
          byte[] raw = RequestHelper.request(temp, false);
@@ -295,8 +256,7 @@ public class Library {
    public void readCurrentSong(TagListener listener) {
       // reads the current playing song as a one-item playlist
       try {
-         String temp = String.format("%s/ctrl-int/1/playstatusupdate?revision-number=1&session-id=%s", session
-                  .getRequestBase(), session.sessionId);
+         String temp = String.format("%s/ctrl-int/1/playstatusupdate?revision-number=1&session-id=%s", session.getRequestBase(), session.sessionId);
 
          // Refactor response into one that looks like a normal items request
          // and trigger listener
