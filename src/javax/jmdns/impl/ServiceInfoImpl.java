@@ -1,6 +1,6 @@
-//Copyright 2003-2005 Arthur van Hoff, Rick Blair
-//Licensed under Apache License version 2.0
-//Original license LGPL
+// Copyright 2003-2005 Arthur van Hoff, Rick Blair
+// Licensed under Apache License version 2.0
+// Original license LGPL
 
 package javax.jmdns.impl;
 
@@ -16,9 +16,13 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.jmdns.ServiceEvent;
 import javax.jmdns.ServiceInfo;
@@ -32,12 +36,10 @@ import javax.jmdns.impl.tasks.DNSTask;
 
 /**
  * JmDNS service information.
- * @version %I%, %G%
  * @author Arthur van Hoff, Jeff Sonstein, Werner Randelshofer
  */
-public class ServiceInfoImpl extends ServiceInfo implements DNSListener, Cloneable, DNSStatefulObject {
-   // private static Logger logger =
-   // Logger.getLogger(ServiceInfoImpl.class.getName());
+public class ServiceInfoImpl extends ServiceInfo implements DNSListener, DNSStatefulObject {
+   private static Logger logger = Logger.getLogger(ServiceInfoImpl.class.getName());
 
    private String _domain;
    private String _protocol;
@@ -50,8 +52,10 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, Cloneab
    private int _priority;
    private byte _text[];
    private Map<String, byte[]> _props;
-   private Inet4Address _ipv4Addr;
-   private Inet6Address _ipv6Addr;
+   private final Set<Inet4Address> _ipv4Addresses;
+   private final Set<Inet6Address> _ipv6Addresses;
+
+   private transient String _key;
 
    private boolean _persistent;
    private boolean _needTextAnnouncing;
@@ -88,7 +92,7 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, Cloneab
             try {
                if ((this._task == null) && _info.needTextAnnouncing()) {
                   if (this._state.isAnnounced()) {
-                     this._state = DNSState.ANNOUNCING_1;
+                     this.setState(DNSState.ANNOUNCING_1);
                      if (this.getDns() != null) {
                         this.getDns().startAnnouncer();
                      }
@@ -119,10 +123,8 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, Cloneab
     * @param text
     * @see javax.jmdns.ServiceInfo#create(String, String, int, int, int, String)
     */
-   public ServiceInfoImpl(String type, String name, String subtype, int port, int weight, int priority,
-            boolean persistent, String text) {
-      this(ServiceInfoImpl.decodeQualifiedNameMap(type, name, subtype), port, weight, priority, persistent,
-               (byte[]) null);
+   public ServiceInfoImpl(String type, String name, String subtype, int port, int weight, int priority, boolean persistent, String text) {
+      this(ServiceInfoImpl.decodeQualifiedNameMap(type, name, subtype), port, weight, priority, persistent, (byte[]) null);
       _server = text;
       try {
          ByteArrayOutputStream out = new ByteArrayOutputStream(text.length());
@@ -144,10 +146,8 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, Cloneab
     * @param props
     * @see javax.jmdns.ServiceInfo#create(String, String, int, int, int, Map)
     */
-   public ServiceInfoImpl(String type, String name, String subtype, int port, int weight, int priority,
-            boolean persistent, Map<String, ?> props) {
-      this(ServiceInfoImpl.decodeQualifiedNameMap(type, name, subtype), port, weight, priority, persistent,
-               textFromProperties(props));
+   public ServiceInfoImpl(String type, String name, String subtype, int port, int weight, int priority, boolean persistent, Map<String, ?> props) {
+      this(ServiceInfoImpl.decodeQualifiedNameMap(type, name, subtype), port, weight, priority, persistent, textFromProperties(props));
    }
 
    /**
@@ -161,18 +161,15 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, Cloneab
     * @param text
     * @see javax.jmdns.ServiceInfo#create(String, String, int, int, int, byte[])
     */
-   public ServiceInfoImpl(String type, String name, String subtype, int port, int weight, int priority,
-            boolean persistent, byte text[]) {
+   public ServiceInfoImpl(String type, String name, String subtype, int port, int weight, int priority, boolean persistent, byte text[]) {
       this(ServiceInfoImpl.decodeQualifiedNameMap(type, name, subtype), port, weight, priority, persistent, text);
    }
 
-   public ServiceInfoImpl(Map<Fields, String> qualifiedNameMap, int port, int weight, int priority, boolean persistent,
-            Map<String, ?> props) {
+   public ServiceInfoImpl(Map<Fields, String> qualifiedNameMap, int port, int weight, int priority, boolean persistent, Map<String, ?> props) {
       this(qualifiedNameMap, port, weight, priority, persistent, textFromProperties(props));
    }
 
-   ServiceInfoImpl(Map<Fields, String> qualifiedNameMap, int port, int weight, int priority, boolean persistent,
-            String text) {
+   ServiceInfoImpl(Map<Fields, String> qualifiedNameMap, int port, int weight, int priority, boolean persistent, String text) {
       this(qualifiedNameMap, port, weight, priority, persistent, (byte[]) null);
       _server = text;
       try {
@@ -184,8 +181,7 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, Cloneab
       }
    }
 
-   ServiceInfoImpl(Map<Fields, String> qualifiedNameMap, int port, int weight, int priority, boolean persistent,
-            byte text[]) {
+   ServiceInfoImpl(Map<Fields, String> qualifiedNameMap, int port, int weight, int priority, boolean persistent, byte text[]) {
       Map<Fields, String> map = ServiceInfoImpl.checkQualifiedNameMap(qualifiedNameMap);
 
       this._domain = map.get(Fields.Domain);
@@ -201,13 +197,17 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, Cloneab
       this.setNeedTextAnnouncing(false);
       this._state = new ServiceInfoState(this);
       this._persistent = persistent;
+      this._ipv4Addresses = Collections.synchronizedSet(new LinkedHashSet<Inet4Address>());
+      this._ipv6Addresses = Collections.synchronizedSet(new LinkedHashSet<Inet6Address>());
    }
 
    /**
     * During recovery we need to duplicate service info to reregister them
     * @param info
     */
-   public ServiceInfoImpl(ServiceInfo info) {
+   ServiceInfoImpl(ServiceInfo info) {
+      this._ipv4Addresses = Collections.synchronizedSet(new LinkedHashSet<Inet4Address>());
+      this._ipv6Addresses = Collections.synchronizedSet(new LinkedHashSet<Inet6Address>());
       if (info != null) {
          this._domain = info.getDomain();
          this._protocol = info.getProtocol();
@@ -219,8 +219,14 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, Cloneab
          this._priority = info.getPriority();
          this._text = info.getTextBytes();
          this._persistent = info.isPersistent();
-         this._ipv4Addr = info.getInet4Address();
-         this._ipv6Addr = info.getInet6Address();
+         Inet6Address[] ipv6Addresses = info.getInet6Addresses();
+         for (Inet6Address address : ipv6Addresses) {
+            this._ipv6Addresses.add(address);
+         }
+         Inet4Address[] ipv4Addresses = info.getInet4Addresses();
+         for (Inet4Address address : ipv4Addresses) {
+            this._ipv4Addresses.add(address);
+         }
       }
       this._state = new ServiceInfoState(this);
    }
@@ -237,6 +243,8 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, Cloneab
    public static Map<Fields, String> decodeQualifiedNameMapForType(String type) {
       int index;
 
+      String casePreservedType = type;
+
       String aType = type.toLowerCase();
       String application = aType;
       String protocol = "";
@@ -246,13 +254,13 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, Cloneab
 
       if (aType.contains("in-addr.arpa") || aType.contains("ip6.arpa")) {
          index = (aType.contains("in-addr.arpa") ? aType.indexOf("in-addr.arpa") : aType.indexOf("ip6.arpa"));
-         name = removeSeparators(aType.substring(0, index));
-         domain = aType.substring(index);
+         name = removeSeparators(casePreservedType.substring(0, index));
+         domain = casePreservedType.substring(index);
          application = "";
       } else if ((!aType.contains("_")) && aType.contains(".")) {
          index = aType.indexOf('.');
-         name = removeSeparators(aType.substring(0, index));
-         domain = removeSeparators(aType.substring(index));
+         name = removeSeparators(casePreservedType.substring(0, index));
+         domain = removeSeparators(casePreservedType.substring(index));
          application = "";
       } else {
          // First remove the name if it there.
@@ -260,9 +268,10 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, Cloneab
             index = aType.indexOf('.');
             if (index > 0) {
                // We need to preserve the case for the user readable name.
-               name = type.substring(0, index);
+               name = casePreservedType.substring(0, index);
                if (index + 1 < aType.length()) {
                   aType = aType.substring(index + 1);
+                  casePreservedType = casePreservedType.substring(index + 1);
                }
             }
          }
@@ -271,16 +280,16 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, Cloneab
          if (index > 0) {
             int start = index + 2;
             int end = aType.indexOf('.', start);
-            protocol = aType.substring(start, end);
+            protocol = casePreservedType.substring(start, end);
          }
          if (protocol.length() > 0) {
-            index = aType.indexOf("_" + protocol + ".");
+            index = aType.indexOf("_" + protocol.toLowerCase() + ".");
             int start = index + protocol.length() + 2;
             int end = aType.length() - (aType.endsWith(".") ? 1 : 0);
-            domain = aType.substring(start, end);
-            application = aType.substring(0, index - 1);
+            domain = casePreservedType.substring(start, end);
+            application = casePreservedType.substring(0, index - 1);
          }
-         index = application.indexOf("._sub");
+         index = application.toLowerCase().indexOf("._sub");
          if (index > 0) {
             int start = index + 5;
             subtype = removeSeparators(application.substring(0, index));
@@ -316,8 +325,7 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, Cloneab
       protocol = removeSeparators(protocol);
       checkedQualifiedNameMap.put(Fields.Protocol, protocol);
       // Application
-      String application = (qualifiedNameMap.containsKey(Fields.Application) ? qualifiedNameMap.get(Fields.Application)
-               : "");
+      String application = (qualifiedNameMap.containsKey(Fields.Application) ? qualifiedNameMap.get(Fields.Application) : "");
       if ((application == null) || (application.length() == 0)) {
          application = "";
       }
@@ -369,8 +377,7 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, Cloneab
       String domain = this.getDomain();
       String protocol = this.getProtocol();
       String application = this.getApplication();
-      return (application.length() > 0 ? "_" + application + "." : "")
-               + (protocol.length() > 0 ? "_" + protocol + "." : "") + domain + ".";
+      return (application.length() > 0 ? "_" + application + "." : "") + (protocol.length() > 0 ? "_" + protocol + "." : "") + domain + ".";
    }
 
    /**
@@ -393,11 +400,24 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, Cloneab
    }
 
    /**
+    * {@inheritDoc}
+    */
+
+   @Override
+   public String getKey() {
+      if (this._key == null) {
+         this._key = this.getQualifiedName().toLowerCase();
+      }
+      return this._key;
+   }
+
+   /**
     * Sets the service instance name.
     * @param name unqualified service instance name, such as <code>foobar</code>
     */
    void setName(String name) {
       this._name = name;
+      this._key = null;
    }
 
    /**
@@ -411,10 +431,9 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, Cloneab
       String application = this.getApplication();
       String instance = this.getName();
       // String subtype = this.getSubtype();
-      // return (instance.length() > 0 ? instance + "." : "") +
-      // (application.length() > 0 ? "_" + application + "." : "") +
-      // (protocol.length() > 0 ? "_" + protocol + (subtype.length() > 0 ? ",_"
-      // + subtype.toLowerCase() + "." : ".") : "") + domain
+      // return (instance.length() > 0 ? instance + "." : "") + (application.length() > 0 ? "_" + application + "." :
+      // "") + (protocol.length() > 0 ? "_" + protocol + (subtype.length() > 0 ? ",_" + subtype.toLowerCase() + "." :
+      // ".") : "") + domain
       // + ".";
       return (instance.length() > 0 ? instance + "." : "") + (application.length() > 0 ? "_" + application + "." : "")
                + (protocol.length() > 0 ? "_" + protocol + "." : "") + domain + ".";
@@ -439,10 +458,39 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, Cloneab
    /**
     * {@inheritDoc}
     */
+   @Override
+   @Deprecated
+   public String getHostAddress() {
+      String[] names = this.getHostAddresses();
+      return (names.length > 0 ? names[0] : "");
+   }
+
+   /**
+    * {@inheritDoc}
+    */
 
    @Override
-   public String getHostAddress() {
-      return (this.getInetAddress() != null ? this.getInetAddress().getHostAddress() : "");
+   public String[] getHostAddresses() {
+      InetAddress[] addresses = this.getInetAddresses();
+      String[] names = new String[addresses.length];
+      for (int i = 0; i < addresses.length; i++) {
+         names[i] = addresses[i].getHostAddress();
+      }
+      return names;
+   }
+
+   /**
+    * @param addr the addr to add
+    */
+   void addAddress(Inet4Address addr) {
+      _ipv4Addresses.add(addr);
+   }
+
+   /**
+    * @param addr the addr to add
+    */
+   void addAddress(Inet6Address addr) {
+      _ipv6Addresses.add(addr);
    }
 
    /**
@@ -455,44 +503,66 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, Cloneab
    }
 
    /**
-    * @param addr the addr to set
-    */
-   void setAddress(Inet4Address addr) {
-      this._ipv4Addr = addr;
-   }
-
-   /**
-    * @param addr the addr to set
-    */
-   void setAddress(Inet6Address addr) {
-      this._ipv6Addr = addr;
-   }
-
-   /**
     * {@inheritDoc}
     */
-
    @Override
+   @Deprecated
    public InetAddress getInetAddress() {
-      return (_ipv4Addr != null ? _ipv4Addr : _ipv6Addr);
+      InetAddress[] addresses = this.getInetAddresses();
+      return (addresses.length > 0 ? addresses[0] : null);
    }
 
    /**
     * {@inheritDoc}
     */
-
    @Override
+   @Deprecated
    public Inet4Address getInet4Address() {
-      return _ipv4Addr;
+      Inet4Address[] addresses = this.getInet4Addresses();
+      return (addresses.length > 0 ? addresses[0] : null);
    }
 
    /**
     * {@inheritDoc}
     */
+   @Override
+   @Deprecated
+   public Inet6Address getInet6Address() {
+      Inet6Address[] addresses = this.getInet6Addresses();
+      return (addresses.length > 0 ? addresses[0] : null);
+   }
+
+   /*
+    * (non-Javadoc)
+    * @see javax.jmdns.ServiceInfo#getInetAddresses()
+    */
 
    @Override
-   public Inet6Address getInet6Address() {
-      return _ipv6Addr;
+   public InetAddress[] getInetAddresses() {
+      List<InetAddress> aList = new ArrayList<InetAddress>(_ipv4Addresses.size() + _ipv6Addresses.size());
+      aList.addAll(_ipv4Addresses);
+      aList.addAll(_ipv6Addresses);
+      return aList.toArray(new InetAddress[aList.size()]);
+   }
+
+   /*
+    * (non-Javadoc)
+    * @see javax.jmdns.ServiceInfo#getInet4Addresses()
+    */
+
+   @Override
+   public Inet4Address[] getInet4Addresses() {
+      return _ipv4Addresses.toArray(new Inet4Address[_ipv4Addresses.size()]);
+   }
+
+   /*
+    * (non-Javadoc)
+    * @see javax.jmdns.ServiceInfo#getInet6Addresses()
+    */
+
+   @Override
+   public Inet6Address[] getInet6Addresses() {
+      return _ipv6Addresses.toArray(new Inet6Address[_ipv6Addresses.size()]);
    }
 
    /**
@@ -528,7 +598,7 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, Cloneab
 
    @Override
    public byte[] getTextBytes() {
-      return getText();
+      return (this._text != null && this._text.length > 0 ? this._text : DNSRecord.EMPTY_TXT);
    }
 
    /**
@@ -548,31 +618,59 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, Cloneab
       return "";
    }
 
-   /**
+   /*
+    * (non-Javadoc)
     * @see javax.jmdns.ServiceInfo#getURL()
     */
-
    @Override
+   @Deprecated
    public String getURL() {
-      return getURL("http");
+      return this.getURL("http");
    }
 
-   /**
-    * @see javax.jmdns.ServiceInfo#getURL(java.lang.String)
+   /*
+    * (non-Javadoc)
+    * @see javax.jmdns.ServiceInfo#getURLs()
     */
 
    @Override
+   public String[] getURLs() {
+      return this.getURLs("http");
+   }
+
+   /*
+    * (non-Javadoc)
+    * @see javax.jmdns.ServiceInfo#getURL(java.lang.String)
+    */
+   @Override
+   @Deprecated
    public String getURL(String protocol) {
-      String url = protocol + "://" + getHostAddress() + ":" + getPort();
-      String path = getPropertyString("path");
-      if (path != null) {
-         if (path.indexOf("://") >= 0) {
-            url = path;
-         } else {
-            url += path.startsWith("/") ? path : "/" + path;
+      String[] urls = this.getURLs(protocol);
+      return (urls.length > 0 ? urls[0] : protocol + "://null:" + getPort());
+   }
+
+   /*
+    * (non-Javadoc)
+    * @see javax.jmdns.ServiceInfo#getURLs(java.lang.String)
+    */
+
+   @Override
+   public String[] getURLs(String protocol) {
+      InetAddress[] addresses = this.getInetAddresses();
+      String[] urls = new String[addresses.length];
+      for (int i = 0; i < addresses.length; i++) {
+         String url = protocol + "://" + addresses[i].getHostAddress() + ":" + getPort();
+         String path = getPropertyString("path");
+         if (path != null) {
+            if (path.indexOf("://") >= 0) {
+               url = path;
+            } else {
+               url += path.startsWith("/") ? path : "/" + path;
+            }
          }
+         urls[i] = url;
       }
-      return url;
+      return urls;
    }
 
    /**
@@ -606,7 +704,7 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, Cloneab
 
    @Override
    public Enumeration<String> getPropertyNames() {
-      Map<String, byte[]> properties = getProperties();
+      Map<String, byte[]> properties = this.getProperties();
       Collection<String> names = (properties != null ? properties.keySet() : Collections.<String> emptySet());
       return new Vector<String>(names).elements();
    }
@@ -732,36 +830,41 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, Cloneab
    }
 
    synchronized Map<String, byte[]> getProperties() {
-      if ((_props == null) && (getText() != null)) {
+      if ((_props == null) && (this.getTextBytes() != null)) {
          Hashtable<String, byte[]> properties = new Hashtable<String, byte[]>();
-         int off = 0;
-         while (off < getText().length) {
-            // length of the next key value pair
-            int len = getText()[off++] & 0xFF;
-            if ((len == 0) || (off + len > getText().length)) {
-               properties.clear();
-               break;
-            }
-            // look for the '='
-            int i = 0;
-            for (; (i < len) && (getText()[off + i] != '='); i++) {
-               /* Stub */
-            }
+         try {
+            int off = 0;
+            while (off < getTextBytes().length) {
+               // length of the next key value pair
+               int len = getTextBytes()[off++] & 0xFF;
+               if ((len == 0) || (off + len > getTextBytes().length)) {
+                  properties.clear();
+                  break;
+               }
+               // look for the '='
+               int i = 0;
+               for (; (i < len) && (getTextBytes()[off + i] != '='); i++) {
+                  /* Stub */
+               }
 
-            // get the property name
-            String name = readUTF(getText(), off, i);
-            if (name == null) {
-               properties.clear();
-               break;
+               // get the property name
+               String name = readUTF(getTextBytes(), off, i);
+               if (name == null) {
+                  properties.clear();
+                  break;
+               }
+               if (i == len) {
+                  properties.put(name, NO_VALUE);
+               } else {
+                  byte value[] = new byte[len - ++i];
+                  System.arraycopy(getTextBytes(), off + i, value, 0, len - i);
+                  properties.put(name, value);
+                  off += len;
+               }
             }
-            if (i == len) {
-               properties.put(name, NO_VALUE);
-            } else {
-               byte value[] = new byte[len - ++i];
-               System.arraycopy(getText(), off + i, value, 0, len - i);
-               properties.put(name, value);
-               off += len;
-            }
+         } catch (Exception exception) {
+            // We should get better logging.
+            logger.log(Level.WARNING, "Malformed TXT Field ", exception);
          }
          this._props = properties;
       }
@@ -781,13 +884,13 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, Cloneab
          switch (rec.getRecordType()) {
          case TYPE_A: // IPv4
             if (rec.getName().equalsIgnoreCase(this.getServer())) {
-               _ipv4Addr = (Inet4Address) ((DNSRecord.Address) rec).getAddress();
+               _ipv4Addresses.add((Inet4Address) ((DNSRecord.Address) rec).getAddress());
                serviceUpdated = true;
             }
             break;
          case TYPE_AAAA: // IPv6
             if (rec.getName().equalsIgnoreCase(this.getServer())) {
-               _ipv6Addr = (Inet6Address) ((DNSRecord.Address) rec).getAddress();
+               _ipv6Addresses.add((Inet6Address) ((DNSRecord.Address) rec).getAddress());
                serviceUpdated = true;
             }
             break;
@@ -800,14 +903,16 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, Cloneab
                _weight = srv.getWeight();
                _priority = srv.getPriority();
                if (serverChanged) {
-                  _ipv4Addr = null;
-                  _ipv6Addr = null;
-                  this.updateRecord(dnsCache, now, dnsCache.getDNSEntry(_server, DNSRecordType.TYPE_A,
-                           DNSRecordClass.CLASS_IN));
-                  this.updateRecord(dnsCache, now, dnsCache.getDNSEntry(_server, DNSRecordType.TYPE_AAAA,
-                           DNSRecordClass.CLASS_IN));
-                  // We do not want to trigger the listener in this case as it
-                  // will be triggered if the address resolves.
+                  _ipv4Addresses.clear();
+                  _ipv6Addresses.clear();
+                  for (DNSEntry entry : dnsCache.getDNSEntryList(_server, DNSRecordType.TYPE_A, DNSRecordClass.CLASS_IN)) {
+                     this.updateRecord(dnsCache, now, entry);
+                  }
+                  for (DNSEntry entry : dnsCache.getDNSEntryList(_server, DNSRecordType.TYPE_AAAA, DNSRecordClass.CLASS_IN)) {
+                     this.updateRecord(dnsCache, now, entry);
+                  }
+                  // We do not want to trigger the listener in this case as it will be triggered if the address
+                  // resolves.
                } else {
                   serviceUpdated = true;
                }
@@ -816,7 +921,7 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, Cloneab
          case TYPE_TXT:
             if (rec.getName().equalsIgnoreCase(this.getQualifiedName())) {
                DNSRecord.Text txt = (DNSRecord.Text) rec;
-               _text = txt._text;
+               _text = txt.getText();
                serviceUpdated = true;
             }
             break;
@@ -837,8 +942,7 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, Cloneab
                dns.handleServiceResolved(event);
             }
          }
-         // This is done, to notify the wait loop in method
-         // JmDNS.waitForInfoData(ServiceInfo info, int timeout);
+         // This is done, to notify the wait loop in method JmDNS.waitForInfoData(ServiceInfo info, int timeout);
          synchronized (this) {
             this.notifyAll();
          }
@@ -847,16 +951,18 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, Cloneab
 
    /**
     * Returns true if the service info is filled with data.
-    * @return <code>true</code> if the service info has data, <code>false</code>
-    *         otherwise.
+    * @return <code>true</code> if the service info has data, <code>false</code> otherwise.
     */
 
    @Override
    public synchronized boolean hasData() {
-      return this.getServer() != null && this.getInetAddress() != null && this.getTextBytes() != null
-               && this.getTextBytes().length > 0;
-      // return this.getServer() != null && (this.getAddress() != null ||
-      // (this.getTextBytes() != null && this.getTextBytes().length > 0));
+      return this.getServer() != null && this.hasInetAddress() && this.getTextBytes() != null && this.getTextBytes().length > 0;
+      // return this.getServer() != null && (this.getAddress() != null || (this.getTextBytes() != null &&
+      // this.getTextBytes().length > 0));
+   }
+
+   private final boolean hasInetAddress() {
+      return _ipv4Addresses.size() > 0 || _ipv6Addresses.size() > 0;
    }
 
    // State machine
@@ -883,6 +989,14 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, Cloneab
 
    public boolean cancelState() {
       return _state.cancelState();
+   }
+
+   /**
+    * {@inheritDoc}
+    */
+
+   public boolean closeState() {
+      return this._state.closeState();
    }
 
    /**
@@ -961,6 +1075,22 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, Cloneab
     * {@inheritDoc}
     */
 
+   public boolean isClosing() {
+      return _state.isClosing();
+   }
+
+   /**
+    * {@inheritDoc}
+    */
+
+   public boolean isClosed() {
+      return _state.isClosed();
+   }
+
+   /**
+    * {@inheritDoc}
+    */
+
    public boolean waitForAnnounced(long timeout) {
       return _state.waitForAnnounced(timeout);
    }
@@ -998,12 +1128,12 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, Cloneab
    @Override
    public String getNiceTextString() {
       StringBuffer buf = new StringBuffer();
-      for (int i = 0, len = this.getText().length; i < len; i++) {
+      for (int i = 0, len = this.getTextBytes().length; i < len; i++) {
          if (i >= 200) {
             buf.append("...");
             break;
          }
-         int ch = getText()[i] & 0xFF;
+         int ch = getTextBytes()[i] & 0xFF;
          if ((ch < ' ') || (ch > 127)) {
             buf.append("\\0");
             buf.append(Integer.toString(ch, 8));
@@ -1014,13 +1144,23 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, Cloneab
       return buf.toString();
    }
 
-   /**
-    * {@inheritDoc}
+   /*
+    * (non-Javadoc)
+    * @see javax.jmdns.ServiceInfo#clone()
     */
 
    @Override
-   public Object clone() {
-      return new ServiceInfoImpl(this.getQualifiedNameMap(), _port, _weight, _priority, _persistent, _text);
+   public ServiceInfoImpl clone() {
+      ServiceInfoImpl serviceInfo = new ServiceInfoImpl(this.getQualifiedNameMap(), _port, _weight, _priority, _persistent, _text);
+      Inet6Address[] ipv6Addresses = this.getInet6Addresses();
+      for (Inet6Address address : ipv6Addresses) {
+         serviceInfo._ipv6Addresses.add(address);
+      }
+      Inet4Address[] ipv4Addresses = this.getInet4Addresses();
+      for (Inet4Address address : ipv4Addresses) {
+         serviceInfo._ipv4Addresses.add(address);
+      }
+      return serviceInfo;
    }
 
    /**
@@ -1034,16 +1174,25 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, Cloneab
       buf.append("name: '");
       buf.append((this.getName().length() > 0 ? this.getName() + "." : "") + this.getTypeWithSubtype());
       buf.append("' address: '");
-      buf.append(this.getInetAddress());
-      buf.append(':');
-      buf.append(this.getPort());
+      InetAddress[] addresses = this.getInetAddresses();
+      if (addresses.length > 0) {
+         for (InetAddress address : addresses) {
+            buf.append(address);
+            buf.append(':');
+            buf.append(this.getPort());
+            buf.append(' ');
+         }
+      } else {
+         buf.append("(null):");
+         buf.append(this.getPort());
+      }
       buf.append("' status: '");
       buf.append(_state.toString());
       buf.append(this.isPersistent() ? "' is persistent," : "',");
       buf.append(" has ");
       buf.append(this.hasData() ? "" : "NO ");
       buf.append("data");
-      if (this.getText().length > 0) {
+      if (this.getTextBytes().length > 0) {
          // buf.append("\n");
          // buf.append(this.getNiceTextString());
          Map<String, byte[]> properties = this.getProperties();
@@ -1063,14 +1212,11 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, Cloneab
    public Collection<DNSRecord> answers(boolean unique, int ttl, HostInfo localHost) {
       List<DNSRecord> list = new ArrayList<DNSRecord>();
       if (this.getSubtype().length() > 0) {
-         list
-                  .add(new Pointer(this.getTypeWithSubtype(), DNSRecordClass.CLASS_IN, unique, ttl, this
-                           .getQualifiedName()));
+         list.add(new Pointer(this.getTypeWithSubtype(), DNSRecordClass.CLASS_IN, DNSRecordClass.NOT_UNIQUE, ttl, this.getQualifiedName()));
       }
-      list.add(new Pointer(this.getType(), DNSRecordClass.CLASS_IN, unique, ttl, this.getQualifiedName()));
-      list.add(new Service(this.getQualifiedName(), DNSRecordClass.CLASS_IN, unique, ttl, _priority, _weight, _port,
-               localHost.getName()));
-      list.add(new Text(this.getQualifiedName(), DNSRecordClass.CLASS_IN, unique, ttl, this.getText()));
+      list.add(new Pointer(this.getType(), DNSRecordClass.CLASS_IN, DNSRecordClass.NOT_UNIQUE, ttl, this.getQualifiedName()));
+      list.add(new Service(this.getQualifiedName(), DNSRecordClass.CLASS_IN, unique, ttl, _priority, _weight, _port, localHost.getName()));
+      list.add(new Text(this.getQualifiedName(), DNSRecordClass.CLASS_IN, unique, ttl, this.getTextBytes()));
       return list;
    }
 
@@ -1082,6 +1228,7 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, Cloneab
    public void setText(byte[] text) throws IllegalStateException {
       synchronized (this) {
          this._text = text;
+         this._props = null;
          this.setNeedTextAnnouncing(true);
       }
    }
@@ -1101,9 +1248,11 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, Cloneab
     */
    void _setText(byte[] text) {
       this._text = text;
+      this._props = null;
    }
 
    private static byte[] textFromProperties(Map<String, ?> props) {
+      byte[] text = null;
       if (props != null) {
          try {
             ByteArrayOutputStream out = new ByteArrayOutputStream(256);
@@ -1129,22 +1278,17 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, Cloneab
                }
                byte data[] = out2.toByteArray();
                if (data.length > 255) {
-                  throw new IOException("Cannot have individual values larger that 255 chars. Offending value: " + key
-                           + (val != null ? "" : "=" + val));
+                  throw new IOException("Cannot have individual values larger that 255 chars. Offending value: " + key + (val != null ? "" : "=" + val));
                }
                out.write((byte) data.length);
                out.write(data, 0, data.length);
             }
-            return out.toByteArray();
+            text = out.toByteArray();
          } catch (IOException e) {
             throw new RuntimeException("unexpected exception: " + e);
          }
       }
-      return new byte[0];
-   }
-
-   public byte[] getText() {
-      return (this._text != null ? this._text : new byte[] {});
+      return (text != null && text.length > 0 ? text : DNSRecord.EMPTY_TXT);
    }
 
    public void setDns(JmDNSImpl dns) {

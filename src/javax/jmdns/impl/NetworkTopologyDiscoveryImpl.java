@@ -13,15 +13,14 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.jmdns.JmmDNS.NetworkTopologyDiscovery;
+import javax.jmdns.NetworkTopologyDiscovery;
 
 /**
  * This class implements NetworkTopologyDiscovery.
- * @version %I%, %G%
  * @author Pierre Frisch
  */
 public class NetworkTopologyDiscoveryImpl implements NetworkTopologyDiscovery {
-   private static Logger logger = Logger.getLogger(NetworkTopologyDiscoveryImpl.class.getName());
+   private final static Logger logger = Logger.getLogger(NetworkTopologyDiscoveryImpl.class.getName());
 
    private final Method _isUp;
 
@@ -79,8 +78,7 @@ public class NetworkTopologyDiscoveryImpl implements NetworkTopologyDiscovery {
 
    /*
     * (non-Javadoc)
-    * @seejavax.jmdns.JmmDNS.NetworkTopologyDiscovery#useInetAddress(java.net.
-    * NetworkInterface, java.net.InetAddress)
+    * @see javax.jmdns.JmmDNS.NetworkTopologyDiscovery#useInetAddress(java.net.NetworkInterface, java.net.InetAddress)
     */
 
    public boolean useInetAddress(NetworkInterface networkInterface, InetAddress interfaceAddress) {
