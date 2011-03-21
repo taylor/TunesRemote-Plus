@@ -131,10 +131,10 @@ javax.jmdns.impl.DNSStatefulObjectSemaphore$Entry
 javax.jmdns.impl.DNSTaskStarter:
     public abstract void startTypeResolver()
 javax.jmdns.impl.DNSTaskStarter$DNSTaskStarterImpl:
-    245:246:public void startTypeResolver()
+    371:372:public void startTypeResolver()
 javax.jmdns.impl.DNSTaskStarter$Factory:
-    69:70:public static void setClassDelegate(javax.jmdns.impl.DNSTaskStarter$Factory$ClassDelegate)
-    79:79:public static javax.jmdns.impl.DNSTaskStarter$Factory$ClassDelegate classDelegate()
+    71:72:public static void setClassDelegate(javax.jmdns.impl.DNSTaskStarter$Factory$ClassDelegate)
+    81:81:public static javax.jmdns.impl.DNSTaskStarter$Factory$ClassDelegate classDelegate()
 javax.jmdns.impl.HostInfo:
     276:276:public javax.jmdns.impl.JmDNSImpl getDns()
     356:356:public boolean isAnnouncing()
@@ -152,21 +152,21 @@ javax.jmdns.impl.JmDNSImpl:
     871:873:public void requestServiceInfo(java.lang.String,java.lang.String,boolean,long)
     903:912:public void addServiceTypeListener(javax.jmdns.ServiceTypeListener)
     920:922:public void removeServiceTypeListener(javax.jmdns.ServiceTypeListener)
-    1517:1531:public javax.jmdns.impl.DNSOutgoing addAnswer(javax.jmdns.impl.DNSIncoming,java.net.InetAddress,int,javax.jmdns.impl.DNSOutgoing,javax.jmdns.impl.DNSRecord)
-    1657:1658:public void startTypeResolver()
-    1869:1870:public void printServices()
-    1925:1925:public javax.jmdns.ServiceInfo[] list(java.lang.String)
-    1934:1962:public javax.jmdns.ServiceInfo[] list(java.lang.String,long)
-    1971:1971:public java.util.Map listBySubtype(java.lang.String)
-    1980:1995:public java.util.Map listBySubtype(java.lang.String,long)
-    2192:2193:public void ioLock()
-    2196:2197:public void ioUnlock()
-    2200:2201:public void setPlannedAnswer(javax.jmdns.impl.DNSIncoming)
-    2204:2204:public javax.jmdns.impl.DNSIncoming getPlannedAnswer()
-    2208:2209:void setLocalHost(javax.jmdns.impl.HostInfo)
-    2230:2232:public javax.jmdns.JmDNS$Delegate setDelegate(javax.jmdns.JmDNS$Delegate)
+    1511:1525:public javax.jmdns.impl.DNSOutgoing addAnswer(javax.jmdns.impl.DNSIncoming,java.net.InetAddress,int,javax.jmdns.impl.DNSOutgoing,javax.jmdns.impl.DNSRecord)
+    1651:1652:public void startTypeResolver()
+    1863:1864:public void printServices()
+    1919:1919:public javax.jmdns.ServiceInfo[] list(java.lang.String)
+    1928:1956:public javax.jmdns.ServiceInfo[] list(java.lang.String,long)
+    1965:1965:public java.util.Map listBySubtype(java.lang.String)
+    1974:1989:public java.util.Map listBySubtype(java.lang.String,long)
+    2186:2187:public void ioLock()
+    2190:2191:public void ioUnlock()
+    2194:2195:public void setPlannedAnswer(javax.jmdns.impl.DNSIncoming)
+    2198:2198:public javax.jmdns.impl.DNSIncoming getPlannedAnswer()
+    2202:2203:void setLocalHost(javax.jmdns.impl.HostInfo)
+    2224:2226:public javax.jmdns.JmDNS$Delegate setDelegate(javax.jmdns.JmDNS$Delegate)
 javax.jmdns.impl.JmDNSImpl$ServiceCollector:
-    2103:2120:public javax.jmdns.ServiceInfo[] list(long)
+    2097:2114:public javax.jmdns.ServiceInfo[] list(long)
 javax.jmdns.impl.JmDNSImpl$ServiceTypeEntry:
     263:263:public java.util.Iterator iterator()
 javax.jmdns.impl.JmDNSImpl$ServiceTypeEntry$SubTypeEntry:
@@ -216,7 +216,7 @@ javax.jmdns.impl.ServiceInfoImpl$Delegate
 javax.jmdns.impl.ServiceInfoImpl$ServiceInfoState:
     private static final long serialVersionUID
 javax.jmdns.impl.SocketListener:
-    87:87:public javax.jmdns.impl.JmDNSImpl getDns()
+    78:78:public javax.jmdns.impl.JmDNSImpl getDns()
 javax.jmdns.impl.constants.DNSConstants:
     public static final java.lang.String MDNS_GROUP
     public static final java.lang.String MDNS_GROUP_IPV6

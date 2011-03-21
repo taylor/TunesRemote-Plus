@@ -65,6 +65,7 @@ javax.jmdns.impl.DNSCache -> a.a.a.a:
     java.lang.Object clone() -> clone
     java.util.Collection allValues() -> a
     java.util.Collection getDNSEntryList(java.lang.String) -> a
+    java.util.Collection _getDNSEntryList(java.lang.String) -> c
     javax.jmdns.impl.DNSEntry getDNSEntry(javax.jmdns.impl.DNSEntry) -> a
     javax.jmdns.impl.DNSEntry getDNSEntry(java.lang.String,javax.jmdns.impl.constants.DNSRecordType,javax.jmdns.impl.constants.DNSRecordClass) -> a
     java.util.Collection getDNSEntryList(java.lang.String,javax.jmdns.impl.constants.DNSRecordType,javax.jmdns.impl.constants.DNSRecordClass) -> b
@@ -403,13 +404,22 @@ javax.jmdns.impl.DNSTaskStarter$DNSTaskStarterImpl -> a.a.a.ag:
     void startServiceInfoResolver(javax.jmdns.impl.ServiceInfoImpl) -> a
     void startServiceResolver(java.lang.String) -> a
     void startResponder(javax.jmdns.impl.DNSIncoming,int) -> a
-javax.jmdns.impl.DNSTaskStarter$Factory -> a.a.a.ah:
+javax.jmdns.impl.DNSTaskStarter$DNSTaskStarterImpl$StarterTimer -> a.a.a.ah:
+    boolean _cancelled -> a
+    void cancel() -> cancel
+    void schedule(java.util.TimerTask,long) -> schedule
+    void schedule(java.util.TimerTask,java.util.Date) -> schedule
+    void schedule(java.util.TimerTask,long,long) -> schedule
+    void schedule(java.util.TimerTask,java.util.Date,long) -> schedule
+    void scheduleAtFixedRate(java.util.TimerTask,long,long) -> scheduleAtFixedRate
+    void scheduleAtFixedRate(java.util.TimerTask,java.util.Date,long) -> scheduleAtFixedRate
+javax.jmdns.impl.DNSTaskStarter$Factory -> a.a.a.ai:
     javax.jmdns.impl.DNSTaskStarter$Factory _instance -> a
     java.util.concurrent.ConcurrentMap _instances -> b
     java.util.concurrent.atomic.AtomicReference _databaseClassDelegate -> c
     javax.jmdns.impl.DNSTaskStarter$Factory getInstance() -> a
     javax.jmdns.impl.DNSTaskStarter getStarter(javax.jmdns.impl.JmDNSImpl) -> a
-javax.jmdns.impl.HostInfo -> a.a.a.ai:
+javax.jmdns.impl.HostInfo -> a.a.a.aj:
     java.util.logging.Logger logger -> a
     java.lang.String _name -> b
     java.net.InetAddress _address -> c
@@ -447,10 +457,10 @@ javax.jmdns.impl.HostInfo -> a.a.a.ai:
     boolean isClosed() -> p
     boolean waitForAnnounced(long) -> a
     boolean waitForCanceled(long) -> b
-javax.jmdns.impl.HostInfo$1 -> a.a.a.aj:
+javax.jmdns.impl.HostInfo$1 -> a.a.a.ak:
     int[] $SwitchMap$javax$jmdns$impl$constants$DNSRecordType -> a
-javax.jmdns.impl.HostInfo$HostInfoState -> a.a.a.ak:
-javax.jmdns.impl.JmDNSImpl -> a.a.a.al:
+javax.jmdns.impl.HostInfo$HostInfoState -> a.a.a.al:
+javax.jmdns.impl.JmDNSImpl -> a.a.a.am:
     java.util.logging.Logger logger -> a
     java.net.InetAddress _group -> b
     java.net.MulticastSocket _socket -> c
@@ -537,32 +547,32 @@ javax.jmdns.impl.JmDNSImpl -> a.a.a.al:
     java.util.Random getRandom() -> A
     java.util.Map getServiceTypes() -> B
     java.net.MulticastSocket getSocket() -> C
-javax.jmdns.impl.JmDNSImpl$1 -> a.a.a.am:
+javax.jmdns.impl.JmDNSImpl$1 -> a.a.a.an:
     javax.jmdns.impl.ListenerStatus$ServiceListenerStatus val$listener -> a
     javax.jmdns.ServiceEvent val$localEvent -> b
     void run() -> run
-javax.jmdns.impl.JmDNSImpl$2 -> a.a.a.an:
+javax.jmdns.impl.JmDNSImpl$2 -> a.a.a.ao:
     javax.jmdns.impl.ListenerStatus$ServiceTypeListenerStatus val$status -> a
     javax.jmdns.ServiceEvent val$event -> b
     void run() -> run
-javax.jmdns.impl.JmDNSImpl$3 -> a.a.a.ao:
+javax.jmdns.impl.JmDNSImpl$3 -> a.a.a.ap:
     javax.jmdns.impl.ListenerStatus$ServiceTypeListenerStatus val$status -> a
     javax.jmdns.ServiceEvent val$event -> b
     void run() -> run
-javax.jmdns.impl.JmDNSImpl$4 -> a.a.a.ap:
+javax.jmdns.impl.JmDNSImpl$4 -> a.a.a.aq:
     javax.jmdns.impl.ListenerStatus$ServiceListenerStatus val$listener -> a
     javax.jmdns.ServiceEvent val$localEvent -> b
     void run() -> run
-javax.jmdns.impl.JmDNSImpl$5 -> a.a.a.aq:
+javax.jmdns.impl.JmDNSImpl$5 -> a.a.a.ar:
     javax.jmdns.impl.ListenerStatus$ServiceListenerStatus val$listener -> a
     javax.jmdns.ServiceEvent val$localEvent -> b
     void run() -> run
-javax.jmdns.impl.JmDNSImpl$6 -> a.a.a.ar:
+javax.jmdns.impl.JmDNSImpl$6 -> a.a.a.as:
     javax.jmdns.impl.JmDNSImpl this$0 -> a
     void run() -> run
-javax.jmdns.impl.JmDNSImpl$7 -> a.a.a.as:
+javax.jmdns.impl.JmDNSImpl$7 -> a.a.a.at:
     int[] $SwitchMap$javax$jmdns$impl$JmDNSImpl$Operation -> a
-javax.jmdns.impl.JmDNSImpl$Operation -> a.a.a.at:
+javax.jmdns.impl.JmDNSImpl$Operation -> a.a.a.au:
     javax.jmdns.impl.JmDNSImpl$Operation Remove -> a
     javax.jmdns.impl.JmDNSImpl$Operation Update -> b
     javax.jmdns.impl.JmDNSImpl$Operation Add -> c
@@ -571,7 +581,7 @@ javax.jmdns.impl.JmDNSImpl$Operation -> a.a.a.at:
     javax.jmdns.impl.JmDNSImpl$Operation[] $VALUES -> f
     javax.jmdns.impl.JmDNSImpl$Operation[] values() -> values
     javax.jmdns.impl.JmDNSImpl$Operation valueOf(java.lang.String) -> valueOf
-javax.jmdns.impl.JmDNSImpl$ServiceCollector -> a.a.a.au:
+javax.jmdns.impl.JmDNSImpl$ServiceCollector -> a.a.a.av:
     java.util.concurrent.ConcurrentMap _infos -> a
     java.util.concurrent.ConcurrentMap _events -> b
     java.lang.String _type -> c
@@ -580,7 +590,7 @@ javax.jmdns.impl.JmDNSImpl$ServiceCollector -> a.a.a.au:
     void serviceRemoved(javax.jmdns.ServiceEvent) -> b
     void serviceResolved(javax.jmdns.ServiceEvent) -> c
     java.lang.String toString() -> toString
-javax.jmdns.impl.JmDNSImpl$ServiceTypeEntry -> a.a.a.av:
+javax.jmdns.impl.JmDNSImpl$ServiceTypeEntry -> a.a.a.aw:
     java.util.Set _entrySet -> a
     java.lang.String _type -> b
     java.lang.String getType() -> a
@@ -589,7 +599,7 @@ javax.jmdns.impl.JmDNSImpl$ServiceTypeEntry -> a.a.a.av:
     boolean add(java.lang.String) -> b
     java.lang.String toString() -> toString
     java.lang.Object clone() -> clone
-javax.jmdns.impl.JmDNSImpl$ServiceTypeEntry$SubTypeEntry -> a.a.a.aw:
+javax.jmdns.impl.JmDNSImpl$ServiceTypeEntry$SubTypeEntry -> a.a.a.ax:
     java.lang.String _key -> a
     java.lang.String _value -> b
     boolean equals(java.lang.Object) -> equals
@@ -599,7 +609,7 @@ javax.jmdns.impl.JmDNSImpl$ServiceTypeEntry$SubTypeEntry -> a.a.a.aw:
     java.lang.Object setValue(java.lang.Object) -> setValue
     java.lang.Object getValue() -> getValue
     java.lang.Object getKey() -> getKey
-javax.jmdns.impl.ListenerStatus -> a.a.a.ax:
+javax.jmdns.impl.ListenerStatus -> a.a.a.ay:
     java.util.EventListener _listener -> a
     boolean _synch -> b
     java.util.EventListener getListener() -> a
@@ -607,7 +617,7 @@ javax.jmdns.impl.ListenerStatus -> a.a.a.ax:
     int hashCode() -> hashCode
     boolean equals(java.lang.Object) -> equals
     java.lang.String toString() -> toString
-javax.jmdns.impl.ListenerStatus$ServiceListenerStatus -> a.a.a.ay:
+javax.jmdns.impl.ListenerStatus$ServiceListenerStatus -> a.a.a.az:
     java.util.logging.Logger logger -> a
     java.util.concurrent.ConcurrentMap _addedServices -> b
     void serviceAdded(javax.jmdns.ServiceEvent) -> a
@@ -615,18 +625,18 @@ javax.jmdns.impl.ListenerStatus$ServiceListenerStatus -> a.a.a.ay:
     void serviceResolved(javax.jmdns.ServiceEvent) -> c
     boolean _sameInfo(javax.jmdns.ServiceInfo,javax.jmdns.ServiceInfo) -> a
     java.lang.String toString() -> toString
-javax.jmdns.impl.ListenerStatus$ServiceTypeListenerStatus -> a.a.a.az:
+javax.jmdns.impl.ListenerStatus$ServiceTypeListenerStatus -> a.a.a.ba:
     java.util.concurrent.ConcurrentMap _addedTypes -> a
     void serviceTypeAdded(javax.jmdns.ServiceEvent) -> a
     void subTypeForServiceTypeAdded(javax.jmdns.ServiceEvent) -> b
     java.lang.String toString() -> toString
-javax.jmdns.impl.NetworkTopologyDiscoveryImpl -> a.a.a.ba:
+javax.jmdns.impl.NetworkTopologyDiscoveryImpl -> a.a.a.bb:
     java.util.logging.Logger logger -> a
     java.lang.reflect.Method _isUp -> b
     java.lang.reflect.Method _supportsMulticast -> c
     java.net.InetAddress[] getInetAddresses() -> a
     boolean useInetAddress(java.net.NetworkInterface,java.net.InetAddress) -> a
-javax.jmdns.impl.ServiceEventImpl -> a.a.a.bb:
+javax.jmdns.impl.ServiceEventImpl -> a.a.a.bc:
     java.lang.String _type -> a
     java.lang.String _name -> b
     javax.jmdns.ServiceInfo _info -> c
@@ -638,7 +648,7 @@ javax.jmdns.impl.ServiceEventImpl -> a.a.a.bb:
     javax.jmdns.impl.ServiceEventImpl clone() -> f
     javax.jmdns.ServiceEvent clone() -> e
     java.lang.Object clone() -> clone
-javax.jmdns.impl.ServiceInfoImpl -> a.a.a.bc:
+javax.jmdns.impl.ServiceInfoImpl -> a.a.a.bd:
     java.lang.String _domain -> b
     java.lang.String _protocol -> c
     java.lang.String _application -> d
@@ -715,13 +725,13 @@ javax.jmdns.impl.ServiceInfoImpl -> a.a.a.bc:
     boolean needTextAnnouncing() -> F
     javax.jmdns.ServiceInfo clone() -> s
     java.lang.Object clone() -> clone
-javax.jmdns.impl.ServiceInfoImpl$1 -> a.a.a.bd:
+javax.jmdns.impl.ServiceInfoImpl$1 -> a.a.a.be:
     int[] $SwitchMap$javax$jmdns$impl$constants$DNSRecordType -> a
-javax.jmdns.impl.ServiceInfoImpl$ServiceInfoState -> a.a.a.be:
+javax.jmdns.impl.ServiceInfoImpl$ServiceInfoState -> a.a.a.bf:
     javax.jmdns.impl.ServiceInfoImpl _info -> c
     void setTask(javax.jmdns.impl.tasks.DNSTask) -> c
     void setDns(javax.jmdns.impl.JmDNSImpl) -> a
-javax.jmdns.impl.SocketListener -> a.a.a.bf:
+javax.jmdns.impl.SocketListener -> a.a.a.bg:
     java.util.logging.Logger logger -> a
     javax.jmdns.impl.JmDNSImpl _jmDNSImpl -> b
     void run() -> run

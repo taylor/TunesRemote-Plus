@@ -72,7 +72,7 @@ public class LibraryActivity extends Activity implements ServiceListener {
    public final static String TOUCH_ABLE_TYPE = "_touch-able._tcp.local.";
    public final static String DACP_TYPE = "_dacp._tcp.local.";
    public final static String REMOTE_TYPE = "_touch-remote._tcp.local.";
-   public final static String HOSTNAME = "meowbox4";
+   public final static String HOSTNAME = "tunesremote";
 
    private static JmDNS zeroConf = null;
    private static MulticastLock mLock = null;

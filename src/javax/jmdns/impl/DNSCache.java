@@ -355,6 +355,16 @@ public class DNSCache extends AbstractMap<String, List<? extends DNSEntry>> {
     * @return list of DNSEntries
     */
    public synchronized Collection<? extends DNSEntry> getDNSEntryList(String name) {
+      Collection<? extends DNSEntry> entryList = this._getDNSEntryList(name);
+      if (entryList != null) {
+         entryList = new ArrayList<DNSEntry>(entryList);
+      } else {
+         entryList = Collections.emptyList();
+      }
+      return entryList;
+   }
+
+   private Collection<? extends DNSEntry> _getDNSEntryList(String name) {
       return this.get(name != null ? name.toLowerCase() : null);
    }
 
@@ -366,7 +376,7 @@ public class DNSCache extends AbstractMap<String, List<? extends DNSEntry>> {
    public synchronized DNSEntry getDNSEntry(DNSEntry dnsEntry) {
       DNSEntry result = null;
       if (dnsEntry != null) {
-         Collection<? extends DNSEntry> entryList = this.getDNSEntryList(dnsEntry.getKey());
+         Collection<? extends DNSEntry> entryList = this._getDNSEntryList(dnsEntry.getKey());
          if (entryList != null) {
             for (DNSEntry testDNSEntry : entryList) {
                if (testDNSEntry.isSameEntry(dnsEntry)) {
@@ -388,7 +398,7 @@ public class DNSCache extends AbstractMap<String, List<? extends DNSEntry>> {
     */
    public synchronized DNSEntry getDNSEntry(String name, DNSRecordType type, DNSRecordClass recordClass) {
       DNSEntry result = null;
-      Collection<? extends DNSEntry> entryList = this.getDNSEntryList(name);
+      Collection<? extends DNSEntry> entryList = this._getDNSEntryList(name);
       if (entryList != null) {
          for (DNSEntry testDNSEntry : entryList) {
             if (testDNSEntry.getRecordType().equals(type) && ((DNSRecordClass.CLASS_ANY == recordClass) || testDNSEntry.getRecordClass().equals(recordClass))) {
@@ -408,7 +418,7 @@ public class DNSCache extends AbstractMap<String, List<? extends DNSEntry>> {
     * @return list of entries
     */
    public synchronized Collection<? extends DNSEntry> getDNSEntryList(String name, DNSRecordType type, DNSRecordClass recordClass) {
-      Collection<? extends DNSEntry> entryList = this.getDNSEntryList(name);
+      Collection<? extends DNSEntry> entryList = this._getDNSEntryList(name);
       if (entryList != null) {
          entryList = new ArrayList<DNSEntry>(entryList);
          for (Iterator<? extends DNSEntry> i = entryList.iterator(); i.hasNext();) {
