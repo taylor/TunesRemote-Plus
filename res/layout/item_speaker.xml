@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+    TunesRemote+ - http://code.google.com/p/tunesremote-plus/
+    
+    Copyright (C) 2008 Jeffrey Sharkey, http://jsharkey.org/
+    Copyright (C) 2010 TunesRemote+, http://code.google.com/p/tunesremote-plus/
+    Copyright (C) 2011 Daniel Thommes
+    
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+    The Initial Developer of the Original Code is Jeffrey Sharkey.
+    Portions created by Jeffrey Sharkey are
+    Copyright (C) 2008. Jeffrey Sharkey, http://jsharkey.org/
+    All Rights Reserved.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="wrap_content">
+	<CheckBox android:id="@+id/speakerActiveCheckBox"
+		android:layout_height="wrap_content" android:layout_width="wrap_content"
+		android:padding="10dip" />
+	<LinearLayout android:layout_width="fill_parent"
+		android:padding="5dip" android:layout_height="wrap_content"
+		android:orientation="vertical">
+		<TextView android:id="@+id/speakerNameTextView"
+			android:paddingLeft="10dip" android:singleLine="true" android:text="Speaker Name"
+			android:textColor="@android:color/primary_text_light"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:textAppearance="?android:attr/textAppearanceMedium"
+			android:textStyle="bold" />
+		<TextView android:id="@+id/speakerTypeTextView"
+			android:paddingLeft="10dip" android:singleLine="true" android:text="Speaker Type"
+			android:textColor="@android:color/primary_text_light"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:textAppearance="?android:attr/textAppearanceSmall" />
+		<SeekBar android:id="@+id/speakerVolumeBar" android:max="100"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:layout_gravity="center_vertical" android:paddingLeft="10dip"
+			android:paddingRight="10dip" />
+	</LinearLayout>
+</LinearLayout>

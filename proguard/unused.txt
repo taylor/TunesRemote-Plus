@@ -280,8 +280,8 @@ javax.jmdns.impl.tasks.state.DNSStateTask:
     51:52:public static void setDefaultTTL(int)
 org.tunesremote.ArtistsActivity:
     protected android.graphics.Bitmap blank
-    194:196:protected char startsWith(int)
-    205:235:public void scrollAlpha(char)
+    197:199:protected char startsWith(int)
+    208:238:public void scrollAlpha(char)
 org.tunesremote.BackendService:
     public static final java.lang.String PREFS
     public static final java.lang.String PREF_LASTADDR
@@ -292,6 +292,7 @@ org.tunesremote.BaseBrowseActivity:
     public static final int RESULT_SWITCH_TO_ARTISTS
     public static final int RESULT_SWITCH_TO_PLAYLISTS
 org.tunesremote.ControlActivity:
+    private static final int DIALOG_SPEAKERS
     public static final java.lang.String EULA
     public static final int VIBRATE_LEN
     public static final long CACHE_TIME

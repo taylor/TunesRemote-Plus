@@ -57,6 +57,7 @@
   <string name="control_menu_shuffle_on">Shuffle on</string>
   <string name="control_menu_shuffle_off">Shuffle off</string>
   <string name="control_menu_nowplaying">Now Playing</string>
+  <string name="control_menu_speakers">Speakers</string>
   <string name="library_menu_refresh">Refresh</string>
   <string name="library_menu_manual">Manual Add</string>
   <string name="library_menu_forget">Forget All</string>
@@ -104,4 +105,6 @@
   <string name="search_menu_play_found">Play Found Tracks</string>
   <string name="search_menu_open_album">Open Album</string>
   <string name="search_menu_open_artist">Open Artist</string>
+  <string name="speakers_dialog_computer_speaker">Computer Speaker</string>
+  <string name="speakers_dialog_airport_express">Airport Express</string>
 </resources>

@@ -27,11 +27,15 @@ package org.tunesremote;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import org.tunesremote.daap.Session;
+import org.tunesremote.daap.Speaker;
 import org.tunesremote.daap.Status;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -56,8 +60,11 @@ import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.animation.AnimationUtils;
+import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
@@ -71,13 +78,17 @@ import android.widget.Toast;
 import android.widget.ViewSwitcher.ViewFactory;
 
 /**
- * Main activity of TunesRemote. This controls the player and drives all the
- * other activities.
+ * Main activity of TunesRemote. This controls the player and drives all the other activities.
  * <p>
  */
 public class ControlActivity extends Activity implements ViewFactory {
 
    public final static String TAG = ControlActivity.class.toString();
+
+   /**
+    * ID of the speakers dialog
+    */
+   private static final int DIALOG_SPEAKERS = 1;
 
    protected static BackendService backend;
    protected static Session session;
@@ -87,30 +98,33 @@ public class ControlActivity extends Activity implements ViewFactory {
 
    public ServiceConnection connection = new ServiceConnection() {
       public void onServiceConnected(ComponentName className, IBinder service) {
-         backend = ((BackendService.BackendBinder) service).getService();
-         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(ControlActivity.this);
-         backend.setPrefs(settings);
+         try {
+            backend = ((BackendService.BackendBinder) service).getService();
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(ControlActivity.this);
+            backend.setPrefs(settings);
 
-         if (!agreed)
-            return;
+            if (!agreed)
+               return;
 
-         Log.w(TAG, "onServiceConnected");
+            Log.w(TAG, "onServiceConnected");
 
-         session = backend.getSession();
-         if (session == null) {
-            // we couldnt connect with library, so launch picker
-            ControlActivity.this.startActivityForResult(new Intent(ControlActivity.this, LibraryActivity.class), 1);
+            session = backend.getSession();
+            if (session == null) {
+               // we could not connect with library, so launch picker
+               ControlActivity.this.startActivityForResult(new Intent(ControlActivity.this, LibraryActivity.class), 1);
 
-         } else {
-            // for some reason we arent correctly disposing of the session
-            // threads we create so we purge any existing ones before creating a
-            // new one
-            status = session.singletonStatus(statusUpdate);
-            status.updateHandler(statusUpdate);
+            } else {
+               // for some reason we are not correctly disposing of the session
+               // threads we create so we purge any existing ones before creating a
+               // new one
+               status = session.singletonStatus(statusUpdate);
+               status.updateHandler(statusUpdate);
 
-            // push update through to make sure we get updated
-            statusUpdate.sendEmptyMessage(Status.UPDATE_TRACK);
-
+               // push update through to make sure we get updated
+               statusUpdate.sendEmptyMessage(Status.UPDATE_TRACK);
+            }
+         } catch (Exception e) {
+            Log.e(TAG, "onServiceConnected:" + e.getMessage());
          }
 
       }
@@ -127,6 +141,7 @@ public class ControlActivity extends Activity implements ViewFactory {
    };
 
    protected Handler statusUpdate = new Handler() {
+
       @Override
       public void handleMessage(Message msg) {
          // update gui based on severity
@@ -151,8 +166,7 @@ public class ControlActivity extends Activity implements ViewFactory {
                shouldUpdate = true;
 
             // only update coverart if different than already shown
-            Log.d(TAG, String.format("Artwork for albumid=%s, value=%s, what=%d", status.albumId, status.coverCache,
-                     msg.what));
+            Log.d(TAG, String.format("Artwork for albumid=%s, value=%s, what=%d", status.albumId, status.coverCache, msg.what));
             if (shouldUpdate) {
                if (status.coverEmpty) {
                   // fade down if no coverart
@@ -164,9 +178,8 @@ public class ControlActivity extends Activity implements ViewFactory {
                showingAlbumId = status.albumId;
             }
          case Status.UPDATE_STATE:
-            controlPause
-                     .setImageResource((status.getPlayStatus() == Status.STATE_PLAYING) ? android.R.drawable.ic_media_pause
-                              : android.R.drawable.ic_media_play);
+            controlPause.setImageResource((status.getPlayStatus() == Status.STATE_PLAYING) ? android.R.drawable.ic_media_pause
+                     : android.R.drawable.ic_media_play);
             seekBar.setMax(status.getProgressTotal());
 
             // TODO: update menu items for shuffle, etc?
@@ -245,6 +258,7 @@ public class ControlActivity extends Activity implements ViewFactory {
    }
 
    protected Handler doubleTapHandler = new Handler() {
+
       @Override
       public void handleMessage(Message msg) {
          StartNowPlaying();
@@ -374,6 +388,169 @@ public class ControlActivity extends Activity implements ViewFactory {
 
    // public boolean shouldPause = false;
 
+   /**
+    * List of available speakers
+    */
+   protected List<Speaker> speakers;
+
+   /**
+    * Instance of the speaker list adapter used in the speakers dialog
+    */
+   protected SpeakersAdapter speakersAdapter;
+
+   /**
+    * OnSeekBarChangeListener that controls the volume for a certain speaker
+    * @author Daniel Thommes
+    */
+   public class VolumeSeekBarListener implements OnSeekBarChangeListener {
+      private final Speaker speaker;
+
+      public VolumeSeekBarListener(Speaker speaker) {
+         this.speaker = speaker;
+      }
+
+      public void onStopTrackingTouch(SeekBar seekBar) {
+      }
+
+      public void onStartTrackingTouch(SeekBar seekBar) {
+      }
+
+      public void onProgressChanged(SeekBar seekBar, int newVolume, boolean fromUser) {
+         if (fromUser) {
+            // Volume of the loudest speaker
+            int maxVolume = 0;
+            // Volume of the second loudest speaker
+            int secondMaxVolume = 0;
+            for (Speaker speaker : speakers) {
+               if (speaker.getAbsoluteVolume() > maxVolume) {
+                  secondMaxVolume = maxVolume;
+                  maxVolume = speaker.getAbsoluteVolume();
+               } else if (speaker.getAbsoluteVolume() > secondMaxVolume) {
+                  secondMaxVolume = speaker.getAbsoluteVolume();
+               }
+            }
+            // fetch the master volume if necessary
+            checkCachedVolume();
+            int formerVolume = speaker.getAbsoluteVolume();
+            status.setSpeakerVolume(speaker.getId(), newVolume, formerVolume, maxVolume, secondMaxVolume, cachedVolume);
+            speaker.setAbsoluteVolume(newVolume);
+         }
+      }
+   }
+
+   /**
+    * List Adapter for displaying the list of available speakers.
+    * @author Daniel Thommes
+    */
+   public class SpeakersAdapter extends BaseAdapter {
+
+      private final LayoutInflater inflater;
+
+      public SpeakersAdapter(Context context) {
+         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+      }
+
+      public int getCount() {
+         return speakers.size();
+      }
+
+      public Object getItem(int position) {
+         return speakers.get(position);
+      }
+
+      public long getItemId(int position) {
+         return position;
+      }
+
+      /**
+       * Toggles activation of a given speaker and refreshes the view
+       * @param active Flag indicating, whether the speaker shall be activated
+       * @param speaker the speaker to be activated or deactivated
+       */
+      public void setSpeakerActive(boolean active, final Speaker speaker) {
+         speaker.setActive(active);
+         status.setSpeakers(speakers);
+         speakers = status.getSpeakers();
+         notifyDataSetChanged();
+      }
+
+      public View getView(int position, View convertView, ViewGroup parent) {
+         try {
+
+            View row;
+            if (null == convertView) {
+               row = inflater.inflate(R.layout.item_speaker, null);
+            } else {
+               row = convertView;
+            }
+
+            /*************************************************************
+             * Find the necessary sub views
+             *************************************************************/
+            TextView nameTextview = (TextView) row.findViewById(R.id.speakerNameTextView);
+            TextView speakerTypeTextView = (TextView) row.findViewById(R.id.speakerTypeTextView);
+            final CheckBox activeCheckBox = (CheckBox) row.findViewById(R.id.speakerActiveCheckBox);
+            SeekBar volumeBar = (SeekBar) row.findViewById(R.id.speakerVolumeBar);
+
+            /*************************************************************
+             * Set view properties
+             *************************************************************/
+            final Speaker speaker = speakers.get(position);
+            nameTextview.setText(speaker.getName());
+            speakerTypeTextView.setText(speaker.isLocalSpeaker() ? R.string.speakers_dialog_computer_speaker : R.string.speakers_dialog_airport_express);
+            activeCheckBox.setChecked(speaker.isActive());
+            activeCheckBox.setOnClickListener(new OnClickListener() {
+
+               public void onClick(View v) {
+                  setSpeakerActive(activeCheckBox.isChecked(), speaker);
+               }
+            });
+            nameTextview.setOnClickListener(new OnClickListener() {
+
+               public void onClick(View v) {
+                  activeCheckBox.toggle();
+                  setSpeakerActive(activeCheckBox.isChecked(), speaker);
+               }
+            });
+            speakerTypeTextView.setOnClickListener(new OnClickListener() {
+
+               public void onClick(View v) {
+                  activeCheckBox.toggle();
+                  setSpeakerActive(activeCheckBox.isChecked(), speaker);
+               }
+            });
+            // If the speaker is active, enable the volume bar
+            if (speaker.isActive()) {
+               volumeBar.setEnabled(true);
+               volumeBar.setProgress(speaker.getAbsoluteVolume());
+               volumeBar.setOnSeekBarChangeListener(new VolumeSeekBarListener(speaker));
+            } else {
+               volumeBar.setEnabled(false);
+               volumeBar.setProgress(0);
+            }
+            return row;
+         } catch (RuntimeException e) {
+            Log.e(TAG, "Error when rendering speaker item: ", e);
+            throw e;
+         }
+      }
+   }
+
+   /**
+    * {@inheritDoc}
+    * @see android.app.Activity#onCreateDialog(int)
+    */
+
+   @Override
+   protected Dialog onCreateDialog(int id) {
+      if (id == DIALOG_SPEAKERS) {
+         // Create the speakers dialog (once)
+         return new AlertDialog.Builder(this).setIcon(android.R.drawable.ic_lock_silent_mode_off).setTitle(R.string.control_menu_speakers)
+                  .setAdapter(speakersAdapter, null).setPositiveButton("OK", null).create();
+      }
+      return null;
+   }
+
    @Override
    public void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
@@ -486,6 +663,9 @@ public class ControlActivity extends Activity implements ViewFactory {
             }
          }
       });
+
+      // Speakers adapter needed for the speakers dialog
+      speakersAdapter = new SpeakersAdapter(this);
    }
 
    protected long cachedTime = -1;
@@ -496,11 +676,7 @@ public class ControlActivity extends Activity implements ViewFactory {
 
    protected void incrementVolume(long increment) {
 
-      // try assuming a cached volume instead of requesting it each time
-      if (System.currentTimeMillis() - cachedTime > CACHE_TIME) {
-         this.cachedVolume = status.getVolume();
-         this.cachedTime = System.currentTimeMillis();
-      }
+      checkCachedVolume();
 
       // increment the volume and send control signal off
       this.cachedVolume += increment;
@@ -513,10 +689,20 @@ public class ControlActivity extends Activity implements ViewFactory {
 
    }
 
+   /**
+    * Updates the cachedVolume if necessary
+    */
+   protected void checkCachedVolume() {
+      // try assuming a cached volume instead of requesting it each time
+      if (System.currentTimeMillis() - cachedTime > CACHE_TIME) {
+         this.cachedVolume = status.getVolume();
+         this.cachedTime = System.currentTimeMillis();
+      }
+   }
+
    @Override
    public boolean onKeyDown(int keyCode, KeyEvent event) {
-      final int increment = Integer.parseInt(backend.getPrefs().getString(
-               getResources().getString(R.string.pref_volumeincrement), "5"));
+      final int increment = Integer.parseInt(backend.getPrefs().getString(getResources().getString(R.string.pref_volumeincrement), "5"));
       // check for volume keys
       if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
          this.incrementVolume(+increment);
@@ -533,6 +719,7 @@ public class ControlActivity extends Activity implements ViewFactory {
    }
 
    // get rid of volume rocker default sound effect
+
    @Override
    public boolean onKeyUp(int keycode, KeyEvent event) {
       switch (keycode) {
@@ -545,7 +732,9 @@ public class ControlActivity extends Activity implements ViewFactory {
       return true;
    }
 
-   protected MenuItem repeat, shuffle;
+   protected MenuItem repeat;
+   protected MenuItem shuffle;
+   protected MenuItem speakersMenuItem;
 
    @Override
    public boolean onCreateOptionsMenu(Menu menu) {
@@ -571,6 +760,19 @@ public class ControlActivity extends Activity implements ViewFactory {
       Intent playlistIntent = new Intent(ControlActivity.this, BrowseActivity.class);
       playlistIntent.putExtra("windowType", BaseBrowseActivity.RESULT_SWITCH_TO_PLAYLISTS);
       playlists.setIntent(playlistIntent);
+
+      speakersMenuItem = menu.add(R.string.control_menu_speakers);
+      // a speaker icon from the default resources
+      speakersMenuItem.setIcon(android.R.drawable.ic_lock_silent_mode_off);
+      speakersMenuItem.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+         public boolean onMenuItemClick(MenuItem item) {
+            showDialog(DIALOG_SPEAKERS);
+            return true;
+         }
+      });
+      // Visibility will be determined in onPrepareOptionsMenu depending on the
+      // number of available speakers
+      speakersMenuItem.setVisible(false);
 
       this.repeat = menu.add("Repeat");
       this.repeat.setIcon(android.R.drawable.ic_menu_rotate);
@@ -692,6 +894,14 @@ public class ControlActivity extends Activity implements ViewFactory {
       case Status.SHUFFLE_ON:
          this.shuffle.setTitle(R.string.control_menu_shuffle_off);
          break;
+      }
+
+      // Determine whether the speakers menu item shall be visible
+      speakers = status.getSpeakers();
+      if (speakers.size() > 1) {
+         speakersMenuItem.setVisible(true);
+      } else {
+         speakersMenuItem.setVisible(false);
       }
 
       return true;

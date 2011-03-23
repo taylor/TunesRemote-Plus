@@ -46,13 +46,13 @@ import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.MenuItem.OnMenuItemClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
 
 public class TracksActivity extends BaseBrowseActivity {
 
@@ -68,22 +68,26 @@ public class TracksActivity extends BaseBrowseActivity {
 
    public ServiceConnection connection = new ServiceConnection() {
       public void onServiceConnected(ComponentName className, IBinder service) {
-         backend = ((BackendService.BackendBinder) service).getService();
-         session = backend.getSession();
+         try {
+            backend = ((BackendService.BackendBinder) service).getService();
+            session = backend.getSession();
 
-         if (session == null)
-            return;
+            if (session == null)
+               return;
 
-         adapter.results.clear();
+            adapter.results.clear();
 
-         // begin search now that we have a backend
-         library = new Library(session);
-         if (playlistId != null)
-            library.readPlaylist(playlistId, adapter);
-         else if (allAlbums)
-            library.readAllTracks(artist, adapter);
-         else
-            library.readTracks(albumid, adapter);
+            // begin search now that we have a backend
+            library = new Library(session);
+            if (playlistId != null)
+               library.readPlaylist(playlistId, adapter);
+            else if (allAlbums)
+               library.readAllTracks(artist, adapter);
+            else
+               library.readTracks(albumid, adapter);
+         } catch (Exception e) {
+            Log.e(TAG, "onServiceConnected:" + e.getMessage());
+         }
       }
 
       public void onServiceDisconnected(ComponentName className) {
@@ -311,9 +315,8 @@ public class TracksActivity extends BaseBrowseActivity {
          }
 
          /*
-          * mlit --+ mikd 1 02 == 2 asal 12 Dance or Die asar 14 Family Force 5
-          * astm 4 0003d5d6 == 251350 astn 2 0001 miid 4 0000005b == 91 minm 12
-          * dance or die
+          * mlit --+ mikd 1 02 == 2 asal 12 Dance or Die asar 14 Family Force 5 astm 4 0003d5d6 == 251350 astn 2 0001
+          * miid 4 0000005b == 91 minm 12 dance or die
           */
 
          return convertView;

@@ -39,12 +39,12 @@ import android.os.Message;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.MenuItem.OnMenuItemClickListener;
+import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
 
 public class PlaylistsActivity extends BaseBrowseActivity {
 
@@ -58,17 +58,21 @@ public class PlaylistsActivity extends BaseBrowseActivity {
 
    public ServiceConnection connection = new ServiceConnection() {
       public void onServiceConnected(ComponentName className, IBinder service) {
-         backend = ((BackendService.BackendBinder) service).getService();
-         session = backend.getSession();
+         try {
+            backend = ((BackendService.BackendBinder) service).getService();
+            session = backend.getSession();
 
-         if (session == null)
-            return;
+            if (session == null)
+               return;
 
-         adapter.results.clear();
+            adapter.results.clear();
 
-         // begin search now that we have a backend
-         library = new Library(session);
-         library.readPlaylists(adapter);
+            // begin search now that we have a backend
+            library = new Library(session);
+            library.readPlaylists(adapter);
+         } catch (Exception e) {
+            Log.e(TAG, "onServiceConnected:" + e.getMessage());
+         }
 
       }
 

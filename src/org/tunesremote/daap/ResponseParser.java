@@ -43,7 +43,7 @@ public class ResponseParser {
 
    public final static String TAG = ResponseParser.class.toString();
    public final static Pattern BRANCHES = Pattern
-            .compile("(cmst|mlog|agal|mlcl|mshl|mlit|abro|abar|apso|caci|avdb|cmgt|aply|adbs)");
+            .compile("(cmst|mlog|agal|mlcl|mshl|mlit|abro|abar|apso|caci|avdb|cmgt|aply|adb|casp|mdcl)");
    public final static Pattern STRINGS = Pattern.compile("(minm|cann|cana|cang|canl|asaa|asal|asar)");
    public final static Pattern RAWS = Pattern.compile("(canp)");
 

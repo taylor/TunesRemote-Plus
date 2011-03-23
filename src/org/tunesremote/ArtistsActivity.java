@@ -46,13 +46,13 @@ import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.MenuItem.OnMenuItemClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
 
 public class ArtistsActivity extends BaseBrowseActivity {
 
@@ -65,23 +65,26 @@ public class ArtistsActivity extends BaseBrowseActivity {
 
    public ServiceConnection connection = new ServiceConnection() {
       public void onServiceConnected(ComponentName className, IBinder service) {
-         backend = ((BackendService.BackendBinder) service).getService();
-         session = backend.getSession();
+         try {
+            backend = ((BackendService.BackendBinder) service).getService();
+            session = backend.getSession();
 
-         if (session == null)
-            return;
+            if (session == null)
+               return;
 
-         // if we already have artists, then leave alone
-         if (adapter.results.size() > 0)
-            return;
-         // adapter.results.clear();
+            // if we already have artists, then leave alone
+            if (adapter.results.size() > 0)
+               return;
+            // adapter.results.clear();
 
-         // begin search now that we have a backend
-         library = new Library(session);
+            // begin search now that we have a backend
+            library = new Library(session);
 
-         // do this on the main GUI thread to prevent exception
-         library.readArtists(adapter);
-
+            // do this on the main GUI thread to prevent exception
+            library.readArtists(adapter);
+         } catch (Exception e) {
+            Log.e(TAG, "onServiceConnected:" + e.getMessage());
+         }
       }
 
       public void onServiceDisconnected(ComponentName className) {
@@ -305,9 +308,8 @@ public class ArtistsActivity extends BaseBrowseActivity {
          }
 
          /*
-          * abro --+ mstt 4 000000c8 == 200 muty 1 00 == 0 mtco 4 000001ea ==
-          * 490 mrco 4 000001ea == 490 abar --+ mlit 11 Aaron Shust mlit 10
-          * Acceptance mlit 15 Acues & Elitist
+          * abro --+ mstt 4 000000c8 == 200 muty 1 00 == 0 mtco 4 000001ea == 490 mrco 4 000001ea == 490 abar --+ mlit
+          * 11 Aaron Shust mlit 10 Acceptance mlit 15 Acues & Elitist
           */
 
          return convertView;
