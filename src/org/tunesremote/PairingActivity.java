@@ -35,6 +35,7 @@ import org.tunesremote.util.ThreadExecutor;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -81,10 +82,10 @@ public class PairingActivity extends Activity {
       pairingServer = new PairingServer(paired);
 
       final Hashtable values = new Hashtable();
-      values.put("DvNm", "Android Remote");
+      values.put("DvNm", Build.MODEL);
       values.put("RemV", "10000");
-      values.put("DvTy", "iPod");
-      values.put("RemN", "Remote");
+      values.put("DvTy", Build.MANUFACTURER);
+      values.put("RemN", "Android Remote");
       values.put("txtvers", "1");
       values.put("Pair", "0000000000000001");
 
