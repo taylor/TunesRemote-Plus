@@ -53,18 +53,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.MenuItem.OnMenuItemClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
 
 /**
- * Show a list of all libraries found on local wifi network. Should have refresh
- * button easly accessibly, and also detect wifi issues.
+ * Show a list of all libraries found on local wifi network. Should have refresh button easly accessibly, and also
+ * detect wifi issues.
  */
 public class LibraryActivity extends Activity implements ServiceListener {
 
@@ -108,8 +108,7 @@ public class LibraryActivity extends Activity implements ServiceListener {
       WifiInfo wifiinfo = wifi.getConnectionInfo();
       int intaddr = wifiinfo.getIpAddress();
 
-      byte[] byteaddr = new byte[] { (byte) (intaddr & 0xff), (byte) (intaddr >> 8 & 0xff),
-               (byte) (intaddr >> 16 & 0xff), (byte) (intaddr >> 24 & 0xff) };
+      byte[] byteaddr = new byte[] { (byte) (intaddr & 0xff), (byte) (intaddr >> 8 & 0xff), (byte) (intaddr >> 16 & 0xff), (byte) (intaddr >> 24 & 0xff) };
       InetAddress addr = InetAddress.getByAddress(byteaddr);
 
       Log.d(TAG, String.format("found intaddr=%d, addr=%s", intaddr, addr.toString()));
@@ -204,8 +203,7 @@ public class LibraryActivity extends Activity implements ServiceListener {
       String address = data.getStringExtra(BackendService.EXTRA_ADDRESS);
       String library = data.getStringExtra(BackendService.EXTRA_LIBRARY);
       String code = data.getStringExtra(BackendService.EXTRA_CODE);
-      Log.d(TAG, String.format("onActivityResult with address=%s, library=%s, code=%s and resultcode=%d", address,
-               library, code, resultCode));
+      Log.d(TAG, String.format("onActivityResult with address=%s, library=%s, code=%s and resultcode=%d", address, library, code, resultCode));
 
       try {
 
@@ -302,25 +300,23 @@ public class LibraryActivity extends Activity implements ServiceListener {
       manual.setOnMenuItemClickListener(new OnMenuItemClickListener() {
          public boolean onMenuItemClick(MenuItem item) {
 
-            LayoutInflater inflater = (LayoutInflater) LibraryActivity.this
-                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) LibraryActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             final View view = inflater.inflate(R.layout.dia_text, null);
             final TextView address = (TextView) view.findViewById(android.R.id.text1);
             final TextView code = (TextView) view.findViewById(android.R.id.text2);
             code.setText("0000000000000001");
 
-            new AlertDialog.Builder(LibraryActivity.this).setView(view).setPositiveButton(R.string.library_manual_pos,
-                     new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                           // try connecting to this specific ip address
-                           Intent shell = new Intent();
-                           shell.putExtra(BackendService.EXTRA_ADDRESS, address.getText().toString());
-                           shell.putExtra(BackendService.EXTRA_LIBRARY, "0");
-                           shell.putExtra(BackendService.EXTRA_CODE, code.getText().toString());
-                           onActivityResult(-1, Activity.RESULT_OK, shell);
+            new AlertDialog.Builder(LibraryActivity.this).setView(view).setPositiveButton(R.string.library_manual_pos, new DialogInterface.OnClickListener() {
+               public void onClick(DialogInterface dialog, int which) {
+                  // try connecting to this specific ip address
+                  Intent shell = new Intent();
+                  shell.putExtra(BackendService.EXTRA_ADDRESS, address.getText().toString());
+                  shell.putExtra(BackendService.EXTRA_LIBRARY, "0");
+                  shell.putExtra(BackendService.EXTRA_CODE, code.getText().toString());
+                  onActivityResult(-1, Activity.RESULT_OK, shell);
 
-                        }
-                     }).setNegativeButton(R.string.library_manual_neg, new DialogInterface.OnClickListener() {
+               }
+            }).setNegativeButton(R.string.library_manual_neg, new DialogInterface.OnClickListener() {
                public void onClick(DialogInterface dialog, int which) {
                }
             }).create().show();
@@ -334,16 +330,16 @@ public class LibraryActivity extends Activity implements ServiceListener {
       forget.setOnMenuItemClickListener(new OnMenuItemClickListener() {
          public boolean onMenuItemClick(MenuItem item) {
 
-            new AlertDialog.Builder(LibraryActivity.this).setMessage(R.string.library_forget).setPositiveButton(
-                     R.string.library_forget_pos, new DialogInterface.OnClickListener() {
+            new AlertDialog.Builder(LibraryActivity.this).setMessage(R.string.library_forget)
+                     .setPositiveButton(R.string.library_forget_pos, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                            backend.pairdb.deleteAll();
 
                         }
                      }).setNegativeButton(R.string.library_forget_neg, new DialogInterface.OnClickListener() {
-               public void onClick(DialogInterface dialog, int which) {
-               }
-            }).create().show();
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                     }).create().show();
 
             return true;
          }
@@ -405,7 +401,7 @@ public class LibraryActivity extends Activity implements ServiceListener {
                throw new IllegalStateException("ServiceInfo is null");
             }
             final String title = serviceInfo.getPropertyString("CtlN");
-            final String addr = serviceInfo.getHostAddress();
+            final String addr = serviceInfo.getHostAddresses()[0]; // grab first one
             final String library = String.format("%s - %s", addr, serviceInfo.getPropertyString("DbId"));
 
             Log.d(TAG, String.format("ZeroConf Server: %s", serviceInfo.getServer()));

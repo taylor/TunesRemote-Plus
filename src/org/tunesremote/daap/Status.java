@@ -37,8 +37,7 @@ import android.os.Handler;
 import android.util.Log;
 
 /**
- * Status handles status information, including background timer thread also
- * subscribes to keep-alive event updates.
+ * Status handles status information, including background timer thread also subscribes to keep-alive event updates.
  * <p>
  */
 public class Status {
@@ -71,7 +70,7 @@ public class Status {
    protected int repeatStatus = REPEAT_OFF, shuffleStatus = SHUFFLE_OFF, playStatus = STATE_PAUSED;
    protected final AtomicBoolean destroyThread = new AtomicBoolean(false);
    private long rating = -1;
-   private long songId = 0;
+   private long trackId = 0;
    private String trackName = "", trackArtist = "", trackAlbum = "";
    private long progressTotal = 0, progressRemain = 0;
    private final Session session;
@@ -306,13 +305,13 @@ public class Status {
    }
 
    private void extractSongId(byte[] bs) {
-      songId = 0;
+      trackId = 0;
 
       // This is a PITA in Java....
-      songId = (bs[12] & 0xff) << 24;
-      songId |= (bs[13] & 0xff) << 16;
-      songId |= (bs[14] & 0xff) << 8;
-      songId |= bs[15] & 0xff;
+      trackId = (bs[12] & 0xff) << 24;
+      trackId |= (bs[13] & 0xff) << 16;
+      trackId |= (bs[14] & 0xff) << 8;
+      trackId |= bs[15] & 0xff;
 
    }
 
@@ -323,7 +322,7 @@ public class Status {
             try {
                Response resp = RequestHelper.requestParsed(
                         String.format("%s/databases/%d/items?session-id=%s&meta=daap.songuserrating&type=music&query='dmap.itemid:%d'",
-                                 session.getRequestBase(), session.databaseId, session.sessionId, songId), false);
+                                 session.getRequestBase(), session.databaseId, session.sessionId, trackId), false);
 
                if (update != null) {
                   // 2 different responses possible!
@@ -360,7 +359,6 @@ public class Status {
 
    /**
     * Reads the list of available speakers
-    * 
     * @return list of available speakers
     */
    public List<Speaker> getSpeakers() {
@@ -370,14 +368,13 @@ public class Status {
       try {
          Log.d(TAG, "getSpeakers() requesting...");
 
-         String temp = String.format("%s/ctrl-int/1/getspeakers?session-id=%s",
-               session.getRequestBase(), session.sessionId);
+         String temp = String.format("%s/ctrl-int/1/getspeakers?session-id=%s", session.getRequestBase(), session.sessionId);
 
          byte[] raw = RequestHelper.request(temp, false);
 
          Response response = ResponseParser.performParse(raw);
 
-         Response casp = (Response) response.getNested("casp");
+         Response casp = response.getNested("casp");
 
          List<Response> mdclArray = casp.findArray("mdcl");
 
@@ -394,8 +391,7 @@ public class Status {
             boolean isActive = mdcl.containsKey("caia");
             speaker.setActive(isActive);
             // mastervolume/100 * relativeVolume/100 * 100
-            int absoluteVolume = isActive ? (int) masterVolume * relativeVolume
-                  / 100 : 0;
+            int absoluteVolume = isActive ? (int) masterVolume * relativeVolume / 100 : 0;
             speaker.setAbsoluteVolume(absoluteVolume);
             speakers.add(speaker);
          }
@@ -410,9 +406,7 @@ public class Status {
 
    /**
     * Sets (activates or deactivates) the speakers as defined in the given list.
-    * 
-    * @param speakers
-    *           all speakers to read the active flag from
+    * @param speakers all speakers to read the active flag from
     */
    public void setSpeakers(List<Speaker> speakers) {
 
@@ -434,9 +428,7 @@ public class Status {
             }
          }
 
-         String url = String.format(
-               "%s/ctrl-int/1/setspeakers?speaker-id=%s&session-id=%s",
-               session.getRequestBase(), idsString, session.sessionId);
+         String url = String.format("%s/ctrl-int/1/setspeakers?speaker-id=%s&session-id=%s", session.getRequestBase(), idsString, session.sessionId);
 
          RequestHelper.request(url, false);
 
@@ -446,37 +438,27 @@ public class Status {
    }
 
    /**
-    * Sets the volume of a single speaker. To recreate the behaviour of the
-    * original iOS Remote App, there are some additional information required
-    * because there is some hassle between relative and master volume.
-    * 
-    * @param speakerId
-    *           ID of the speaker to set the volume of
-    * @param newVolume
-    *           the new volume to set
-    * @param formerVolume
-    *           the former volume of this speaker
-    * @param speakersMaxVolume
-    *           the maximum volume of all available speakers
-    * @param secondMaxVolume
-    *           the volume of the second loudest speaker
-    * @param masterVolume
-    *           the current master volume
+    * Sets the volume of a single speaker. To recreate the behaviour of the original iOS Remote App, there are some
+    * additional information required because there is some hassle between relative and master volume.
+    * @param speakerId ID of the speaker to set the volume of
+    * @param newVolume the new volume to set
+    * @param formerVolume the former volume of this speaker
+    * @param speakersMaxVolume the maximum volume of all available speakers
+    * @param secondMaxVolume the volume of the second loudest speaker
+    * @param masterVolume the current master volume
     */
-   public void setSpeakerVolume(long speakerId, int newVolume,
-         int formerVolume, int speakersMaxVolume, int secondMaxVolume,
-         long masterVolume) {
+   public void setSpeakerVolume(long speakerId, int newVolume, int formerVolume, int speakersMaxVolume, int secondMaxVolume, long masterVolume) {
       try {
          /*************************************************************
-          * If this speaker will become or is currently the loudest or is the
-          * only activated speaker, it will be controlled via the master volume.
+          * If this speaker will become or is currently the loudest or is the only activated speaker, it will be
+          * controlled via the master volume.
           *************************************************************/
          if (newVolume > masterVolume || formerVolume == speakersMaxVolume) {
             if (newVolume < secondMaxVolume) {
                // First equalize the volume of this speaker with the second
                // loudest
                setAbsoluteVolume(speakerId, secondMaxVolume);
-               int relativeVolume = newVolume * 100 / (int) secondMaxVolume;
+               int relativeVolume = newVolume * 100 / secondMaxVolume;
                // then go on by decreasing the relative volume of this speaker
                setRelativeVolume(speakerId, relativeVolume);
             } else {
@@ -498,47 +480,32 @@ public class Status {
    }
 
    /**
-    * Helper to control a speakers's absolute volume. This uses the URL
-    * parameters <code>setproperty?dmcp.volume=%d&include-speaker-id=%s</code>
-    * which results in iTunes controlling the master volume and the selected
-    * speaker synchronously.
-    * 
-    * @param speakerId
-    *           ID of the speaker to control
-    * @param absoluteVolume
-    *           the volume to set absolutely
+    * Helper to control a speakers's absolute volume. This uses the URL parameters
+    * <code>setproperty?dmcp.volume=%d&include-speaker-id=%s</code> which results in iTunes controlling the master
+    * volume and the selected speaker synchronously.
+    * @param speakerId ID of the speaker to control
+    * @param absoluteVolume the volume to set absolutely
     * @throws Exception
     */
-   private void setAbsoluteVolume(long speakerId, int absoluteVolume)
-         throws Exception {
+   private void setAbsoluteVolume(long speakerId, int absoluteVolume) throws Exception {
       String url;
-      url = String.format(
-            "%s/ctrl-int/1/setproperty?dmcp.volume=%d&include-speaker-id=%s"
-                  + "&session-id=%s", session.getRequestBase(), absoluteVolume,
-            speakerId, session.sessionId);
+      url = String.format("%s/ctrl-int/1/setproperty?dmcp.volume=%d&include-speaker-id=%s" + "&session-id=%s", session.getRequestBase(), absoluteVolume,
+               speakerId, session.sessionId);
       RequestHelper.request(url, false);
    }
 
    /**
-    * Helper to control a speaker's relative volume. This relative volume is a
-    * value between 0 and 100 describing the relative volume of a speaker in
-    * comparison to the master volume. For this the URL parameters
-    * <code>%s/ctrl-int/1/setproperty?speaker-id=%s&dmcp.volume=%d</code> are
-    * used.
-    * 
-    * @param speakerId
-    *           ID of the speaker to control
-    * @param relativeVolume
-    *           the relative volume to set
+    * Helper to control a speaker's relative volume. This relative volume is a value between 0 and 100 describing the
+    * relative volume of a speaker in comparison to the master volume. For this the URL parameters
+    * <code>%s/ctrl-int/1/setproperty?speaker-id=%s&dmcp.volume=%d</code> are used.
+    * @param speakerId ID of the speaker to control
+    * @param relativeVolume the relative volume to set
     * @throws Exception
     */
-   private void setRelativeVolume(long speakerId, int relativeVolume)
-         throws Exception {
+   private void setRelativeVolume(long speakerId, int relativeVolume) throws Exception {
       String url;
-      url = String.format(
-            "%s/ctrl-int/1/setproperty?speaker-id=%s&dmcp.volume=%d"
-                  + "&session-id=%s", session.getRequestBase(), speakerId,
-            relativeVolume, session.sessionId);
+      url = String.format("%s/ctrl-int/1/setproperty?speaker-id=%s&dmcp.volume=%d" + "&session-id=%s", session.getRequestBase(), speakerId, relativeVolume,
+               session.sessionId);
       RequestHelper.request(url, false);
    }
 
@@ -584,5 +551,9 @@ public class Status {
 
    public String getAlbumId() {
       return this.albumId;
+   }
+
+   public long getTrackId() {
+      return trackId;
    }
 }

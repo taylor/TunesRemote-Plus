@@ -649,17 +649,13 @@ public class ControlActivity extends Activity implements ViewFactory {
 
       this.fadeview = (FadeView) findViewById(R.id.fadeview);
       this.fadeview.startFade();
-
       this.fadeview.doubleTapHandler = this.doubleTapHandler;
-
-      // cover.setImageDrawable(this.getResources().getDrawable(R.drawable.folder));
 
       this.ratingBar.setOnRatingBarChangeListener(new OnRatingBarChangeListener() {
 
          public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-            // TODO Auto-generated method stub
             if (fromUser && rating <= 5) {
-               session.controlRating((long) ((rating / 5) * 100));
+               session.controlRating((long) ((rating / 5) * 100), status.getTrackId());
             }
          }
       });
