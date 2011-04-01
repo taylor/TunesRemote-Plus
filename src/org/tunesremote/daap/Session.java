@@ -25,7 +25,6 @@
 
 package org.tunesremote.daap;
 
-import java.net.URLEncoder;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -227,7 +226,7 @@ public class Session {
       // /ctrl-int/1/cue?command=play&query=(('com.apple.itunes.mediakind:1','com.apple.itunes.mediakind:32')+'daap.songartist:Family%20Force%205')&index=0&sort=album&session-id=130883770
       // /ctrl-int/1/cue?command=play&query='daap.songartist:%s'&index=0&sort=album&session-id=%s
 
-      final String encodedArtist = URLEncoder.encode(artist).replaceAll("\\+", "%20");
+      final String encodedArtist = Library.escapeUrlString(artist);
       final int encodedIndex = index;
 
       ThreadExecutor.runTask(new Runnable() {
@@ -242,7 +241,7 @@ public class Session {
    }
 
    public void controlQueueArtist(String artist) {
-      final String encodedArtist = URLEncoder.encode(artist).replaceAll("\\+", "%20");
+      final String encodedArtist = Library.escapeUrlString(artist);
 
       ThreadExecutor.runTask(new Runnable() {
          public void run() {
@@ -267,7 +266,7 @@ public class Session {
       // /ctrl-int/1/cue?command=play&query=(('com.apple.itunes.mediakind:1','com.apple.itunes.mediakind:4','com.apple.itunes.mediakind:8')+'dmap.itemname:*F*')&index=4&sort=name&session-id=1550976127
       // /ctrl-int/1/cue?command=play&query='dmap.itemname:*%s*'&index=%d&sort=name&session-id=%s
 
-      final String encodedSearch = URLEncoder.encode(search).replaceAll("\\+", "%20");
+      final String encodedSearch = Library.escapeUrlString(search);
 
       ThreadExecutor.runTask(new Runnable() {
          public void run() {

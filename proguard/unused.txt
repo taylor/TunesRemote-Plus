@@ -52,7 +52,7 @@ javax.jmdns.ServiceInfo:
     375:375:public static javax.jmdns.ServiceInfo create(java.lang.String,java.lang.String,java.lang.String,int,int,int,boolean,byte[])
     396:396:public static javax.jmdns.ServiceInfo create(java.util.Map,int,int,int,boolean,java.util.Map)
     public abstract java.lang.String getTypeWithSubtype()
-    public abstract java.lang.String[] getHostAddresses()
+    public abstract java.lang.String getHostAddress()
     public abstract java.net.InetAddress getAddress()
     public abstract java.net.InetAddress getInetAddress()
     public abstract java.net.Inet4Address getInet4Address()
@@ -191,6 +191,7 @@ javax.jmdns.impl.ServiceEventImpl:
 javax.jmdns.impl.ServiceInfoImpl:
     private javax.jmdns.impl.ServiceInfoImpl$Delegate _delegate
     127:136:public ServiceInfoImpl(java.lang.String,java.lang.String,java.lang.String,int,int,int,boolean,java.lang.String)
+    464:465:public java.lang.String getHostAddress()
     502:502:public java.net.InetAddress getAddress()
     511:512:public java.net.InetAddress getInetAddress()
     521:522:public java.net.Inet4Address getInet4Address()

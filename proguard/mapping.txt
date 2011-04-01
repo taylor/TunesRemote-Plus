@@ -29,7 +29,7 @@ javax.jmdns.ServiceInfo -> a.a.f:
     java.lang.String getKey() -> d
     java.lang.String getQualifiedName() -> e
     java.lang.String getServer() -> f
-    java.lang.String getHostAddress() -> g
+    java.lang.String[] getHostAddresses() -> g
     java.net.Inet4Address[] getInet4Addresses() -> h
     java.net.Inet6Address[] getInet6Addresses() -> i
     int getPort() -> j
@@ -678,7 +678,7 @@ javax.jmdns.impl.ServiceInfoImpl -> a.a.a.bd:
     java.lang.String getQualifiedName() -> e
     java.lang.String getServer() -> f
     void setServer(java.lang.String) -> d
-    java.lang.String getHostAddress() -> g
+    java.lang.String[] getHostAddresses() -> g
     void addAddress(java.net.Inet4Address) -> a
     void addAddress(java.net.Inet6Address) -> a
     java.net.InetAddress[] getInetAddresses() -> G
@@ -1713,6 +1713,7 @@ org.tunesremote.daap.Library -> org.tunesremote.a.a:
     void readPlaylists(org.tunesremote.PlaylistsAdapter) -> a
     void readPlaylist(java.lang.String,org.tunesremote.TagListener) -> c
     boolean readNowPlaying(java.lang.String,org.tunesremote.TagListener) -> d
+    java.lang.String escapeUrlString(java.lang.String) -> a
 org.tunesremote.daap.PairingServer -> org.tunesremote.a.b:
     byte[] CHAR_TABLE -> a
     byte[] PAIRING_RAW -> b
@@ -1771,7 +1772,7 @@ org.tunesremote.daap.Session -> org.tunesremote.a.g:
     void controlProgress(int) -> a
     void controlShuffle(int) -> b
     void controlRepeat(int) -> c
-    void controlRating(long) -> b
+    void controlRating(long,long) -> a
     void controlPlayAlbum(java.lang.String,int) -> a
     void controlQueueAlbum(java.lang.String) -> a
     void controlPlayArtist(java.lang.String,int) -> b
@@ -1785,12 +1786,12 @@ org.tunesremote.daap.Session$1 -> org.tunesremote.a.h:
     boolean val$notify -> b
     void run() -> run
 org.tunesremote.daap.Session$2 -> org.tunesremote.a.i:
-    java.lang.String val$albumid -> a
+    java.lang.String val$albumId -> a
     int val$tracknum -> b
     org.tunesremote.daap.Session this$0 -> c
     void run() -> run
 org.tunesremote.daap.Session$3 -> org.tunesremote.a.j:
-    java.lang.String val$albumid -> a
+    java.lang.String val$albumId -> a
     org.tunesremote.daap.Session this$0 -> b
     void run() -> run
 org.tunesremote.daap.Session$4 -> org.tunesremote.a.k:
@@ -1803,7 +1804,7 @@ org.tunesremote.daap.Session$5 -> org.tunesremote.a.l:
     org.tunesremote.daap.Session this$0 -> b
     void run() -> run
 org.tunesremote.daap.Session$6 -> org.tunesremote.a.m:
-    java.lang.String val$track -> a
+    java.lang.String val$trackId -> a
     org.tunesremote.daap.Session this$0 -> b
     void run() -> run
 org.tunesremote.daap.Session$7 -> org.tunesremote.a.n:
@@ -1848,7 +1849,7 @@ org.tunesremote.daap.Status -> org.tunesremote.a.r:
     int playStatus -> f
     java.util.concurrent.atomic.AtomicBoolean destroyThread -> g
     long rating -> i
-    long songId -> j
+    long trackId -> j
     java.lang.String trackName -> k
     java.lang.String trackArtist -> l
     java.lang.String trackAlbum -> m
@@ -1881,12 +1882,13 @@ org.tunesremote.daap.Status -> org.tunesremote.a.r:
     java.lang.String getTrackAlbum() -> m
     long getRating() -> n
     java.lang.String getAlbumId() -> o
+    long getTrackId() -> p
     long access$022(org.tunesremote.daap.Status,long) -> a
     android.os.Handler access$100(org.tunesremote.daap.Status) -> a
     long access$000(org.tunesremote.daap.Status) -> b
     org.tunesremote.daap.Session access$200(org.tunesremote.daap.Status) -> c
     long access$300(org.tunesremote.daap.Status) -> d
-    java.util.concurrent.atomic.AtomicInteger access$400() -> p
+    java.util.concurrent.atomic.AtomicInteger access$400() -> q
     long access$500(org.tunesremote.daap.Status) -> e
     long access$602(org.tunesremote.daap.Status,long) -> b
 org.tunesremote.daap.Status$1 -> org.tunesremote.a.s:

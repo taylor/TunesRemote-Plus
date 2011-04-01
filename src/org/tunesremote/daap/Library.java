@@ -58,7 +58,7 @@ public class Library {
    public long readSearch(TagListener listener, String search, long start, long items) {
       long total = -1;
       try {
-         String encodedSearch = URLEncoder.encode(search).replaceAll("\\+", "%20");
+         String encodedSearch = Library.escapeUrlString(search);
          String query = String
                   .format("%s/databases/%d/items?session-id=%s&meta=dmap.itemname,dmap.itemid,dmap.persistentid,daap.songartist,daap.songalbum,daap.songtime,daap.songtracknumber&type=music&sort=album&query=('dmap.itemname:*%s*','daap.songartist:*%s*','daap.songalbum:*%s*')&index=%d-%d",
                            session.getRequestBase(), session.databaseId, session.sessionId, encodedSearch, encodedSearch, encodedSearch, start, items);
@@ -102,7 +102,7 @@ public class Library {
 
    public void readAlbums(TagListener listener, String artist) {
 
-      final String encodedArtist = URLEncoder.encode(artist).replaceAll("\\+", "%20");
+      final String encodedArtist = Library.escapeUrlString(artist);
 
       try {
 
@@ -183,8 +183,7 @@ public class Library {
    public void readAllTracks(String artist, TagListener listener) {
 
       // check if we have a local cache create a wrapping taglistener to create local cache
-
-      final String encodedArtist = URLEncoder.encode(artist).replaceAll("\\+", "%20");
+      final String encodedArtist = Library.escapeUrlString(artist);
 
       try {
          // make tracks list request
@@ -276,4 +275,16 @@ public class Library {
       }
    }
 
+   /**
+    * URL encode a string escaping single quotes first.
+    * <p>
+    * @param input the string to encode
+    * @return the URL encoded string value
+    */
+   public static String escapeUrlString(final String input) {
+      String encoded = URLEncoder.encode(input);
+      encoded = encoded.replaceAll("\\+", "%20");
+      encoded = encoded.replaceAll("%27", "%5C'");
+      return encoded;
+   }
 }
