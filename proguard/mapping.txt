@@ -1753,13 +1753,13 @@ org.tunesremote.daap.ResponseParser -> org.tunesremote.a.f:
     org.tunesremote.daap.Response parse(java.io.DataInputStream,org.tunesremote.TagListener,java.util.regex.Pattern,int) -> a
     java.lang.String readString(java.io.DataInputStream,int) -> a
 org.tunesremote.daap.Session -> org.tunesremote.a.g:
-    java.lang.String host -> d
-    org.tunesremote.daap.Status singleton -> e
+    java.lang.String host -> e
+    org.tunesremote.daap.Status singleton -> f
     java.lang.String sessionId -> a
     long databaseId -> b
-    long musicId -> f
+    long musicId -> c
     java.lang.String databasePersistentId -> g
-    java.util.List playlists -> c
+    java.util.List playlists -> d
     org.tunesremote.daap.Status singletonStatus(android.os.Handler) -> a
     java.lang.String getRequestBase() -> a
     void purgeAllStatus() -> b

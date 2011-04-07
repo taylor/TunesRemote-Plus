@@ -264,15 +264,13 @@ public class Session {
 
    public void controlPlaySearch(final String search, final int index) {
       // /ctrl-int/1/cue?command=play&query=(('com.apple.itunes.mediakind:1','com.apple.itunes.mediakind:4','com.apple.itunes.mediakind:8')+'dmap.itemname:*F*')&index=4&sort=name&session-id=1550976127
-      // /ctrl-int/1/cue?command=play&query='dmap.itemname:*%s*'&index=%d&sort=name&session-id=%s
-
       final String encodedSearch = Library.escapeUrlString(search);
 
       ThreadExecutor.runTask(new Runnable() {
          public void run() {
             RequestHelper.attemptRequest(String.format("%s/ctrl-int/1/cue?command=clear&session-id=%s", getRequestBase(), sessionId));
             RequestHelper.attemptRequest(String
-                     .format("%s/ctrl-int/1/cue?command=play&query=('dmap.itemname:*%s*','daap.songartist:*%s*','daap.songalbum:*%s*')&type=music&sort=artist&index=%d&session-id=%s",
+                     .format("%s/ctrl-int/1/cue?command=play&query=(('com.apple.itunes.mediakind:1','com.apple.itunes.mediakind:4','com.apple.itunes.mediakind:8')+('dmap.itemname:*%s*','daap.songartist:*%s*','daap.songalbum:*%s*'))&type=music&sort=name&index=%d&session-id=%s",
                               getRequestBase(), encodedSearch, encodedSearch, encodedSearch, index, sessionId));
             notifyStatus();
          }
