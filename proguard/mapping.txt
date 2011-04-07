@@ -1757,8 +1757,9 @@ org.tunesremote.daap.Session -> org.tunesremote.a.g:
     org.tunesremote.daap.Status singleton -> f
     java.lang.String sessionId -> a
     long databaseId -> b
-    long musicId -> c
-    java.lang.String databasePersistentId -> g
+    long musicId -> g
+    long libraryId -> c
+    java.lang.String databasePersistentId -> h
     java.util.List playlists -> d
     org.tunesremote.daap.Status singletonStatus(android.os.Handler) -> a
     java.lang.String getRequestBase() -> a

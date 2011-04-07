@@ -39,7 +39,7 @@ public class Session {
    private final String host;
    private static Status singleton = null;
    public String sessionId;
-   public long databaseId, musicId;
+   public long databaseId, musicId, libraryId;
    public String databasePersistentId;
    public final List<Playlist> playlists = new LinkedList<Playlist>();
 
@@ -73,9 +73,11 @@ public class Session {
          } else {
             // get a list of playlists, filter out some non-music iTunes
             // playlists
-            if (name.equals("Films") || name.equals("TV Programmes") || name.equals("iTunes U") || (resp.getNumberLong("abpl") == 1))
+            if (name.equals("Films") || name.equals("TV Programmes") || name.equals("iTunes U"))
             // Ignore
             {
+            } else if (resp.getNumberLong("abpl") == 1) {
+               this.libraryId = resp.getNumberLong("miid");
             } else {
                Log.d(TAG, String.format("found playlist=%s", name));
                this.playlists.add(new Playlist(resp.getNumberLong("miid"), name, resp.getNumberLong("mimc"), resp.getNumberHex("mper")));

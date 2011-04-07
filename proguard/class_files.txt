@@ -73635,7 +73635,7 @@ Constant Pool (count = 243):
   - String [%s/databases/%d/containers/%d/items?session-id=%s&meta=dmap.itemname,dmap.itemid,daap.songartist,daap.songalbum,daap.songalbum,daap.songtime,daap.songuserrating,daap.songtracknumber&type=music&sort=album&query='daap.songartist:%s']
   - String [%s/databases/%d/containers/%s/items?session-id=%s&meta=dmap.itemname,dmap.itemid,daap.songartst,daap.songalbum,daap.songtime,dmap.containeritemid,com.apple.tunes.has-video]
   - String [%s/databases/%d/groups?session-id=%s&meta=dmap.itemname,dmap.itemid,dmap.persistentid,daap.songartist&type=music&group-type=albums&sort=artist&include-sort-headers=1&query='daap.songartist:%s']
-  - String [%s/databases/%d/items?session-id=%s&meta=dmap.itemname,dmap.itemid,dmap.persistentid,daap.songartist,daap.songalbum,daap.songtime,daap.songtracknumber&type=music&sort=album&query=('dmap.itemname:*%s*','daap.songartist:*%s*','daap.songalbum:*%s*')&index=%d-%d]
+  - String [%s/databases/%d/items?session-id=%s&meta=dmap.itemname,dmap.itemid,dmap.persistentid,daap.songartist,daap.songalbum,daap.songtime,daap.songtracknumber&type=music&sort=name&query=(('com.apple.itunes.mediakind:1','com.apple.itunes.mediakind:4','com.apple.itunes.mediakind:8')+('dmap.itemname:*%s*','daap.songartist:*%s*','daap.songalbum:*%s*'))&index=%d-%d]
   - String [\+]
   - String [adbs]
   - String [apso]
@@ -73764,7 +73764,7 @@ Constant Pool (count = 243):
   + Utf8 [%s/databases/%d/containers/%d/items?session-id=%s&meta=dmap.itemname,dmap.itemid,daap.songartist,daap.songalbum,daap.songalbum,daap.songtime,daap.songuserrating,daap.songtracknumber&type=music&sort=album&query='daap.songartist:%s']
   + Utf8 [%s/databases/%d/containers/%s/items?session-id=%s&meta=dmap.itemname,dmap.itemid,daap.songartst,daap.songalbum,daap.songtime,dmap.containeritemid,com.apple.tunes.has-video]
   + Utf8 [%s/databases/%d/groups?session-id=%s&meta=dmap.itemname,dmap.itemid,dmap.persistentid,daap.songartist&type=music&group-type=albums&sort=artist&include-sort-headers=1&query='daap.songartist:%s']
-  + Utf8 [%s/databases/%d/items?session-id=%s&meta=dmap.itemname,dmap.itemid,dmap.persistentid,daap.songartist,daap.songalbum,daap.songtime,daap.songtracknumber&type=music&sort=album&query=('dmap.itemname:*%s*','daap.songartist:*%s*','daap.songalbum:*%s*')&index=%d-%d]
+  + Utf8 [%s/databases/%d/items?session-id=%s&meta=dmap.itemname,dmap.itemid,dmap.persistentid,daap.songartist,daap.songalbum,daap.songtime,daap.songtracknumber&type=music&sort=name&query=(('com.apple.itunes.mediakind:1','com.apple.itunes.mediakind:4','com.apple.itunes.mediakind:8')+('dmap.itemname:*%s*','daap.songartist:*%s*','daap.songalbum:*%s*'))&index=%d-%d]
   + Utf8 [()I]
   + Utf8 [()J]
   + Utf8 [()Ljava/lang/Object;]
@@ -73904,7 +73904,7 @@ Methods (count = 11):
         - Methodref [org/tunesremote/a/a.a (Ljava/lang/String;)Ljava/lang/String;]
       [9] astore_2 v2
       [10] ldc #11
-        - String [%s/databases/%d/items?session-id=%s&meta=dmap.itemname,dmap.itemid,dmap.persistentid,daap.songartist,daap.songalbum,daap.songtime,daap.songtracknumber&type=music&sort=album&query=('dmap.itemname:*%s*','daap.songartist:*%s*','daap.songalbum:*%s*')&index=%d-%d]
+        - String [%s/databases/%d/items?session-id=%s&meta=dmap.itemname,dmap.itemid,dmap.persistentid,daap.songartist,daap.songalbum,daap.songtime,daap.songtracknumber&type=music&sort=name&query=(('com.apple.itunes.mediakind:1','com.apple.itunes.mediakind:4','com.apple.itunes.mediakind:8')+('dmap.itemname:*%s*','daap.songartist:*%s*','daap.songalbum:*%s*'))&index=%d-%d]
       [12] bipush 8
       [14] anewarray #38
         - Class [java/lang/Object]
@@ -77098,7 +77098,7 @@ _____________________________________________________________________
 
 Interfaces (count = 0):
 
-Constant Pool (count = 266):
+Constant Pool (count = 269):
   - String [%s/ctrl-int/1/nextitem?session-id=%s]
   - String [%s/ctrl-int/1/playpause?session-id=%s]
   - String [%s/ctrl-int/1/previtem?session-id=%s]
@@ -77166,7 +77166,8 @@ Constant Pool (count = 266):
   - Fieldref [org/tunesremote/a/g.d Ljava/util/List;]
   - Fieldref [org/tunesremote/a/g.e Ljava/lang/String;]
   - Fieldref [org/tunesremote/a/g.f Lorg/tunesremote/a/r;]
-  - Fieldref [org/tunesremote/a/g.g Ljava/lang/String;]
+  - Fieldref [org/tunesremote/a/g.g J]
+  - Fieldref [org/tunesremote/a/g.h Ljava/lang/String;]
   - Fieldref [org/tunesremote/a/r.d I]
   - Fieldref [org/tunesremote/a/r.e I]
   - Fieldref [org/tunesremote/a/r.g Ljava/util/concurrent/atomic/AtomicBoolean;]
@@ -77233,10 +77234,11 @@ Constant Pool (count = 266):
   + NameAndType [equals (Ljava/lang/Object;)Z]
   + NameAndType [f Lorg/tunesremote/a/r;]
   + NameAndType [format (Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;]
-  + NameAndType [g Ljava/lang/String;]
+  + NameAndType [g J]
   + NameAndType [g Ljava/util/concurrent/atomic/AtomicBoolean;]
   + NameAndType [get ()Z]
   + NameAndType [get (Ljava/lang/Object;)Ljava/lang/Object;]
+  + NameAndType [h Ljava/lang/String;]
   + NameAndType [hasNext ()Z]
   + NameAndType [iterator ()Ljava/util/Iterator;]
   + NameAndType [longValue ()J]
@@ -77319,6 +77321,7 @@ Constant Pool (count = 266):
   + Utf8 [found session-id=%s]
   + Utf8 [g]
   + Utf8 [get]
+  + Utf8 [h]
   + Utf8 [hasNext]
   + Utf8 [http://%s:3689]
   + Utf8 [iTunes U]
@@ -77365,7 +77368,7 @@ Constant Pool (count = 266):
   + Utf8 [tryign login for host=%s and guid=%s]
   + Utf8 [valueOf]
 
-Fields (count = 7):
+Fields (count = 8):
   + Field:        e Ljava/lang/String;
     Access flags: 0x12
       = private final java.lang.String e
@@ -77378,12 +77381,15 @@ Fields (count = 7):
   + Field:        b J
     Access flags: 0x1
       = public long b
+  + Field:        g J
+    Access flags: 0x2
+      = private long g
   + Field:        c J
     Access flags: 0x1
       = public long c
-  + Field:        g Ljava/lang/String;
+  + Field:        h Ljava/lang/String;
     Access flags: 0x2
-      = private java.lang.String g
+      = private java.lang.String h
   + Field:        d Ljava/util/List;
     Access flags: 0x11
       = public final java.util.List d
@@ -77393,15 +77399,15 @@ Methods (count = 23):
     Access flags: 0x1
       = public g(java.lang.String,java.lang.String)
     Class member attributes (count = 1):
-    + Code attribute instructions (code length = 525, locals = 5, stack = 11):
+    + Code attribute instructions (code length = 544, locals = 5, stack = 11):
       [0] aload_0 v0
-      [1] invokespecial #76
+      [1] invokespecial #77
         - Methodref [java/lang/Object.<init> ()V]
       [4] aload_0 v0
       [5] new #43
         - Class [java/util/LinkedList]
       [8] dup
-      [9] invokespecial #81
+      [9] invokespecial #82
         - Methodref [java/util/LinkedList.<init> ()V]
       [12] putfield #65
         - Fieldref [org/tunesremote/a/g.d Ljava/util/List;]
@@ -77422,7 +77428,7 @@ Methods (count = 23):
       [31] iconst_1
       [32] aload_2 v2
       [33] aastore
-      [34] invokestatic #78
+      [34] invokestatic #79
         - Methodref [java/lang/String.format (Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;]
       [37] pop
       [38] ldc #11
@@ -77433,17 +77439,17 @@ Methods (count = 23):
       [44] dup
       [45] iconst_0
       [46] aload_0 v0
-      [47] invokevirtual #90
+      [47] invokevirtual #91
         - Methodref [org/tunesremote/a/g.a ()Ljava/lang/String;]
       [50] aastore
       [51] dup
       [52] iconst_1
       [53] aload_2 v2
       [54] aastore
-      [55] invokestatic #78
+      [55] invokestatic #79
         - Methodref [java/lang/String.format (Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;]
       [58] iconst_0
-      [59] invokestatic #85
+      [59] invokestatic #86
         - Methodref [org/tunesremote/a/d.a (Ljava/lang/String;Z)Lorg/tunesremote/a/e;]
       [62] astore_1 v1
       [63] aload_0 v0
@@ -77452,7 +77458,7 @@ Methods (count = 23):
         - String [mlog]
       [67] dup
       [68] astore v4
-      [70] invokevirtual #89
+      [70] invokevirtual #90
         - Methodref [org/tunesremote/a/e.get (Ljava/lang/Object;)Ljava/lang/Object;]
       [73] checkcast #49
         - Class [org/tunesremote/a/e]
@@ -77460,9 +77466,9 @@ Methods (count = 23):
         - String [mlid]
       [78] dup
       [79] astore v4
-      [81] invokevirtual #87
+      [81] invokevirtual #88
         - Methodref [org/tunesremote/a/e.b (Ljava/lang/String;)Ljava/math/BigInteger;]
-      [84] invokevirtual #80
+      [84] invokevirtual #81
         - Methodref [java/math/BigInteger.toString ()Ljava/lang/String;]
       [87] putfield #62
         - Fieldref [org/tunesremote/a/g.a Ljava/lang/String;]
@@ -77477,7 +77483,7 @@ Methods (count = 23):
       [99] getfield #62
         - Fieldref [org/tunesremote/a/g.a Ljava/lang/String;]
       [102] aastore
-      [103] invokestatic #78
+      [103] invokestatic #79
         - Methodref [java/lang/String.format (Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;]
       [106] pop
       [107] ldc #10
@@ -77488,7 +77494,7 @@ Methods (count = 23):
       [113] dup
       [114] iconst_0
       [115] aload_0 v0
-      [116] invokevirtual #90
+      [116] invokevirtual #91
         - Methodref [org/tunesremote/a/g.a ()Ljava/lang/String;]
       [119] aastore
       [120] dup
@@ -77497,10 +77503,10 @@ Methods (count = 23):
       [123] getfield #62
         - Fieldref [org/tunesremote/a/g.a Ljava/lang/String;]
       [126] aastore
-      [127] invokestatic #78
+      [127] invokestatic #79
         - Methodref [java/lang/String.format (Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;]
       [130] iconst_0
-      [131] invokestatic #85
+      [131] invokestatic #86
         - Methodref [org/tunesremote/a/d.a (Ljava/lang/String;Z)Lorg/tunesremote/a/e;]
       [134] astore_1 v1
       [135] aload_0 v0
@@ -77509,7 +77515,7 @@ Methods (count = 23):
         - String [avdb]
       [139] dup
       [140] astore v4
-      [142] invokevirtual #89
+      [142] invokevirtual #90
         - Methodref [org/tunesremote/a/e.get (Ljava/lang/Object;)Ljava/lang/Object;]
       [145] checkcast #49
         - Class [org/tunesremote/a/e]
@@ -77517,7 +77523,7 @@ Methods (count = 23):
         - String [mlcl]
       [150] dup
       [151] astore v4
-      [153] invokevirtual #89
+      [153] invokevirtual #90
         - Methodref [org/tunesremote/a/e.get (Ljava/lang/Object;)Ljava/lang/Object;]
       [156] checkcast #49
         - Class [org/tunesremote/a/e]
@@ -77525,7 +77531,7 @@ Methods (count = 23):
         - String [mlit]
       [161] dup
       [162] astore v4
-      [164] invokevirtual #89
+      [164] invokevirtual #90
         - Methodref [org/tunesremote/a/e.get (Ljava/lang/Object;)Ljava/lang/Object;]
       [167] checkcast #49
         - Class [org/tunesremote/a/e]
@@ -77533,9 +77539,9 @@ Methods (count = 23):
         - String [miid]
       [172] dup
       [173] astore v4
-      [175] invokevirtual #87
+      [175] invokevirtual #88
         - Methodref [org/tunesremote/a/e.b (Ljava/lang/String;)Ljava/math/BigInteger;]
-      [178] invokevirtual #79
+      [178] invokevirtual #80
         - Methodref [java/math/BigInteger.longValue ()J]
       [181] putfield #63
         - Fieldref [org/tunesremote/a/g.b J]
@@ -77545,7 +77551,7 @@ Methods (count = 23):
         - String [avdb]
       [188] dup
       [189] astore v4
-      [191] invokevirtual #89
+      [191] invokevirtual #90
         - Methodref [org/tunesremote/a/e.get (Ljava/lang/Object;)Ljava/lang/Object;]
       [194] checkcast #49
         - Class [org/tunesremote/a/e]
@@ -77553,7 +77559,7 @@ Methods (count = 23):
         - String [mlcl]
       [199] dup
       [200] astore v4
-      [202] invokevirtual #89
+      [202] invokevirtual #90
         - Methodref [org/tunesremote/a/e.get (Ljava/lang/Object;)Ljava/lang/Object;]
       [205] checkcast #49
         - Class [org/tunesremote/a/e]
@@ -77561,7 +77567,7 @@ Methods (count = 23):
         - String [mlit]
       [210] dup
       [211] astore v4
-      [213] invokevirtual #89
+      [213] invokevirtual #90
         - Methodref [org/tunesremote/a/e.get (Ljava/lang/Object;)Ljava/lang/Object;]
       [216] checkcast #49
         - Class [org/tunesremote/a/e]
@@ -77573,14 +77579,14 @@ Methods (count = 23):
       [225] aconst_null
       [226] astore_2 v2
       [227] aload_3 v3
-      [228] invokevirtual #87
+      [228] invokevirtual #88
         - Methodref [org/tunesremote/a/e.b (Ljava/lang/String;)Ljava/math/BigInteger;]
-      [231] invokevirtual #79
+      [231] invokevirtual #80
         - Methodref [java/math/BigInteger.longValue ()J]
-      [234] invokestatic #74
+      [234] invokestatic #75
         - Methodref [java/lang/Long.toHexString (J)Ljava/lang/String;]
-      [237] putfield #68
-        - Fieldref [org/tunesremote/a/g.g Ljava/lang/String;]
+      [237] putfield #69
+        - Fieldref [org/tunesremote/a/g.h Ljava/lang/String;]
       [240] ldc #20
         - String [found database-id=%s]
       [242] iconst_1
@@ -77591,10 +77597,10 @@ Methods (count = 23):
       [248] aload_0 v0
       [249] getfield #63
         - Fieldref [org/tunesremote/a/g.b J]
-      [252] invokestatic #75
+      [252] invokestatic #76
         - Methodref [java/lang/Long.valueOf (J)Ljava/lang/Long;]
       [255] aastore
-      [256] invokestatic #78
+      [256] invokestatic #79
         - Methodref [java/lang/String.format (Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;]
       [259] pop
       [260] ldc #9
@@ -77605,7 +77611,7 @@ Methods (count = 23):
       [266] dup
       [267] iconst_0
       [268] aload_0 v0
-      [269] invokevirtual #90
+      [269] invokevirtual #91
         - Methodref [org/tunesremote/a/g.a ()Ljava/lang/String;]
       [272] aastore
       [273] dup
@@ -77613,7 +77619,7 @@ Methods (count = 23):
       [275] aload_0 v0
       [276] getfield #63
         - Fieldref [org/tunesremote/a/g.b J]
-      [279] invokestatic #75
+      [279] invokestatic #76
         - Methodref [java/lang/Long.valueOf (J)Ljava/lang/Long;]
       [282] aastore
       [283] dup
@@ -77622,16 +77628,16 @@ Methods (count = 23):
       [286] getfield #62
         - Fieldref [org/tunesremote/a/g.a Ljava/lang/String;]
       [289] aastore
-      [290] invokestatic #78
+      [290] invokestatic #79
         - Methodref [java/lang/String.format (Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;]
       [293] iconst_0
-      [294] invokestatic #85
+      [294] invokestatic #86
         - Methodref [org/tunesremote/a/d.a (Ljava/lang/String;Z)Lorg/tunesremote/a/e;]
       [297] ldc #18
         - String [aply]
       [299] dup
       [300] astore v4
-      [302] invokevirtual #89
+      [302] invokevirtual #90
         - Methodref [org/tunesremote/a/e.get (Ljava/lang/Object;)Ljava/lang/Object;]
       [305] checkcast #49
         - Class [org/tunesremote/a/e]
@@ -77639,23 +77645,23 @@ Methods (count = 23):
         - String [mlcl]
       [310] dup
       [311] astore v4
-      [313] invokevirtual #89
+      [313] invokevirtual #90
         - Methodref [org/tunesremote/a/e.get (Ljava/lang/Object;)Ljava/lang/Object;]
       [316] checkcast #49
         - Class [org/tunesremote/a/e]
       [319] ldc #31
         - String [mlit]
-      [321] invokevirtual #88
+      [321] invokevirtual #89
         - Methodref [org/tunesremote/a/e.c (Ljava/lang/String;)Ljava/util/List;]
-      [324] invokeinterface #107
+      [324] invokeinterface #108
         - InterfaceMethodref [java/util/List.iterator ()Ljava/util/Iterator;]
       [329] astore_1 v1
       [330] aload_1 v1
-      [331] invokeinterface #104
+      [331] invokeinterface #105
         - InterfaceMethodref [java/util/Iterator.hasNext ()Z]
-      [336] ifeq +168 (target=504)
+      [336] ifeq +187 (target=523)
       [339] aload_1 v1
-      [340] invokeinterface #105
+      [340] invokeinterface #106
         - InterfaceMethodref [java/util/Iterator.next ()Ljava/lang/Object;]
       [345] checkcast #49
         - Class [org/tunesremote/a/e]
@@ -77663,13 +77669,13 @@ Methods (count = 23):
       [349] astore_2 v2
       [350] ldc #28
         - String [minm]
-      [352] invokevirtual #86
+      [352] invokevirtual #87
         - Methodref [org/tunesremote/a/e.a (Ljava/lang/String;)Ljava/lang/String;]
       [355] dup
       [356] astore_3 v3
       [357] ldc #15
         - String [Music]
-      [359] invokevirtual #77
+      [359] invokevirtual #78
         - Methodref [java/lang/String.equals (Ljava/lang/Object;)Z]
       [362] ifeq +22 (target=384)
       [365] aload_0 v0
@@ -77678,116 +77684,129 @@ Methods (count = 23):
         - String [miid]
       [369] dup
       [370] astore v4
-      [372] invokevirtual #87
+      [372] invokevirtual #88
         - Methodref [org/tunesremote/a/e.b (Ljava/lang/String;)Ljava/math/BigInteger;]
-      [375] invokevirtual #79
+      [375] invokevirtual #80
         - Methodref [java/math/BigInteger.longValue ()J]
-      [378] putfield #64
-        - Fieldref [org/tunesremote/a/g.c J]
+      [378] putfield #68
+        - Fieldref [org/tunesremote/a/g.g J]
       [381] goto -51 (target=330)
       [384] aload_3 v3
       [385] ldc #13
         - String [Films]
-      [387] invokevirtual #77
+      [387] invokevirtual #78
         - Methodref [java/lang/String.equals (Ljava/lang/Object;)Z]
-      [390] ifne +111 (target=501)
+      [390] ifne +130 (target=520)
       [393] aload_3 v3
       [394] ldc #16
         - String [TV Programmes]
-      [396] invokevirtual #77
+      [396] invokevirtual #78
         - Methodref [java/lang/String.equals (Ljava/lang/Object;)Z]
-      [399] ifne +102 (target=501)
+      [399] ifne +121 (target=520)
       [402] aload_3 v3
       [403] ldc #25
         - String [iTunes U]
-      [405] invokevirtual #77
+      [405] invokevirtual #78
         - Methodref [java/lang/String.equals (Ljava/lang/Object;)Z]
-      [408] ifne +93 (target=501)
+      [408] ifne +112 (target=520)
       [411] aload_2 v2
       [412] ldc #17
         - String [abpl]
       [414] dup
       [415] astore v4
-      [417] invokevirtual #87
+      [417] invokevirtual #88
         - Methodref [org/tunesremote/a/e.b (Ljava/lang/String;)Ljava/math/BigInteger;]
-      [420] invokevirtual #79
+      [420] invokevirtual #80
         - Methodref [java/math/BigInteger.longValue ()J]
       [423] lconst_1
       [424] lcmp
-      [425] ifeq +76 (target=501)
-      [428] ldc #22
-        - String [found playlist=%s]
-      [430] iconst_1
-      [431] anewarray #39
-        - Class [java/lang/Object]
-      [434] dup
-      [435] iconst_0
-      [436] aload_3 v3
-      [437] aastore
-      [438] invokestatic #78
-        - Methodref [java/lang/String.format (Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;]
-      [441] pop
-      [442] aload_0 v0
-      [443] getfield #65
-        - Fieldref [org/tunesremote/a/g.d Ljava/util/List;]
-      [446] new #47
-        - Class [org/tunesremote/a/c]
-      [449] dup
-      [450] aload_2 v2
-      [451] ldc #26
+      [425] ifne +22 (target=447)
+      [428] aload_0 v0
+      [429] aload_2 v2
+      [430] ldc #26
         - String [miid]
-      [453] dup
-      [454] astore v4
-      [456] invokevirtual #87
+      [432] dup
+      [433] astore v4
+      [435] invokevirtual #88
         - Methodref [org/tunesremote/a/e.b (Ljava/lang/String;)Ljava/math/BigInteger;]
-      [459] invokevirtual #79
+      [438] invokevirtual #80
         - Methodref [java/math/BigInteger.longValue ()J]
-      [462] aload_3 v3
-      [463] aload_2 v2
-      [464] ldc #27
-        - String [mimc]
-      [466] dup
-      [467] astore v4
-      [469] invokevirtual #87
-        - Methodref [org/tunesremote/a/e.b (Ljava/lang/String;)Ljava/math/BigInteger;]
-      [472] invokevirtual #79
-        - Methodref [java/math/BigInteger.longValue ()J]
-      [475] aload_2 v2
-      [476] ldc #33
-        - String [mper]
-      [478] dup
-      [479] astore v4
-      [481] dup
-      [482] astore_3 v3
-      [483] invokevirtual #87
-        - Methodref [org/tunesremote/a/e.b (Ljava/lang/String;)Ljava/math/BigInteger;]
-      [486] invokevirtual #79
-        - Methodref [java/math/BigInteger.longValue ()J]
-      [489] invokestatic #74
-        - Methodref [java/lang/Long.toHexString (J)Ljava/lang/String;]
-      [492] invokespecial #84
-        - Methodref [org/tunesremote/a/c.<init> (JLjava/lang/String;JLjava/lang/String;)V]
-      [495] invokeinterface #106
-        - InterfaceMethodref [java/util/List.add (Ljava/lang/Object;)Z]
-      [500] pop
-      [501] goto -171 (target=330)
-      [504] ldc #21
-        - String [found music-id=%s]
-      [506] iconst_1
-      [507] anewarray #39
-        - Class [java/lang/Object]
-      [510] dup
-      [511] iconst_0
-      [512] aload_0 v0
-      [513] getfield #64
+      [441] putfield #64
         - Fieldref [org/tunesremote/a/g.c J]
-      [516] invokestatic #75
-        - Methodref [java/lang/Long.valueOf (J)Ljava/lang/Long;]
-      [519] aastore
-      [520] invokestatic #78
+      [444] goto -114 (target=330)
+      [447] ldc #22
+        - String [found playlist=%s]
+      [449] iconst_1
+      [450] anewarray #39
+        - Class [java/lang/Object]
+      [453] dup
+      [454] iconst_0
+      [455] aload_3 v3
+      [456] aastore
+      [457] invokestatic #79
         - Methodref [java/lang/String.format (Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;]
-      [523] pop
-      [524] return
+      [460] pop
+      [461] aload_0 v0
+      [462] getfield #65
+        - Fieldref [org/tunesremote/a/g.d Ljava/util/List;]
+      [465] new #47
+        - Class [org/tunesremote/a/c]
+      [468] dup
+      [469] aload_2 v2
+      [470] ldc #26
+        - String [miid]
+      [472] dup
+      [473] astore v4
+      [475] invokevirtual #88
+        - Methodref [org/tunesremote/a/e.b (Ljava/lang/String;)Ljava/math/BigInteger;]
+      [478] invokevirtual #80
+        - Methodref [java/math/BigInteger.longValue ()J]
+      [481] aload_3 v3
+      [482] aload_2 v2
+      [483] ldc #27
+        - String [mimc]
+      [485] dup
+      [486] astore v4
+      [488] invokevirtual #88
+        - Methodref [org/tunesremote/a/e.b (Ljava/lang/String;)Ljava/math/BigInteger;]
+      [491] invokevirtual #80
+        - Methodref [java/math/BigInteger.longValue ()J]
+      [494] aload_2 v2
+      [495] ldc #33
+        - String [mper]
+      [497] dup
+      [498] astore v4
+      [500] dup
+      [501] astore_3 v3
+      [502] invokevirtual #88
+        - Methodref [org/tunesremote/a/e.b (Ljava/lang/String;)Ljava/math/BigInteger;]
+      [505] invokevirtual #80
+        - Methodref [java/math/BigInteger.longValue ()J]
+      [508] invokestatic #75
+        - Methodref [java/lang/Long.toHexString (J)Ljava/lang/String;]
+      [511] invokespecial #85
+        - Methodref [org/tunesremote/a/c.<init> (JLjava/lang/String;JLjava/lang/String;)V]
+      [514] invokeinterface #107
+        - InterfaceMethodref [java/util/List.add (Ljava/lang/Object;)Z]
+      [519] pop
+      [520] goto -190 (target=330)
+      [523] ldc #21
+        - String [found music-id=%s]
+      [525] iconst_1
+      [526] anewarray #39
+        - Class [java/lang/Object]
+      [529] dup
+      [530] iconst_0
+      [531] aload_0 v0
+      [532] getfield #68
+        - Fieldref [org/tunesremote/a/g.g J]
+      [535] invokestatic #76
+        - Methodref [java/lang/Long.valueOf (J)Ljava/lang/Long;]
+      [538] aastore
+      [539] invokestatic #79
+        - Methodref [java/lang/String.format (Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;]
+      [542] pop
+      [543] return
       Code attribute exceptions (count = 0):
       Code attribute attributes (attribute count = 0):
   + Method:       a(Landroid/os/Handler;)Lorg/tunesremote/a/r;
@@ -77800,9 +77819,9 @@ Methods (count = 23):
       [3] ifnull +15 (target=18)
       [6] getstatic #67
         - Fieldref [org/tunesremote/a/g.f Lorg/tunesremote/a/r;]
-      [9] getfield #71
+      [9] getfield #72
         - Fieldref [org/tunesremote/a/r.g Ljava/util/concurrent/atomic/AtomicBoolean;]
-      [12] invokevirtual #82
+      [12] invokevirtual #83
         - Methodref [java/util/concurrent/atomic/AtomicBoolean.get ()Z]
       [15] ifeq +25 (target=40)
       [18] aload_0 v0
@@ -77814,11 +77833,11 @@ Methods (count = 23):
       [25] dup
       [26] aload_1 v1
       [27] aload_2 v2
-      [28] invokespecial #100
+      [28] invokespecial #101
         - Methodref [org/tunesremote/a/r.<init> (Lorg/tunesremote/a/g;Landroid/os/Handler;)V]
       [31] dup
       [32] astore_1 v1
-      [33] invokevirtual #102
+      [33] invokevirtual #103
         - Methodref [org/tunesremote/a/r.b ()V]
       [36] aload_1 v1
       [37] putstatic #67
@@ -77844,7 +77863,7 @@ Methods (count = 23):
       [9] getfield #66
         - Fieldref [org/tunesremote/a/g.e Ljava/lang/String;]
       [12] aastore
-      [13] invokestatic #78
+      [13] invokestatic #79
         - Methodref [java/lang/String.format (Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;]
       [16] areturn
       Code attribute exceptions (count = 0):
@@ -77859,7 +77878,7 @@ Methods (count = 23):
       [3] ifnull +13 (target=16)
       [6] getstatic #67
         - Fieldref [org/tunesremote/a/g.f Lorg/tunesremote/a/r;]
-      [9] invokevirtual #101
+      [9] invokevirtual #102
         - Methodref [org/tunesremote/a/r.a ()V]
       [12] aconst_null
       [13] putstatic #67
@@ -77877,7 +77896,7 @@ Methods (count = 23):
       [3] ifnull +9 (target=12)
       [6] getstatic #67
         - Fieldref [org/tunesremote/a/g.f Lorg/tunesremote/a/r;]
-      [9] invokevirtual #102
+      [9] invokevirtual #103
         - Methodref [org/tunesremote/a/r.b ()V]
       [12] return
       Code attribute exceptions (count = 0):
@@ -77898,7 +77917,7 @@ Methods (count = 23):
       [9] getfield #62
         - Fieldref [org/tunesremote/a/g.a Ljava/lang/String;]
       [12] aastore
-      [13] invokestatic #78
+      [13] invokestatic #79
         - Methodref [java/lang/String.format (Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;]
       [16] pop
       [17] aload_0 v0
@@ -77910,7 +77929,7 @@ Methods (count = 23):
       [24] dup
       [25] iconst_0
       [26] aload_0 v0
-      [27] invokevirtual #90
+      [27] invokevirtual #91
         - Methodref [org/tunesremote/a/g.a ()Ljava/lang/String;]
       [30] aastore
       [31] dup
@@ -77919,7 +77938,7 @@ Methods (count = 23):
       [34] getfield #62
         - Fieldref [org/tunesremote/a/g.a Ljava/lang/String;]
       [37] aastore
-      [38] invokestatic #78
+      [38] invokestatic #79
         - Methodref [java/lang/String.format (Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;]
       [41] astore_2 v2
       [42] astore_1 v1
@@ -77929,9 +77948,9 @@ Methods (count = 23):
       [47] aload_1 v1
       [48] aload_2 v2
       [49] iconst_0
-      [50] invokespecial #91
+      [50] invokespecial #92
         - Methodref [org/tunesremote/a/h.<init> (Lorg/tunesremote/a/g;Ljava/lang/String;Z)V]
-      [53] invokestatic #103
+      [53] invokestatic #104
         - Methodref [org/tunesremote/util/b.a (Ljava/lang/Runnable;)V]
       [56] return
       Code attribute exceptions (count = 0):
@@ -77950,7 +77969,7 @@ Methods (count = 23):
       [7] dup
       [8] iconst_0
       [9] aload_0 v0
-      [10] invokevirtual #90
+      [10] invokevirtual #91
         - Methodref [org/tunesremote/a/g.a ()Ljava/lang/String;]
       [13] aastore
       [14] dup
@@ -77959,7 +77978,7 @@ Methods (count = 23):
       [17] getfield #62
         - Fieldref [org/tunesremote/a/g.a Ljava/lang/String;]
       [20] aastore
-      [21] invokestatic #78
+      [21] invokestatic #79
         - Methodref [java/lang/String.format (Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;]
       [24] astore_2 v2
       [25] astore_1 v1
@@ -77969,9 +77988,9 @@ Methods (count = 23):
       [30] aload_1 v1
       [31] aload_2 v2
       [32] iconst_1
-      [33] invokespecial #91
+      [33] invokespecial #92
         - Methodref [org/tunesremote/a/h.<init> (Lorg/tunesremote/a/g;Ljava/lang/String;Z)V]
-      [36] invokestatic #103
+      [36] invokestatic #104
         - Methodref [org/tunesremote/util/b.a (Ljava/lang/Runnable;)V]
       [39] return
       Code attribute exceptions (count = 0):
@@ -77990,7 +78009,7 @@ Methods (count = 23):
       [7] dup
       [8] iconst_0
       [9] aload_0 v0
-      [10] invokevirtual #90
+      [10] invokevirtual #91
         - Methodref [org/tunesremote/a/g.a ()Ljava/lang/String;]
       [13] aastore
       [14] dup
@@ -77999,7 +78018,7 @@ Methods (count = 23):
       [17] getfield #62
         - Fieldref [org/tunesremote/a/g.a Ljava/lang/String;]
       [20] aastore
-      [21] invokestatic #78
+      [21] invokestatic #79
         - Methodref [java/lang/String.format (Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;]
       [24] astore_2 v2
       [25] astore_1 v1
@@ -78009,9 +78028,9 @@ Methods (count = 23):
       [30] aload_1 v1
       [31] aload_2 v2
       [32] iconst_1
-      [33] invokespecial #91
+      [33] invokespecial #92
         - Methodref [org/tunesremote/a/h.<init> (Lorg/tunesremote/a/g;Ljava/lang/String;Z)V]
-      [36] invokestatic #103
+      [36] invokestatic #104
         - Methodref [org/tunesremote/util/b.a (Ljava/lang/Runnable;)V]
       [39] return
       Code attribute exceptions (count = 0):
@@ -78030,7 +78049,7 @@ Methods (count = 23):
       [7] dup
       [8] iconst_0
       [9] aload_0 v0
-      [10] invokevirtual #90
+      [10] invokevirtual #91
         - Methodref [org/tunesremote/a/g.a ()Ljava/lang/String;]
       [13] aastore
       [14] dup
@@ -78039,7 +78058,7 @@ Methods (count = 23):
       [17] getfield #62
         - Fieldref [org/tunesremote/a/g.a Ljava/lang/String;]
       [20] aastore
-      [21] invokestatic #78
+      [21] invokestatic #79
         - Methodref [java/lang/String.format (Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;]
       [24] astore_2 v2
       [25] astore_1 v1
@@ -78049,9 +78068,9 @@ Methods (count = 23):
       [30] aload_1 v1
       [31] aload_2 v2
       [32] iconst_1
-      [33] invokespecial #91
+      [33] invokespecial #92
         - Methodref [org/tunesremote/a/h.<init> (Lorg/tunesremote/a/g;Ljava/lang/String;Z)V]
-      [36] invokestatic #103
+      [36] invokestatic #104
         - Methodref [org/tunesremote/util/b.a (Ljava/lang/Runnable;)V]
       [39] return
       Code attribute exceptions (count = 0):
@@ -78070,13 +78089,13 @@ Methods (count = 23):
       [7] dup
       [8] iconst_0
       [9] aload_0 v0
-      [10] invokevirtual #90
+      [10] invokevirtual #91
         - Methodref [org/tunesremote/a/g.a ()Ljava/lang/String;]
       [13] aastore
       [14] dup
       [15] iconst_1
       [16] lload_1 v1
-      [17] invokestatic #75
+      [17] invokestatic #76
         - Methodref [java/lang/Long.valueOf (J)Ljava/lang/Long;]
       [20] aastore
       [21] dup
@@ -78085,7 +78104,7 @@ Methods (count = 23):
       [24] getfield #62
         - Fieldref [org/tunesremote/a/g.a Ljava/lang/String;]
       [27] aastore
-      [28] invokestatic #78
+      [28] invokestatic #79
         - Methodref [java/lang/String.format (Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;]
       [31] astore_2 v2
       [32] astore_1 v1
@@ -78095,9 +78114,9 @@ Methods (count = 23):
       [37] aload_1 v1
       [38] aload_2 v2
       [39] iconst_0
-      [40] invokespecial #91
+      [40] invokespecial #92
         - Methodref [org/tunesremote/a/h.<init> (Lorg/tunesremote/a/g;Ljava/lang/String;Z)V]
-      [43] invokestatic #103
+      [43] invokestatic #104
         - Methodref [org/tunesremote/util/b.a (Ljava/lang/Runnable;)V]
       [46] return
       Code attribute exceptions (count = 0):
@@ -78116,7 +78135,7 @@ Methods (count = 23):
       [7] dup
       [8] iconst_0
       [9] aload_0 v0
-      [10] invokevirtual #90
+      [10] invokevirtual #91
         - Methodref [org/tunesremote/a/g.a ()Ljava/lang/String;]
       [13] aastore
       [14] dup
@@ -78124,7 +78143,7 @@ Methods (count = 23):
       [16] iload_1 v1
       [17] sipush 1000
       [20] imul
-      [21] invokestatic #73
+      [21] invokestatic #74
         - Methodref [java/lang/Integer.valueOf (I)Ljava/lang/Integer;]
       [24] aastore
       [25] dup
@@ -78133,7 +78152,7 @@ Methods (count = 23):
       [28] getfield #62
         - Fieldref [org/tunesremote/a/g.a Ljava/lang/String;]
       [31] aastore
-      [32] invokestatic #78
+      [32] invokestatic #79
         - Methodref [java/lang/String.format (Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;]
       [35] astore_2 v2
       [36] astore_1 v1
@@ -78143,9 +78162,9 @@ Methods (count = 23):
       [41] aload_1 v1
       [42] aload_2 v2
       [43] iconst_1
-      [44] invokespecial #91
+      [44] invokespecial #92
         - Methodref [org/tunesremote/a/h.<init> (Lorg/tunesremote/a/g;Ljava/lang/String;Z)V]
-      [47] invokestatic #103
+      [47] invokestatic #104
         - Methodref [org/tunesremote/util/b.a (Ljava/lang/Runnable;)V]
       [50] return
       Code attribute exceptions (count = 0):
@@ -78164,13 +78183,13 @@ Methods (count = 23):
       [7] dup
       [8] iconst_0
       [9] aload_0 v0
-      [10] invokevirtual #90
+      [10] invokevirtual #91
         - Methodref [org/tunesremote/a/g.a ()Ljava/lang/String;]
       [13] aastore
       [14] dup
       [15] iconst_1
       [16] iload_1 v1
-      [17] invokestatic #73
+      [17] invokestatic #74
         - Methodref [java/lang/Integer.valueOf (I)Ljava/lang/Integer;]
       [20] aastore
       [21] dup
@@ -78179,7 +78198,7 @@ Methods (count = 23):
       [24] getfield #62
         - Fieldref [org/tunesremote/a/g.a Ljava/lang/String;]
       [27] aastore
-      [28] invokestatic #78
+      [28] invokestatic #79
         - Methodref [java/lang/String.format (Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;]
       [31] astore_3 v3
       [32] astore_2 v2
@@ -78189,14 +78208,14 @@ Methods (count = 23):
       [37] aload_2 v2
       [38] aload_3 v3
       [39] iconst_0
-      [40] invokespecial #91
+      [40] invokespecial #92
         - Methodref [org/tunesremote/a/h.<init> (Lorg/tunesremote/a/g;Ljava/lang/String;Z)V]
-      [43] invokestatic #103
+      [43] invokestatic #104
         - Methodref [org/tunesremote/util/b.a (Ljava/lang/Runnable;)V]
       [46] getstatic #67
         - Fieldref [org/tunesremote/a/g.f Lorg/tunesremote/a/r;]
       [49] iload_1 v1
-      [50] putfield #70
+      [50] putfield #71
         - Fieldref [org/tunesremote/a/r.e I]
       [53] return
       Code attribute exceptions (count = 0):
@@ -78215,13 +78234,13 @@ Methods (count = 23):
       [7] dup
       [8] iconst_0
       [9] aload_0 v0
-      [10] invokevirtual #90
+      [10] invokevirtual #91
         - Methodref [org/tunesremote/a/g.a ()Ljava/lang/String;]
       [13] aastore
       [14] dup
       [15] iconst_1
       [16] iload_1 v1
-      [17] invokestatic #73
+      [17] invokestatic #74
         - Methodref [java/lang/Integer.valueOf (I)Ljava/lang/Integer;]
       [20] aastore
       [21] dup
@@ -78230,7 +78249,7 @@ Methods (count = 23):
       [24] getfield #62
         - Fieldref [org/tunesremote/a/g.a Ljava/lang/String;]
       [27] aastore
-      [28] invokestatic #78
+      [28] invokestatic #79
         - Methodref [java/lang/String.format (Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;]
       [31] astore_3 v3
       [32] astore_2 v2
@@ -78240,14 +78259,14 @@ Methods (count = 23):
       [37] aload_2 v2
       [38] aload_3 v3
       [39] iconst_0
-      [40] invokespecial #91
+      [40] invokespecial #92
         - Methodref [org/tunesremote/a/h.<init> (Lorg/tunesremote/a/g;Ljava/lang/String;Z)V]
-      [43] invokestatic #103
+      [43] invokestatic #104
         - Methodref [org/tunesremote/util/b.a (Ljava/lang/Runnable;)V]
       [46] getstatic #67
         - Fieldref [org/tunesremote/a/g.f Lorg/tunesremote/a/r;]
       [49] iload_1 v1
-      [50] putfield #69
+      [50] putfield #70
         - Fieldref [org/tunesremote/a/r.d I]
       [53] return
       Code attribute exceptions (count = 0):
@@ -78266,19 +78285,19 @@ Methods (count = 23):
       [7] dup
       [8] iconst_0
       [9] aload_0 v0
-      [10] invokevirtual #90
+      [10] invokevirtual #91
         - Methodref [org/tunesremote/a/g.a ()Ljava/lang/String;]
       [13] aastore
       [14] dup
       [15] iconst_1
       [16] lload_1 v1
-      [17] invokestatic #75
+      [17] invokestatic #76
         - Methodref [java/lang/Long.valueOf (J)Ljava/lang/Long;]
       [20] aastore
       [21] dup
       [22] iconst_2
       [23] lload_3 v3
-      [24] invokestatic #75
+      [24] invokestatic #76
         - Methodref [java/lang/Long.valueOf (J)Ljava/lang/Long;]
       [27] aastore
       [28] dup
@@ -78287,7 +78306,7 @@ Methods (count = 23):
       [31] getfield #62
         - Fieldref [org/tunesremote/a/g.a Ljava/lang/String;]
       [34] aastore
-      [35] invokestatic #78
+      [35] invokestatic #79
         - Methodref [java/lang/String.format (Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;]
       [38] astore_2 v2
       [39] astore_1 v1
@@ -78297,9 +78316,9 @@ Methods (count = 23):
       [44] aload_1 v1
       [45] aload_2 v2
       [46] iconst_0
-      [47] invokespecial #91
+      [47] invokespecial #92
         - Methodref [org/tunesremote/a/h.<init> (Lorg/tunesremote/a/g;Ljava/lang/String;Z)V]
-      [50] invokestatic #103
+      [50] invokestatic #104
         - Methodref [org/tunesremote/util/b.a (Ljava/lang/Runnable;)V]
       [53] return
       Code attribute exceptions (count = 0):
@@ -78315,9 +78334,9 @@ Methods (count = 23):
       [4] aload_0 v0
       [5] aload_1 v1
       [6] iload_2 v2
-      [7] invokespecial #92
+      [7] invokespecial #93
         - Methodref [org/tunesremote/a/i.<init> (Lorg/tunesremote/a/g;Ljava/lang/String;I)V]
-      [10] invokestatic #103
+      [10] invokestatic #104
         - Methodref [org/tunesremote/util/b.a (Ljava/lang/Runnable;)V]
       [13] return
       Code attribute exceptions (count = 0):
@@ -78332,9 +78351,9 @@ Methods (count = 23):
       [3] dup
       [4] aload_0 v0
       [5] aload_1 v1
-      [6] invokespecial #93
+      [6] invokespecial #94
         - Methodref [org/tunesremote/a/j.<init> (Lorg/tunesremote/a/g;Ljava/lang/String;)V]
-      [9] invokestatic #103
+      [9] invokestatic #104
         - Methodref [org/tunesremote/util/b.a (Ljava/lang/Runnable;)V]
       [12] return
       Code attribute exceptions (count = 0):
@@ -78345,7 +78364,7 @@ Methods (count = 23):
     Class member attributes (count = 1):
     + Code attribute instructions (code length = 19, locals = 3, stack = 5):
       [0] aload_1 v1
-      [1] invokestatic #83
+      [1] invokestatic #84
         - Methodref [org/tunesremote/a/a.a (Ljava/lang/String;)Ljava/lang/String;]
       [4] astore_1 v1
       [5] new #54
@@ -78354,9 +78373,9 @@ Methods (count = 23):
       [9] aload_0 v0
       [10] aload_1 v1
       [11] iload_2 v2
-      [12] invokespecial #94
+      [12] invokespecial #95
         - Methodref [org/tunesremote/a/k.<init> (Lorg/tunesremote/a/g;Ljava/lang/String;I)V]
-      [15] invokestatic #103
+      [15] invokestatic #104
         - Methodref [org/tunesremote/util/b.a (Ljava/lang/Runnable;)V]
       [18] return
       Code attribute exceptions (count = 0):
@@ -78367,7 +78386,7 @@ Methods (count = 23):
     Class member attributes (count = 1):
     + Code attribute instructions (code length = 18, locals = 2, stack = 4):
       [0] aload_1 v1
-      [1] invokestatic #83
+      [1] invokestatic #84
         - Methodref [org/tunesremote/a/a.a (Ljava/lang/String;)Ljava/lang/String;]
       [4] astore_1 v1
       [5] new #55
@@ -78375,9 +78394,9 @@ Methods (count = 23):
       [8] dup
       [9] aload_0 v0
       [10] aload_1 v1
-      [11] invokespecial #95
+      [11] invokespecial #96
         - Methodref [org/tunesremote/a/l.<init> (Lorg/tunesremote/a/g;Ljava/lang/String;)V]
-      [14] invokestatic #103
+      [14] invokestatic #104
         - Methodref [org/tunesremote/util/b.a (Ljava/lang/Runnable;)V]
       [17] return
       Code attribute exceptions (count = 0):
@@ -78392,9 +78411,9 @@ Methods (count = 23):
       [3] dup
       [4] aload_0 v0
       [5] aload_1 v1
-      [6] invokespecial #96
+      [6] invokespecial #97
         - Methodref [org/tunesremote/a/m.<init> (Lorg/tunesremote/a/g;Ljava/lang/String;)V]
-      [9] invokestatic #103
+      [9] invokestatic #104
         - Methodref [org/tunesremote/util/b.a (Ljava/lang/Runnable;)V]
       [12] return
       Code attribute exceptions (count = 0):
@@ -78405,7 +78424,7 @@ Methods (count = 23):
     Class member attributes (count = 1):
     + Code attribute instructions (code length = 19, locals = 3, stack = 5):
       [0] aload_1 v1
-      [1] invokestatic #83
+      [1] invokestatic #84
         - Methodref [org/tunesremote/a/a.a (Ljava/lang/String;)Ljava/lang/String;]
       [4] astore_1 v1
       [5] new #57
@@ -78414,9 +78433,9 @@ Methods (count = 23):
       [9] aload_0 v0
       [10] aload_1 v1
       [11] iload_2 v2
-      [12] invokespecial #97
+      [12] invokespecial #98
         - Methodref [org/tunesremote/a/n.<init> (Lorg/tunesremote/a/g;Ljava/lang/String;I)V]
-      [15] invokestatic #103
+      [15] invokestatic #104
         - Methodref [org/tunesremote/util/b.a (Ljava/lang/Runnable;)V]
       [18] return
       Code attribute exceptions (count = 0):
@@ -78427,8 +78446,8 @@ Methods (count = 23):
     Class member attributes (count = 1):
     + Code attribute instructions (code length = 20, locals = 4, stack = 6):
       [0] aload_0 v0
-      [1] getfield #68
-        - Fieldref [org/tunesremote/a/g.g Ljava/lang/String;]
+      [1] getfield #69
+        - Fieldref [org/tunesremote/a/g.h Ljava/lang/String;]
       [4] astore_3 v3
       [5] new #58
         - Class [org/tunesremote/a/o]
@@ -78437,9 +78456,9 @@ Methods (count = 23):
       [10] aload_3 v3
       [11] aload_1 v1
       [12] aload_2 v2
-      [13] invokespecial #98
+      [13] invokespecial #99
         - Methodref [org/tunesremote/a/o.<init> (Lorg/tunesremote/a/g;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V]
-      [16] invokestatic #103
+      [16] invokestatic #104
         - Methodref [org/tunesremote/util/b.a (Ljava/lang/Runnable;)V]
       [19] return
       Code attribute exceptions (count = 0):
@@ -78455,9 +78474,9 @@ Methods (count = 23):
       [4] aload_0 v0
       [5] iload_2 v2
       [6] aload_1 v1
-      [7] invokespecial #99
+      [7] invokespecial #100
         - Methodref [org/tunesremote/a/p.<init> (Lorg/tunesremote/a/g;ILjava/lang/String;)V]
-      [10] invokestatic #103
+      [10] invokestatic #104
         - Methodref [org/tunesremote/util/b.a (Ljava/lang/Runnable;)V]
       [13] return
       Code attribute exceptions (count = 0):
@@ -78469,7 +78488,7 @@ Methods (count = 23):
     + Code attribute instructions (code length = 11, locals = 0, stack = 1):
       [0] ldc #50
         - Class [org/tunesremote/a/g]
-      [2] invokevirtual #72
+      [2] invokevirtual #73
         - Methodref [java/lang/Class.toString ()Ljava/lang/String;]
       [5] pop
       [6] aconst_null

@@ -60,7 +60,7 @@ public class Library {
       try {
          String encodedSearch = Library.escapeUrlString(search);
          String query = String
-                  .format("%s/databases/%d/items?session-id=%s&meta=dmap.itemname,dmap.itemid,dmap.persistentid,daap.songartist,daap.songalbum,daap.songtime,daap.songtracknumber&type=music&sort=album&query=('dmap.itemname:*%s*','daap.songartist:*%s*','daap.songalbum:*%s*')&index=%d-%d",
+                  .format("%s/databases/%d/items?session-id=%s&meta=dmap.itemname,dmap.itemid,dmap.persistentid,daap.songartist,daap.songalbum,daap.songtime,daap.songtracknumber&type=music&sort=name&query=(('com.apple.itunes.mediakind:1','com.apple.itunes.mediakind:4','com.apple.itunes.mediakind:8')+('dmap.itemname:*%s*','daap.songartist:*%s*','daap.songalbum:*%s*'))&index=%d-%d",
                            session.getRequestBase(), session.databaseId, session.sessionId, encodedSearch, encodedSearch, encodedSearch, start, items);
          byte[] raw = RequestHelper.request(query, false);
          Response resp = ResponseParser.performParse(raw, listener, MLIT_PATTERN);
@@ -165,7 +165,7 @@ public class Library {
       try {
          String temp = String
                   .format("%s/databases/%d/containers/%d/items?session-id=%s&meta=dmap.itemname,dmap.itemid,daap.songartist,daap.songalbum,daap.songalbum,daap.songtime,daap.songuserrating,daap.songtracknumber&type=music&sort=album&query='daap.songalbumid:%s'",
-                           session.getRequestBase(), session.databaseId, session.musicId, session.sessionId, albumid);
+                           session.getRequestBase(), session.databaseId, session.libraryId, session.sessionId, albumid);
 
          // make tracks list request
          // http://192.168.254.128:3689/databases/36/containers/113/items?session-id=1301749047&meta=dmap.itemname,dmap.itemid,daap.songartist,daap.songalbum,daap.songalbum,daap.songtime,daap.songtracknumber&type=music&sort=album&query='daap.songalbumid:11624070975347817354'
@@ -191,7 +191,7 @@ public class Library {
          byte[] raw = RequestHelper
                   .request(String
                            .format("%s/databases/%d/containers/%d/items?session-id=%s&meta=dmap.itemname,dmap.itemid,daap.songartist,daap.songalbum,daap.songalbum,daap.songtime,daap.songuserrating,daap.songtracknumber&type=music&sort=album&query='daap.songartist:%s'",
-                                    session.getRequestBase(), session.databaseId, session.musicId, session.sessionId, encodedArtist), false);
+                                    session.getRequestBase(), session.databaseId, session.libraryId, session.sessionId, encodedArtist), false);
 
          // parse list, passing off events in the process
          ResponseParser.performSearch(raw, listener, MLIT_PATTERN, false);
