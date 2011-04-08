@@ -73628,14 +73628,14 @@ Constant Pool (count = 243):
   - String [%20]
   - String [%27]
   - String [%5C']
-  - String [%s/ctrl-int/1/items?session-id=%s&meta=dmap.itemname,dmap.itemid,daap.songartist,daap.songalbum,daap.songalbum,daap.songtime,daap.songtracknumber&type=music&sort=album&query='daap.songalbumid:%s']
+  - String [%s/ctrl-int/1/items?session-id=%s&meta=dmap.itemname,dmap.itemid,daap.songartist,daap.songalbum,daap.songalbum,daap.songtime,daap.songuserrating,daap.songtracknumber&type=music&sort=album&query='daap.songalbumid:%s']
   - String [%s/ctrl-int/1/playstatusupdate?revision-number=1&session-id=%s]
   - String [%s/databases/%d/browse/artists?session-id=%s&include-sort-headers=1]
   - String [%s/databases/%d/containers/%d/items?session-id=%s&meta=dmap.itemname,dmap.itemid,daap.songartist,daap.songalbum,daap.songalbum,daap.songtime,daap.songuserrating,daap.songtracknumber&type=music&sort=album&query='daap.songalbumid:%s']
   - String [%s/databases/%d/containers/%d/items?session-id=%s&meta=dmap.itemname,dmap.itemid,daap.songartist,daap.songalbum,daap.songalbum,daap.songtime,daap.songuserrating,daap.songtracknumber&type=music&sort=album&query='daap.songartist:%s']
+  - String [%s/databases/%d/containers/%d/items?session-id=%s&meta=dmap.itemname,dmap.itemid,dmap.persistentid,daap.songartist,daap.songalbum,daap.songtime,daap.songuserrating,daap.songtracknumber&type=music&sort=name&include-sort-headers=1&query=(('com.apple.itunes.mediakind:1','com.apple.itunes.mediakind:4','com.apple.itunes.mediakind:8')+('dmap.itemname:*%s*','daap.songartist:*%s*','daap.songalbum:*%s*'))&index=%d-%d]
   - String [%s/databases/%d/containers/%s/items?session-id=%s&meta=dmap.itemname,dmap.itemid,daap.songartst,daap.songalbum,daap.songtime,dmap.containeritemid,com.apple.tunes.has-video]
   - String [%s/databases/%d/groups?session-id=%s&meta=dmap.itemname,dmap.itemid,dmap.persistentid,daap.songartist&type=music&group-type=albums&sort=artist&include-sort-headers=1&query='daap.songartist:%s']
-  - String [%s/databases/%d/items?session-id=%s&meta=dmap.itemname,dmap.itemid,dmap.persistentid,daap.songartist,daap.songalbum,daap.songtime,daap.songtracknumber&type=music&sort=name&query=(('com.apple.itunes.mediakind:1','com.apple.itunes.mediakind:4','com.apple.itunes.mediakind:8')+('dmap.itemname:*%s*','daap.songartist:*%s*','daap.songalbum:*%s*'))&index=%d-%d]
   - String [\+]
   - String [adbs]
   - String [apso]
@@ -73757,14 +73757,14 @@ Constant Pool (count = 243):
   + Utf8 [%20]
   + Utf8 [%27]
   + Utf8 [%5C']
-  + Utf8 [%s/ctrl-int/1/items?session-id=%s&meta=dmap.itemname,dmap.itemid,daap.songartist,daap.songalbum,daap.songalbum,daap.songtime,daap.songtracknumber&type=music&sort=album&query='daap.songalbumid:%s']
+  + Utf8 [%s/ctrl-int/1/items?session-id=%s&meta=dmap.itemname,dmap.itemid,daap.songartist,daap.songalbum,daap.songalbum,daap.songtime,daap.songuserrating,daap.songtracknumber&type=music&sort=album&query='daap.songalbumid:%s']
   + Utf8 [%s/ctrl-int/1/playstatusupdate?revision-number=1&session-id=%s]
   + Utf8 [%s/databases/%d/browse/artists?session-id=%s&include-sort-headers=1]
   + Utf8 [%s/databases/%d/containers/%d/items?session-id=%s&meta=dmap.itemname,dmap.itemid,daap.songartist,daap.songalbum,daap.songalbum,daap.songtime,daap.songuserrating,daap.songtracknumber&type=music&sort=album&query='daap.songalbumid:%s']
   + Utf8 [%s/databases/%d/containers/%d/items?session-id=%s&meta=dmap.itemname,dmap.itemid,daap.songartist,daap.songalbum,daap.songalbum,daap.songtime,daap.songuserrating,daap.songtracknumber&type=music&sort=album&query='daap.songartist:%s']
+  + Utf8 [%s/databases/%d/containers/%d/items?session-id=%s&meta=dmap.itemname,dmap.itemid,dmap.persistentid,daap.songartist,daap.songalbum,daap.songtime,daap.songuserrating,daap.songtracknumber&type=music&sort=name&include-sort-headers=1&query=(('com.apple.itunes.mediakind:1','com.apple.itunes.mediakind:4','com.apple.itunes.mediakind:8')+('dmap.itemname:*%s*','daap.songartist:*%s*','daap.songalbum:*%s*'))&index=%d-%d]
   + Utf8 [%s/databases/%d/containers/%s/items?session-id=%s&meta=dmap.itemname,dmap.itemid,daap.songartst,daap.songalbum,daap.songtime,dmap.containeritemid,com.apple.tunes.has-video]
   + Utf8 [%s/databases/%d/groups?session-id=%s&meta=dmap.itemname,dmap.itemid,dmap.persistentid,daap.songartist&type=music&group-type=albums&sort=artist&include-sort-headers=1&query='daap.songartist:%s']
-  + Utf8 [%s/databases/%d/items?session-id=%s&meta=dmap.itemname,dmap.itemid,dmap.persistentid,daap.songartist,daap.songalbum,daap.songtime,daap.songtracknumber&type=music&sort=name&query=(('com.apple.itunes.mediakind:1','com.apple.itunes.mediakind:4','com.apple.itunes.mediakind:8')+('dmap.itemname:*%s*','daap.songartist:*%s*','daap.songalbum:*%s*'))&index=%d-%d]
   + Utf8 [()I]
   + Utf8 [()J]
   + Utf8 [()Ljava/lang/Object;]
@@ -73895,7 +73895,7 @@ Methods (count = 11):
     Access flags: 0x11
       = public final long a(org.tunesremote.cd,java.lang.String,long,long)
     Class member attributes (count = 1):
-    + Code attribute instructions (code length = 202, locals = 9, stack = 6):
+    + Code attribute instructions (code length = 216, locals = 9, stack = 6):
       [0] ldc2_w #54
         - Long [-1]
       [3] lstore v7
@@ -73903,9 +73903,9 @@ Methods (count = 11):
       [6] invokestatic #76
         - Methodref [org/tunesremote/a/a.a (Ljava/lang/String;)Ljava/lang/String;]
       [9] astore_2 v2
-      [10] ldc #11
-        - String [%s/databases/%d/items?session-id=%s&meta=dmap.itemname,dmap.itemid,dmap.persistentid,daap.songartist,daap.songalbum,daap.songtime,daap.songtracknumber&type=music&sort=name&query=(('com.apple.itunes.mediakind:1','com.apple.itunes.mediakind:4','com.apple.itunes.mediakind:8')+('dmap.itemname:*%s*','daap.songartist:*%s*','daap.songalbum:*%s*'))&index=%d-%d]
-      [12] bipush 8
+      [10] ldc #9
+        - String [%s/databases/%d/containers/%d/items?session-id=%s&meta=dmap.itemname,dmap.itemid,dmap.persistentid,daap.songartist,daap.songalbum,daap.songtime,daap.songuserrating,daap.songtracknumber&type=music&sort=name&include-sort-headers=1&query=(('com.apple.itunes.mediakind:1','com.apple.itunes.mediakind:4','com.apple.itunes.mediakind:8')+('dmap.itemname:*%s*','daap.songartist:*%s*','daap.songalbum:*%s*'))&index=%d-%d]
+      [12] bipush 9
       [14] anewarray #38
         - Class [java/lang/Object]
       [17] dup
@@ -73931,127 +73931,137 @@ Methods (count = 11):
       [42] aload_0 v0
       [43] getfield #57
         - Fieldref [org/tunesremote/a/a.b Lorg/tunesremote/a/g;]
-      [46] getfield #58
+      [46] getfield #60
+        - Fieldref [org/tunesremote/a/g.c J]
+      [49] invokestatic #65
+        - Methodref [java/lang/Long.valueOf (J)Ljava/lang/Long;]
+      [52] aastore
+      [53] dup
+      [54] iconst_3
+      [55] aload_0 v0
+      [56] getfield #57
+        - Fieldref [org/tunesremote/a/a.b Lorg/tunesremote/a/g;]
+      [59] getfield #58
         - Fieldref [org/tunesremote/a/g.a Ljava/lang/String;]
-      [49] aastore
-      [50] dup
-      [51] iconst_3
-      [52] aload_2 v2
-      [53] aastore
-      [54] dup
-      [55] iconst_4
-      [56] aload_2 v2
-      [57] aastore
-      [58] dup
-      [59] iconst_5
-      [60] aload_2 v2
-      [61] aastore
-      [62] dup
-      [63] bipush 6
-      [65] lload_3 v3
-      [66] invokestatic #65
+      [62] aastore
+      [63] dup
+      [64] iconst_4
+      [65] aload_2 v2
+      [66] aastore
+      [67] dup
+      [68] iconst_5
+      [69] aload_2 v2
+      [70] aastore
+      [71] dup
+      [72] bipush 6
+      [74] aload_2 v2
+      [75] aastore
+      [76] dup
+      [77] bipush 7
+      [79] lload_3 v3
+      [80] invokestatic #65
         - Methodref [java/lang/Long.valueOf (J)Ljava/lang/Long;]
-      [69] aastore
-      [70] dup
-      [71] bipush 7
-      [73] lload v5
-      [75] invokestatic #65
+      [83] aastore
+      [84] dup
+      [85] bipush 8
+      [87] lload v5
+      [89] invokestatic #65
         - Methodref [java/lang/Long.valueOf (J)Ljava/lang/Long;]
-      [78] aastore
-      [79] invokestatic #67
+      [92] aastore
+      [93] invokestatic #67
         - Methodref [java/lang/String.format (Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;]
-      [82] iconst_0
-      [83] invokestatic #79
+      [96] iconst_0
+      [97] invokestatic #79
         - Methodref [org/tunesremote/a/d.b (Ljava/lang/String;Z)[B]
-      [86] aload_1 v1
-      [87] getstatic #56
+      [100] aload_1 v1
+      [101] getstatic #56
         - Fieldref [org/tunesremote/a/a.a Ljava/util/regex/Pattern;]
-      [90] invokestatic #86
+      [104] invokestatic #86
         - Methodref [org/tunesremote/a/f.a ([BLorg/tunesremote/cd;Ljava/util/regex/Pattern;)Lorg/tunesremote/a/e;]
-      [93] dup
-      [94] astore_1 v1
-      [95] ldc #14
+      [107] dup
+      [108] astore_1 v1
+      [109] ldc #14
         - String [apso]
-      [97] dup
-      [98] astore_2 v2
-      [99] invokevirtual #84
+      [111] dup
+      [112] astore_2 v2
+      [113] invokevirtual #84
         - Methodref [org/tunesremote/a/e.get (Ljava/lang/Object;)Ljava/lang/Object;]
-      [102] checkcast #49
+      [116] checkcast #49
         - Class [org/tunesremote/a/e]
-      [105] dup
-      [106] astore_2 v2
-      [107] ifnonnull +15 (target=122)
-      [110] aload_1 v1
-      [111] ldc #13
+      [119] dup
+      [120] astore_2 v2
+      [121] ifnonnull +15 (target=136)
+      [124] aload_1 v1
+      [125] ldc #13
         - String [adbs]
-      [113] dup
-      [114] astore_2 v2
-      [115] invokevirtual #84
+      [127] dup
+      [128] astore_2 v2
+      [129] invokevirtual #84
         - Methodref [org/tunesremote/a/e.get (Ljava/lang/Object;)Ljava/lang/Object;]
-      [118] checkcast #49
+      [132] checkcast #49
         - Class [org/tunesremote/a/e]
-      [121] astore_2 v2
-      [122] aload_2 v2
-      [123] ifnull +16 (target=139)
-      [126] aload_2 v2
-      [127] ldc #25
+      [135] astore_2 v2
+      [136] aload_2 v2
+      [137] ifnull +16 (target=153)
+      [140] aload_2 v2
+      [141] ldc #25
         - String [mtco]
-      [129] dup
-      [130] astore_2 v2
-      [131] invokevirtual #82
+      [143] dup
+      [144] astore_2 v2
+      [145] invokevirtual #82
         - Methodref [org/tunesremote/a/e.b (Ljava/lang/String;)Ljava/math/BigInteger;]
-      [134] invokevirtual #73
+      [148] invokevirtual #73
         - Methodref [java/math/BigInteger.longValue ()J]
-      [137] lstore v7
-      [139] goto +27 (target=166)
-      [142] astore_2 v2
-      [143] new #40
+      [151] lstore v7
+      [153] goto +27 (target=180)
+      [156] astore_2 v2
+      [157] new #40
         - Class [java/lang/StringBuilder]
-      [146] dup
-      [147] invokespecial #70
+      [160] dup
+      [161] invokespecial #70
         - Methodref [java/lang/StringBuilder.<init> ()V]
-      [150] ldc #31
+      [164] ldc #31
         - String [readSearch Exception:]
-      [152] invokevirtual #71
+      [166] invokevirtual #71
         - Methodref [java/lang/StringBuilder.append (Ljava/lang/String;)Ljava/lang/StringBuilder;]
-      [155] aload_2 v2
-      [156] invokevirtual #63
+      [169] aload_2 v2
+      [170] invokevirtual #63
         - Methodref [java/lang/Exception.getMessage ()Ljava/lang/String;]
-      [159] invokevirtual #71
+      [173] invokevirtual #71
         - Methodref [java/lang/StringBuilder.append (Ljava/lang/String;)Ljava/lang/StringBuilder;]
-      [162] invokevirtual #72
+      [176] invokevirtual #72
         - Methodref [java/lang/StringBuilder.toString ()Ljava/lang/String;]
-      [165] pop
-      [166] ldc #32
+      [179] pop
+      [180] ldc #32
         - String [readSearch() finished start=%d, items=%d, total=%d]
-      [168] iconst_3
-      [169] anewarray #38
+      [182] iconst_3
+      [183] anewarray #38
         - Class [java/lang/Object]
-      [172] dup
-      [173] iconst_0
-      [174] lload_3 v3
-      [175] invokestatic #65
+      [186] dup
+      [187] iconst_0
+      [188] lload_3 v3
+      [189] invokestatic #65
         - Methodref [java/lang/Long.valueOf (J)Ljava/lang/Long;]
-      [178] aastore
-      [179] dup
-      [180] iconst_1
-      [181] lload v5
-      [183] invokestatic #65
+      [192] aastore
+      [193] dup
+      [194] iconst_1
+      [195] lload v5
+      [197] invokestatic #65
         - Methodref [java/lang/Long.valueOf (J)Ljava/lang/Long;]
-      [186] aastore
-      [187] dup
-      [188] iconst_2
-      [189] lload v7
-      [191] invokestatic #65
+      [200] aastore
+      [201] dup
+      [202] iconst_2
+      [203] lload v7
+      [205] invokestatic #65
         - Methodref [java/lang/Long.valueOf (J)Ljava/lang/Long;]
-      [194] aastore
-      [195] invokestatic #67
+      [208] aastore
+      [209] invokestatic #67
         - Methodref [java/lang/String.format (Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;]
-      [198] pop
-      [199] lload v7
-      [201] lreturn
+      [212] pop
+      [213] lload v7
+      [215] lreturn
       Code attribute exceptions (count = 1):
-      - ExceptionInfo (5 -> 139: 142):
+      - ExceptionInfo (5 -> 153: 156):
       - Class [java/lang/Exception]
       Code attribute attributes (attribute count = 0):
   + Method:       a(Lorg/tunesremote/cd;)V
@@ -74149,7 +74159,7 @@ Methods (count = 11):
       [1] invokestatic #76
         - Methodref [org/tunesremote/a/a.a (Ljava/lang/String;)Ljava/lang/String;]
       [4] astore_2 v2
-      [5] ldc #10
+      [5] ldc #11
         - String [%s/databases/%d/groups?session-id=%s&meta=dmap.itemname,dmap.itemid,dmap.persistentid,daap.songartist&type=music&group-type=albums&sort=artist&include-sort-headers=1&query='daap.songartist:%s']
       [7] iconst_4
       [8] anewarray #38
@@ -74437,7 +74447,7 @@ Methods (count = 11):
       = public final void c(java.lang.String,org.tunesremote.cd)
     Class member attributes (count = 1):
     + Code attribute instructions (code length = 87, locals = 3, stack = 6):
-      [0] ldc #9
+      [0] ldc #10
         - String [%s/databases/%d/containers/%s/items?session-id=%s&meta=dmap.itemname,dmap.itemid,daap.songartst,daap.songalbum,daap.songtime,dmap.containeritemid,com.apple.tunes.has-video]
       [2] iconst_4
       [3] anewarray #38
@@ -74516,7 +74526,7 @@ Methods (count = 11):
     Class member attributes (count = 1):
     + Code attribute instructions (code length = 228, locals = 4, stack = 5):
       [0] ldc #4
-        - String [%s/ctrl-int/1/items?session-id=%s&meta=dmap.itemname,dmap.itemid,daap.songartist,daap.songalbum,daap.songalbum,daap.songtime,daap.songtracknumber&type=music&sort=album&query='daap.songalbumid:%s']
+        - String [%s/ctrl-int/1/items?session-id=%s&meta=dmap.itemname,dmap.itemid,daap.songartist,daap.songalbum,daap.songalbum,daap.songtime,daap.songuserrating,daap.songtracknumber&type=music&sort=album&query='daap.songalbumid:%s']
       [2] iconst_3
       [3] anewarray #38
         - Class [java/lang/Object]

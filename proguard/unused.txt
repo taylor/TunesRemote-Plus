@@ -327,7 +327,7 @@ org.tunesremote.SearchActivity:
     public static final int NO_RESULTS_FOUND
 org.tunesremote.daap.Library:
     public static final int RESULT_INCREMENT
-    131:159:public void readAlbums(org.tunesremote.TagListener)
+    132:160:public void readAlbums(org.tunesremote.TagListener)
 org.tunesremote.daap.PairingServer:
     public static final int PORT
 org.tunesremote.daap.RequestHelper:
