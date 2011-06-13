@@ -70,12 +70,14 @@ public class Status {
    protected int repeatStatus = REPEAT_OFF, shuffleStatus = SHUFFLE_OFF, playStatus = STATE_PAUSED;
    protected final AtomicBoolean destroyThread = new AtomicBoolean(false);
    private long rating = -1;
+   private long playlistId = 0;
+   private long containerItemId = 0;
    private long trackId = 0;
-   private String trackName = "", trackArtist = "", trackAlbum = "";
+   private String trackName = "", trackArtist = "", trackAlbum = "", trackGenre = "";
    private long progressTotal = 0, progressRemain = 0;
    private final Session session;
    private Handler update = null;
-   private static AtomicInteger failures = new AtomicInteger(0);
+   private AtomicInteger failures = new AtomicInteger(0);
    private long revision = 1;
 
    /**
@@ -230,7 +232,10 @@ public class Status {
 
       resp = resp.getNested("cmst");
       this.revision = resp.getNumberLong("cmsr");
-      extractSongId(resp.getRaw("canp"));
+      
+      byte[] canp = resp.getRaw("canp");
+      if (canp != null)
+    	  extractNowPlaying(canp);
 
       int playStatus = (int) resp.getNumberLong("caps");
       int shuffleStatus = (int) resp.getNumberLong("cash");
@@ -250,6 +255,7 @@ public class Status {
       final String trackName = resp.getString("cann");
       final String trackArtist = resp.getString("cana");
       final String trackAlbum = resp.getString("canl");
+      final String trackGenre = resp.getString("cang");
 
       this.albumId = resp.getNumberString("asai");
 
@@ -259,6 +265,7 @@ public class Status {
          this.trackName = trackName;
          this.trackArtist = trackArtist;
          this.trackAlbum = trackAlbum;
+         this.trackGenre = trackGenre;
 
          // clear any coverart cache
          this.coverCache = null;
@@ -304,8 +311,25 @@ public class Status {
       }
    }
 
-   private void extractSongId(byte[] bs) {
-      trackId = 0;
+   private void extractNowPlaying(byte[] bs) {
+
+      playlistId = 0;
+
+      // This is a PITA in Java....
+      playlistId = (bs[4] & 0xff) << 24;
+      playlistId |= (bs[5] & 0xff) << 16;
+      playlistId |= (bs[6] & 0xff) << 8;
+      playlistId |= bs[7] & 0xff;
+	   
+      containerItemId = 0;
+
+      // This is a PITA in Java....
+      containerItemId = (bs[8] & 0xff) << 24;
+      containerItemId |= (bs[9] & 0xff) << 16;
+      containerItemId |= (bs[10] & 0xff) << 8;
+      containerItemId |= bs[11] & 0xff;
+	   
+	  trackId = 0;
 
       // This is a PITA in Java....
       trackId = (bs[12] & 0xff) << 24;
@@ -545,6 +569,18 @@ public class Status {
       return this.trackAlbum;
    }
 
+   public String getTrackGenre() {
+      return this.trackGenre;
+   }
+   
+   public long getContainerItemId() {
+	  return this.containerItemId;
+   }
+
+   public long getPlaylistId() {
+	  return this.playlistId;
+   }
+   
    public long getRating() {
       return this.rating;
    }

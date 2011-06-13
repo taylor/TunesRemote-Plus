@@ -25,10 +25,11 @@
 
 package org.tunesremote.daap;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.regex.Pattern;
 
-import org.tunesremote.PlaylistsAdapter;
+import org.tunesremote.PlaylistListener;
 import org.tunesremote.TagListener;
 
 import android.util.Log;
@@ -202,7 +203,7 @@ public class Library {
       }
    }
 
-   public void readPlaylists(PlaylistsAdapter adapter) {
+   public void readPlaylists(PlaylistListener adapter) {
       for (Playlist ply : this.session.playlists) {
          adapter.foundPlaylist(ply);
       }
@@ -283,9 +284,14 @@ public class Library {
     * @return the URL encoded string value
     */
    public static String escapeUrlString(final String input) {
-      String encoded = URLEncoder.encode(input);
-      encoded = encoded.replaceAll("\\+", "%20");
-      encoded = encoded.replaceAll("%27", "%5C'");
+      String encoded = "";
+      try {
+         encoded = URLEncoder.encode(input, "UTF-8");
+         encoded = encoded.replaceAll("\\+", "%20");
+         encoded = encoded.replaceAll("%27", "%5C'");
+      } catch (UnsupportedEncodingException e) {
+         Log.w(TAG, "readCurrentSong Exception:" + e.getMessage());
+      }
       return encoded;
    }
 }

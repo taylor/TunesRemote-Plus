@@ -29,7 +29,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
@@ -55,7 +54,7 @@ public class RequestHelper {
    public static byte[] requestSearch(Session session, String search, int start, int end) throws Exception {
       // http://192.168.254.128:3689/databases/36/containers/113/items?session-id=1535976870&revision-number=61&meta=dmap.itemname,dmap.itemid,daap.songartist,daap.songalbum&type=music&sort=name&include-sort-headers=1&query='dmap.itemname:*sea*'&index=0-7
       // doesnt seem to listen to &sort=name
-      String encodedSearch = URLEncoder.encode(search).replaceAll("\\+", "%20");
+      String encodedSearch = Library.escapeUrlString(search);
       return request(
                String
                         .format(
@@ -133,6 +132,8 @@ public class RequestHelper {
       if (!keepalive) {
          connection.setConnectTimeout(10000);
          connection.setReadTimeout(10000);
+      } else {
+         connection.setReadTimeout(0);
       }
       connection.connect();
 

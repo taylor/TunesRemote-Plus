@@ -42,11 +42,14 @@ import android.util.Log;
 public class ResponseParser {
 
    public final static String TAG = ResponseParser.class.toString();
-   public final static Pattern BRANCHES = Pattern.compile("(cmst|mlog|agal|mlcl|mshl|mlit|abro|abar|apso|caci|avdb|cmgt|aply|adbs|casp|mdcl)");
-   public final static Pattern STRINGS = Pattern.compile("(minm|cann|cana|cang|canl|asaa|asal|asar)");
+   public final static Pattern BRANCHES = 
+	   Pattern.compile("(cmst|mlog|agal|mccr|mdcl|mlcl|mshl|mlit|abro|abar|agar|apso|caci|avdb|cmgt|aply|adbs)");
+   public final static Pattern STRINGS = 
+	   Pattern.compile("(minm|cann|cana|cang|canl|asaa|asal|asar|asgn|assa|assu|mcnm|mcna)");
    public final static Pattern RAWS = Pattern.compile("(canp)");
 
-   public static int performSearch(byte[] raw, TagListener listener, Pattern listenFor, boolean haltmlit) throws IOException {
+   public static int performSearch(byte[] raw, TagListener listener, Pattern listenFor, boolean haltmlit)
+            throws IOException {
       Log.d(TAG, "ResponseParser performSearch...");
       final DataInputStream stream = new DataInputStream(new ByteArrayInputStream(raw));
       final int hits = ResponseParser.search(stream, listener, listenFor, stream.available(), haltmlit);
@@ -68,7 +71,8 @@ public class ResponseParser {
       return ResponseParser.parse(stream, null, null, stream.available());
    }
 
-   private static int search(DataInputStream raw, TagListener listener, Pattern listenFor, int handle, boolean haltmlit) throws IOException {
+   private static int search(DataInputStream raw, TagListener listener, Pattern listenFor, int handle, boolean haltmlit)
+            throws IOException {
       int progress = 0;
       int hits = 0;
 
@@ -106,7 +110,8 @@ public class ResponseParser {
       return hits;
    }
 
-   private static Response parse(DataInputStream raw, TagListener listener, Pattern listenFor, int handle) throws IOException {
+   private static Response parse(DataInputStream raw, TagListener listener, Pattern listenFor, int handle)
+            throws IOException {
       final Response resp = new Response();
       int progress = 0;
 
@@ -158,7 +163,7 @@ public class ResponseParser {
    private static String readString(DataInputStream raw, int length) throws IOException {
       byte[] key = new byte[length];
       raw.read(key, 0, length);
-      return new String(key);
+      return new String(key, "UTF-8");
    }
 
 }

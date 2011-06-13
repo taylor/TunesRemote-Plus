@@ -327,16 +327,18 @@ org.tunesremote.SearchActivity:
     public static final int NO_RESULTS_FOUND
 org.tunesremote.daap.Library:
     public static final int RESULT_INCREMENT
-    132:160:public void readAlbums(org.tunesremote.TagListener)
+    133:161:public void readAlbums(org.tunesremote.TagListener)
 org.tunesremote.daap.PairingServer:
     public static final int PORT
 org.tunesremote.daap.RequestHelper:
-    58:59:public static byte[] requestSearch(org.tunesremote.daap.Session,java.lang.String,int,int)
-    69:69:public static byte[] requestTracks(org.tunesremote.daap.Session,java.lang.String)
-    79:79:public static byte[] requestAlbums(org.tunesremote.daap.Session,int,int)
-    89:89:public static byte[] requestPlaylists(org.tunesremote.daap.Session)
+    57:58:public static byte[] requestSearch(org.tunesremote.daap.Session,java.lang.String,int,int)
+    68:68:public static byte[] requestTracks(org.tunesremote.daap.Session,java.lang.String)
+    78:78:public static byte[] requestAlbums(org.tunesremote.daap.Session,int,int)
+    88:88:public static byte[] requestPlaylists(org.tunesremote.daap.Session)
 org.tunesremote.daap.Response:
     private static final long serialVersionUID
+org.tunesremote.daap.Session:
+    324:336:public void listContentCodes()
 org.tunesremote.daap.Status:
     public static final int REPEAT_OFF
     public static final int REPEAT_SINGLE
@@ -351,6 +353,9 @@ org.tunesremote.daap.Status:
     public static final int UPDATE_COVER
     public static final int UPDATE_RATING
     private static final int MAX_FAILURES
+    573:573:public java.lang.String getTrackGenre()
+    577:577:public long getContainerItemId()
+    581:581:public long getPlaylistId()
 org.tunesremote.util.PairingDatabase:
     public static final java.lang.String DB_NAME
     public static final int DB_VERSION

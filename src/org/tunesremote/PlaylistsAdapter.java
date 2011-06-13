@@ -43,7 +43,7 @@ import android.widget.TextView;
  * because it is used in more than one location throughout TunesRemote.
  * <p>
  */
-public class PlaylistsAdapter extends BaseAdapter {
+public class PlaylistsAdapter extends BaseAdapter implements PlaylistListener {
 
    public final static String TAG = PlaylistsAdapter.class.toString();
 

@@ -37,7 +37,7 @@ public class Session {
    public final static String TAG = Session.class.toString();
 
    private final String host;
-   private static Status singleton = null;
+   private Status singleton = null;
    public String sessionId;
    public long databaseId, musicId, libraryId;
    public String databasePersistentId;
@@ -48,8 +48,9 @@ public class Session {
       this.host = host;
 
       // http://192.168.254.128:3689/login?pairing-guid=0x0000000000000001
-      Log.d(TAG, String.format("tryign login for host=%s and guid=%s", host, pairingGuid));
-      Response login = RequestHelper.requestParsed(String.format("%s/login?pairing-guid=0x%s", this.getRequestBase(), pairingGuid), false);
+      Log.d(TAG, String.format("trying login for host=%s and guid=%s", host, pairingGuid));
+      Response login = RequestHelper.requestParsed(String.format("%s/login?pairing-guid=0x%s", this.getRequestBase(),
+               pairingGuid), false);
       this.sessionId = login.getNested("mlog").getNumberString("mlid");
       Log.d(TAG, String.format("found session-id=%s", this.sessionId));
 
@@ -314,5 +315,23 @@ public class Session {
             notifyStatus();
          }
       });
+   }
+   
+   // Query the media server about the content codes it handles
+   // print to stderr as a csv file
+   public void listContentCodes() {
+	   try {
+		   Response contentcodes = RequestHelper.requestParsed(String.format("%s/content-codes?session-id=%s", this
+				   .getRequestBase(), this.sessionId), false);
+
+		   for (Response resp : contentcodes.getNested("mccr").findArray("mdcl")) {
+			   System.err.println("\"" + resp.getString("mcnm") + "\", \"" +
+					   resp.getString("mcna") + "\", \"" +
+					   resp.getNumberLong("mcty") + "\"");
+
+		   }
+	   } catch (Exception e) {
+		   e.printStackTrace();
+	   }
    }
 }
