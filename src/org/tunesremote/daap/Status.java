@@ -77,7 +77,7 @@ public class Status {
    private long progressTotal = 0, progressRemain = 0;
    private final Session session;
    private Handler update = null;
-   private AtomicInteger failures = new AtomicInteger(0);
+   private final AtomicInteger failures = new AtomicInteger(0);
    private long revision = 1;
 
    /**
@@ -232,10 +232,10 @@ public class Status {
 
       resp = resp.getNested("cmst");
       this.revision = resp.getNumberLong("cmsr");
-      
+
       byte[] canp = resp.getRaw("canp");
       if (canp != null)
-    	  extractNowPlaying(canp);
+         extractNowPlaying(canp);
 
       int playStatus = (int) resp.getNumberLong("caps");
       int shuffleStatus = (int) resp.getNumberLong("cash");
@@ -320,7 +320,7 @@ public class Status {
       playlistId |= (bs[5] & 0xff) << 16;
       playlistId |= (bs[6] & 0xff) << 8;
       playlistId |= bs[7] & 0xff;
-	   
+
       containerItemId = 0;
 
       // This is a PITA in Java....
@@ -328,8 +328,8 @@ public class Status {
       containerItemId |= (bs[9] & 0xff) << 16;
       containerItemId |= (bs[10] & 0xff) << 8;
       containerItemId |= bs[11] & 0xff;
-	   
-	  trackId = 0;
+
+      trackId = 0;
 
       // This is a PITA in Java....
       trackId = (bs[12] & 0xff) << 24;
@@ -411,6 +411,7 @@ public class Status {
             speaker.setName(mdcl.getString("minm"));
             long id = mdcl.getNumberLong("msma");
             speaker.setId(id);
+            Log.d(TAG, "Speaker = " + speaker.getName());
             int relativeVolume = (int) mdcl.getNumberLong("cmvo");
             boolean isActive = mdcl.containsKey("caia");
             speaker.setActive(isActive);
@@ -572,15 +573,15 @@ public class Status {
    public String getTrackGenre() {
       return this.trackGenre;
    }
-   
+
    public long getContainerItemId() {
-	  return this.containerItemId;
+      return this.containerItemId;
    }
 
    public long getPlaylistId() {
-	  return this.playlistId;
+      return this.playlistId;
    }
-   
+
    public long getRating() {
       return this.rating;
    }

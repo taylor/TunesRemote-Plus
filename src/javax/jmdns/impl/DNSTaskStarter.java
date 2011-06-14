@@ -186,7 +186,9 @@ public interface DNSTaskStarter {
           */
 
          @Override
-         public void cancel() {
+         public synchronized void cancel() {
+            if (_cancelled)
+               return;
             _cancelled = true;
             super.cancel();
          }

@@ -135,13 +135,15 @@ javax.jmdns.impl.DNSIncoming -> a.a.a.e:
     javax.jmdns.impl.DNSIncoming$MessageInputStream _messageInputStream -> j
     int _senderUDPPayload -> k
     char[] _nibbleToHex -> l
+    javax.jmdns.impl.DNSIncoming clone() -> a
     javax.jmdns.impl.DNSRecord readAnswer(java.net.InetAddress) -> a
-    java.lang.String print$56aeb37f() -> a
+    java.lang.String print$56aeb37f() -> b
     java.lang.String toString() -> toString
     void append(javax.jmdns.impl.DNSIncoming) -> a
-    int elapseSinceArrival() -> b
-    int getSenderUDPPayload() -> c
+    int elapseSinceArrival() -> c
+    int getSenderUDPPayload() -> d
     java.lang.String _hexString(byte[]) -> b
+    java.lang.Object clone() -> clone
 javax.jmdns.impl.DNSIncoming$1 -> a.a.a.f:
     int[] $SwitchMap$javax$jmdns$impl$constants$DNSLabel -> a
     int[] $SwitchMap$javax$jmdns$impl$constants$DNSOptionCode -> b
@@ -165,24 +167,24 @@ javax.jmdns.impl.DNSMessage -> a.a.a.i:
     java.util.List _answers -> d
     java.util.List _authoritativeAnswers -> e
     java.util.List _additionals -> f
-    int getId() -> d
+    int getId() -> e
     void setId(int) -> a
-    int getFlags() -> e
+    int getFlags() -> f
     void setFlags(int) -> b
-    boolean isMulticast() -> f
-    java.util.Collection getQuestions() -> g
-    int getNumberOfQuestions() -> h
-    java.util.Collection getAllAnswers() -> i
-    java.util.Collection getAnswers() -> j
-    int getNumberOfAnswers() -> k
-    java.util.Collection getAuthorities() -> l
-    int getNumberOfAuthorities() -> m
-    java.util.Collection getAdditionals() -> n
-    int getNumberOfAdditionals() -> o
-    boolean isTruncated() -> p
-    boolean isQuery() -> q
-    boolean isEmpty() -> r
-    java.lang.String print() -> s
+    boolean isMulticast() -> g
+    java.util.Collection getQuestions() -> h
+    int getNumberOfQuestions() -> i
+    java.util.Collection getAllAnswers() -> j
+    java.util.Collection getAnswers() -> k
+    int getNumberOfAnswers() -> l
+    java.util.Collection getAuthorities() -> m
+    int getNumberOfAuthorities() -> n
+    java.util.Collection getAdditionals() -> o
+    int getNumberOfAdditionals() -> p
+    boolean isTruncated() -> q
+    boolean isQuery() -> r
+    boolean isEmpty() -> s
+    java.lang.String print() -> t
     java.lang.String print(byte[]) -> a
 javax.jmdns.impl.DNSOutgoing -> a.a.a.j:
     boolean USE_DOMAIN_NAME_COMPRESSION -> a
@@ -198,7 +200,7 @@ javax.jmdns.impl.DNSOutgoing -> a.a.a.j:
     void addAnswer(javax.jmdns.impl.DNSRecord,long) -> a
     void addAuthorativeAnswer(javax.jmdns.impl.DNSRecord) -> a
     byte[] data() -> a
-    boolean isQuery() -> q
+    boolean isQuery() -> r
     java.lang.String toString() -> toString
     int getMaxUDPPayload() -> b
 javax.jmdns.impl.DNSOutgoing$MessageOutputStream -> a.a.a.k:
@@ -681,7 +683,6 @@ javax.jmdns.impl.ServiceInfoImpl -> a.a.a.bd:
     java.lang.String[] getHostAddresses() -> g
     void addAddress(java.net.Inet4Address) -> a
     void addAddress(java.net.Inet6Address) -> a
-    java.net.InetAddress[] getInetAddresses() -> G
     java.net.Inet4Address[] getInet4Addresses() -> h
     java.net.Inet6Address[] getInet6Addresses() -> i
     int getPort() -> j
@@ -696,7 +697,7 @@ javax.jmdns.impl.ServiceInfoImpl -> a.a.a.bd:
     java.util.Map getQualifiedNameMap() -> u
     void writeUTF(java.io.OutputStream,java.lang.String) -> a
     java.lang.String readUTF(byte[],int,int) -> a
-    java.util.Map getProperties() -> H
+    java.util.Map getProperties() -> G
     void updateRecord(javax.jmdns.impl.DNSCache,long,javax.jmdns.impl.DNSEntry) -> a
     boolean hasData() -> a
     boolean advanceState(javax.jmdns.impl.tasks.DNSTask) -> a
@@ -713,7 +714,7 @@ javax.jmdns.impl.ServiceInfoImpl -> a.a.a.bd:
     boolean waitForCanceled$1349f3() -> C
     int hashCode() -> hashCode
     boolean equals(java.lang.Object) -> equals
-    javax.jmdns.impl.ServiceInfoImpl clone() -> I
+    javax.jmdns.impl.ServiceInfoImpl clone() -> H
     java.lang.String toString() -> toString
     java.util.Collection answers$58f623d3(int,javax.jmdns.impl.HostInfo) -> a
     void _setText(byte[]) -> a
