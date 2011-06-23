@@ -95,11 +95,11 @@ public class BackendService extends Service {
       // if we have a library, we should make sure that its stored in our db
       // create a new entry, otherwise just update the ip address
       if (library != null) {
-         // if (!pairdb.libraryExists(library)) {
-         pairdb.insertCode(address, library, code);
-         // } else {
-         pairdb.updateAddress(library, address);
-         // }
+         if (!pairdb.libraryExists(library)) {
+            pairdb.insertCode(address, library, code);
+         } else {
+            pairdb.updateAddress(library, address);
+         }
       }
 
       // save this ip address to help us start faster

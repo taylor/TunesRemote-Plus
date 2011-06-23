@@ -143,14 +143,13 @@ public class LibraryActivity extends Activity implements ServiceListener {
    }
 
    public void serviceAdded(ServiceEvent event) {
-      // someone is yelling about their touch-able service (prolly itunes)
+      // someone is yelling about their touch-able service
       // go figure out what their ip address is
+      Log.w(TAG, String.format("serviceAdded(event=\n%s\n)", event.toString()));
       final String name = event.getName();
 
       // trigger delayed gui event
       // needs to be delayed because jmdns hasnt parsed txt info yet
-      Log.w(TAG, String.format("serviceAdded(event=\n%s\n)", event.toString()));
-
       String address = String.format("%s", name);
       resultsUpdated.sendMessageDelayed(Message.obtain(resultsUpdated, -1, address), DELAY);
 
@@ -258,7 +257,9 @@ public class LibraryActivity extends Activity implements ServiceListener {
                return;
 
             String address = split[0].trim();
-            String library = split[1].trim();
+
+            // Use the library name
+            String library = ((TextView) view.findViewById(android.R.id.text1)).getText().toString();
 
             // push off fake result to try login
             // this will start the pairing process if needed
@@ -311,7 +312,7 @@ public class LibraryActivity extends Activity implements ServiceListener {
                   // try connecting to this specific ip address
                   Intent shell = new Intent();
                   shell.putExtra(BackendService.EXTRA_ADDRESS, address.getText().toString());
-                  shell.putExtra(BackendService.EXTRA_LIBRARY, "0");
+                  shell.putExtra(BackendService.EXTRA_LIBRARY, "Manual");
                   shell.putExtra(BackendService.EXTRA_CODE, code.getText().toString());
                   onActivityResult(-1, Activity.RESULT_OK, shell);
 
@@ -398,6 +399,9 @@ public class LibraryActivity extends Activity implements ServiceListener {
             Log.d(TAG, String.format("DNS Name: %s", dnsName));
             ServiceInfo serviceInfo = getZeroConf().getServiceInfo(TOUCH_ABLE_TYPE, dnsName);
             if (serviceInfo == null) {
+               serviceInfo = getZeroConf().getServiceInfo(DACP_TYPE, dnsName);
+            }
+            if (serviceInfo == null) {
                throw new IllegalStateException("ServiceInfo is null");
             }
             final String title = serviceInfo.getPropertyString("CtlN");
@@ -413,9 +417,9 @@ public class LibraryActivity extends Activity implements ServiceListener {
             ((TextView) convertView.findViewById(android.R.id.text2)).setText(library);
 
          } catch (Exception e) {
-            Log.d(TAG, String.format("onCreate Error: %s", e.getMessage()));
-            ((TextView) convertView.findViewById(android.R.id.text1)).setText("");
-            ((TextView) convertView.findViewById(android.R.id.text2)).setText("");
+            Log.d(TAG, String.format("Problem getting _TOUCH-ABLE.TCP service so starting pairing process %s", e.getMessage()));
+            ((TextView) convertView.findViewById(android.R.id.text1)).setText("Unknown");
+            ((TextView) convertView.findViewById(android.R.id.text2)).setText("Unknown");
          }
 
          return convertView;

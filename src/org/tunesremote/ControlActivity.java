@@ -816,11 +816,11 @@ public class ControlActivity extends Activity implements ViewFactory {
             switch (status.getShuffle()) {
             case Status.SHUFFLE_OFF:
                session.controlShuffle(Status.SHUFFLE_ON);
-               shuffleToast.setText(R.string.control_menu_shuffle_on);
+               shuffleToast.setText(R.string.control_menu_shuffle_off);
                break;
             case Status.SHUFFLE_ON:
                session.controlShuffle(Status.SHUFFLE_OFF);
-               shuffleToast.setText(R.string.control_menu_shuffle_off);
+               shuffleToast.setText(R.string.control_menu_shuffle_on);
                break;
             }
 

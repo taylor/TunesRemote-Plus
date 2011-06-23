@@ -54,8 +54,8 @@
   <string name="control_menu_repeat_none">No repeat</string>
   <string name="control_menu_repeat_one">Repeat single</string>
   <string name="control_menu_repeat_all">Repeat all</string>
-  <string name="control_menu_shuffle_on">Shuffle on</string>
-  <string name="control_menu_shuffle_off">Shuffle off</string>
+  <string name="control_menu_shuffle_on">Shuffle is off</string>
+  <string name="control_menu_shuffle_off">Shuffle is on</string>
   <string name="control_menu_nowplaying">Now Playing</string>
   <string name="control_menu_speakers">Speakers</string>
   <string name="library_menu_refresh">Refresh</string>

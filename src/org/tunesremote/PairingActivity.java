@@ -53,7 +53,7 @@ public class PairingActivity extends Activity {
       @Override
       public void handleMessage(Message msg) {
 
-         // someone has paried with us, so try returning with result
+         // someone has paired with us, so try returning with result
          // also be sure to pack along the pairing code used
 
          Intent packed = new Intent();
