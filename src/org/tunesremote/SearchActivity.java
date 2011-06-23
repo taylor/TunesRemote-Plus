@@ -198,13 +198,13 @@ public class SearchActivity extends Activity {
    @Override
    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
 
-      final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-
       try {
+         final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
          // create context menu to play entire artist
          final Response resp = (Response) adapter.getItem(info.position);
          menu.setHeaderTitle(resp.getString("minm"));
          final String artistName = resp.getString("asar");
+         final String trackid = resp.getNumberString("miid");
 
          final MenuItem play = menu.add(R.string.search_menu_play_found);
          play.setOnMenuItemClickListener(new OnMenuItemClickListener() {
@@ -216,12 +216,20 @@ public class SearchActivity extends Activity {
             }
          });
 
-         final MenuItem queue = menu.add(R.string.search_menu_open_artist);
-         queue.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+         final MenuItem openArtist = menu.add(R.string.search_menu_open_artist);
+         openArtist.setOnMenuItemClickListener(new OnMenuItemClickListener() {
             public boolean onMenuItemClick(MenuItem item) {
                Intent intent = new Intent(SearchActivity.this, AlbumsActivity.class);
                intent.putExtra(Intent.EXTRA_TITLE, artistName);
                SearchActivity.this.startActivity(intent);
+               return true;
+            }
+         });
+
+         final MenuItem queue = menu.add(R.string.tracks_menu_queue);
+         queue.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+               session.controlQueueTrack(trackid);
                return true;
             }
          });
