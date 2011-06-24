@@ -38,6 +38,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -61,10 +62,8 @@ public class TracksActivity extends BaseBrowseActivity {
    protected Session session;
    protected Library library;
    protected TracksAdapter adapter;
-   protected String albumid;
    protected boolean allAlbums;
-   protected String artist;
-   protected String playlistId, playlistPersistentId;
+   protected String artist, albumid, playlistId, playlistPersistentId;
 
    public ServiceConnection connection = new ServiceConnection() {
       public void onServiceConnected(ComponentName className, IBinder service) {
@@ -293,14 +292,26 @@ public class TracksActivity extends BaseBrowseActivity {
          try {
 
             // otherwise show normal search result
-            Response resp = (Response) this.getItem(position);
+            final Response resp = (Response) this.getItem(position);
 
-            String title = resp.getString("minm");
+            final String title = resp.getString("minm");
             date.setTime(resp.getNumberLong("astm"));
-            String length = format.format(date);
+            final String length = format.format(date);
+            final long trackId = resp.getNumberLong("miid");
+            final long currentTrackId = ControlActivity.status.getTrackId();
 
-            ((TextView) convertView.findViewById(android.R.id.text1)).setText(title);
-            ((TextView) convertView.findViewById(android.R.id.text2)).setText(length);
+            TextView txtTitle = ((TextView) convertView.findViewById(android.R.id.text1));
+            txtTitle.setText(title);
+
+            TextView txtLength = ((TextView) convertView.findViewById(android.R.id.text2));
+            txtLength.setText(length);
+
+            // highlight the current track playing
+            if (currentTrackId == trackId) {
+               Log.e(TAG, "Track Ids match! = " + trackId);
+               txtTitle.setTextColor(Color.CYAN);
+               txtLength.setTextColor(Color.CYAN);
+            }
 
          } catch (Exception e) {
             Log.d(TAG, String.format("onCreate Error: %s", e.getMessage()));
