@@ -28,7 +28,6 @@ package org.tunesremote;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.LinkedList;
-import java.util.List;
 
 import javax.jmdns.JmDNS;
 import javax.jmdns.ServiceEvent;
@@ -150,8 +149,7 @@ public class LibraryActivity extends Activity implements ServiceListener {
 
       // trigger delayed gui event
       // needs to be delayed because jmdns hasnt parsed txt info yet
-      String address = String.format("%s", name);
-      resultsUpdated.sendMessageDelayed(Message.obtain(resultsUpdated, -1, address), DELAY);
+      resultsUpdated.sendMessageDelayed(Message.obtain(resultsUpdated, -1, name), DELAY);
 
    }
 
@@ -168,9 +166,14 @@ public class LibraryActivity extends Activity implements ServiceListener {
    public Handler resultsUpdated = new Handler() {
       @Override
       public void handleMessage(Message msg) {
-         if (msg.obj != null)
-            adapter.notifyFound((String) msg.obj);
-         adapter.notifyDataSetChanged();
+         if (msg.obj != null) {
+            boolean result = adapter.notifyFound((String) msg.obj);
+
+            // only update UI if a new one was added
+            if (result) {
+               adapter.notifyDataSetChanged();
+            }
+         }
       }
    };
 
@@ -183,7 +186,9 @@ public class LibraryActivity extends Activity implements ServiceListener {
    public void onStart() {
       super.onStart();
       this.bindService(new Intent(this, BackendService.class), connection, Context.BIND_AUTO_CREATE);
-
+      if (this.adapter != null) {
+         this.adapter.known.clear();
+      }
    }
 
    @Override
@@ -353,21 +358,49 @@ public class LibraryActivity extends Activity implements ServiceListener {
 
       protected Context context;
       protected LayoutInflater inflater;
-
       public View footerView;
-
-      protected List<String> known = new LinkedList<String>();
+      protected final LinkedList<ServiceInfo> known = new LinkedList<ServiceInfo>();
 
       public LibraryAdapter(Context context) {
          this.context = context;
          this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
          this.footerView = inflater.inflate(R.layout.item_network, null, false);
-
       }
 
-      public void notifyFound(String address) {
-         known.add(address);
+      public boolean notifyFound(String library) {
+         boolean result = false;
+         try {
+            Log.d(TAG, String.format("DNS Name: %s", library));
+            ServiceInfo serviceInfo = getZeroConf().getServiceInfo(TOUCH_ABLE_TYPE, library);
+
+            // try and get the DACP type only if we cannot find any touchable
+            if (serviceInfo == null) {
+               serviceInfo = getZeroConf().getServiceInfo(DACP_TYPE, library);
+            }
+
+            if (serviceInfo == null) {
+               return result; // nothing to add since serviceInfo is NULL
+            }
+
+            final String databaseId = serviceInfo.getPropertyString("DbId");
+
+            // check if we already have this DatabaseId
+            for (ServiceInfo service : known) {
+               if (databaseId.equalsIgnoreCase(service.getPropertyString("DbId"))) {
+                  Log.w(TAG, "Already have DatabaseId loaded = " + databaseId);
+                  return result;
+               }
+            }
+
+            if (!known.contains(serviceInfo)) {
+               known.add(serviceInfo);
+               result = true;
+            }
+         } catch (Exception e) {
+            Log.d(TAG, String.format("Problem getting ZeroConf information %s", e.getMessage()));
+         }
+
+         return result;
       }
 
       public Object getItem(int position) {
@@ -393,18 +426,13 @@ public class LibraryActivity extends Activity implements ServiceListener {
             convertView = inflater.inflate(android.R.layout.simple_list_item_2, parent, false);
 
          try {
-
             // fetch the dns txt record to get library info
-            final String dnsName = (String) this.getItem(position);
-            Log.d(TAG, String.format("DNS Name: %s", dnsName));
-            ServiceInfo serviceInfo = getZeroConf().getServiceInfo(TOUCH_ABLE_TYPE, dnsName);
-            if (serviceInfo == null) {
-               serviceInfo = getZeroConf().getServiceInfo(DACP_TYPE, dnsName);
+            final ServiceInfo serviceInfo = (ServiceInfo) this.getItem(position);
+
+            String title = serviceInfo.getPropertyString("CtlN");
+            if (title == null) {
+               title = serviceInfo.getName();
             }
-            if (serviceInfo == null) {
-               throw new IllegalStateException("ServiceInfo is null");
-            }
-            final String title = serviceInfo.getPropertyString("CtlN");
             final String addr = serviceInfo.getHostAddresses()[0]; // grab first one
             final String library = String.format("%s - %s", addr, serviceInfo.getPropertyString("DbId"));
 
@@ -417,7 +445,7 @@ public class LibraryActivity extends Activity implements ServiceListener {
             ((TextView) convertView.findViewById(android.R.id.text2)).setText(library);
 
          } catch (Exception e) {
-            Log.d(TAG, String.format("Problem getting _TOUCH-ABLE.TCP service so starting pairing process %s", e.getMessage()));
+            Log.d(TAG, String.format("Problem getting ZeroConf information %s", e.getMessage()));
             ((TextView) convertView.findViewById(android.R.id.text1)).setText("Unknown");
             ((TextView) convertView.findViewById(android.R.id.text2)).setText("Unknown");
          }
