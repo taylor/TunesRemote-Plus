@@ -190,6 +190,15 @@ public class TracksActivity extends BaseBrowseActivity {
                   return true;
                }
             });
+            final MenuItem queue = menu.add(R.string.tracks_menu_queue);
+            queue.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+               public boolean onMenuItemClick(MenuItem item) {
+                  session.controlQueueTrack(trackid);
+                  TracksActivity.this.setResult(RESULT_OK, new Intent());
+                  TracksActivity.this.finish();
+                  return true;
+               }
+            });
 
          } else if (TracksActivity.this.allAlbums) {
             MenuItem play = menu.add(R.string.artists_menu_play);
@@ -311,6 +320,9 @@ public class TracksActivity extends BaseBrowseActivity {
                Log.e(TAG, "Track Ids match! = " + trackId);
                txtTitle.setTextColor(Color.CYAN);
                txtLength.setTextColor(Color.CYAN);
+            } else {
+               txtTitle.setTextColor(Color.WHITE);
+               txtLength.setTextColor(Color.WHITE);
             }
 
          } catch (Exception e) {

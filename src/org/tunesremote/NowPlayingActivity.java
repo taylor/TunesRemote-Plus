@@ -189,6 +189,10 @@ public class NowPlayingActivity extends ListActivity {
                txtTitle.setTextColor(Color.CYAN);
                txtLength.setTextColor(Color.CYAN);
                txtArtist.setTextColor(Color.CYAN);
+            } else {
+               txtTitle.setTextColor(Color.WHITE);
+               txtLength.setTextColor(Color.WHITE);
+               txtArtist.setTextColor(Color.WHITE);
             }
          } catch (Exception e) {
             Log.d(TAG, String.format("onCreate Error: %s", e.getMessage()));
