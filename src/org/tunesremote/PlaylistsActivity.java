@@ -162,6 +162,18 @@ public class PlaylistsActivity extends BaseBrowseActivity {
             }
 
          });
+
+         final MenuItem play = menu.add(R.string.playlists_menu_play);
+         play.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+               session.controlPlayPlaylist(ply.getPersistentId(), "0");
+               PlaylistsActivity.this.setResult(RESULT_OK, new Intent());
+               PlaylistsActivity.this.finish();
+
+               return true;
+            }
+
+         });
       } catch (Exception e) {
          Log.w(TAG, "onCreateContextMenu:" + e.getMessage());
       }

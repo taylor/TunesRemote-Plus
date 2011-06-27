@@ -118,13 +118,13 @@ public class LibraryActivity extends Activity implements ServiceListener {
 
       zeroConf = JmDNS.create(addr, HOSTNAME);
       zeroConf.addServiceListener(TOUCH_ABLE_TYPE, this);
-      zeroConf.addServiceListener(DACP_TYPE, this);
+      // zeroConf.addServiceListener(DACP_TYPE, this);
 
    }
 
    protected void stopProbe() {
       zeroConf.removeServiceListener(TOUCH_ABLE_TYPE, this);
-      zeroConf.removeServiceListener(DACP_TYPE, this);
+      // zeroConf.removeServiceListener(DACP_TYPE, this);
 
       try {
          zeroConf.close();
