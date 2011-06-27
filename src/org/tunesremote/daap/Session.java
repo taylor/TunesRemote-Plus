@@ -49,8 +49,7 @@ public class Session {
 
       // http://192.168.254.128:3689/login?pairing-guid=0x0000000000000001
       Log.d(TAG, String.format("trying login for host=%s and guid=%s", host, pairingGuid));
-      Response login = RequestHelper.requestParsed(String.format("%s/login?pairing-guid=0x%s", this.getRequestBase(),
-               pairingGuid), false);
+      Response login = RequestHelper.requestParsed(String.format("%s/login?pairing-guid=0x%s", this.getRequestBase(), pairingGuid), false);
       this.sessionId = login.getNested("mlog").getNumberString("mlid");
       Log.d(TAG, String.format("found session-id=%s", this.sessionId));
 
@@ -191,6 +190,13 @@ public class Session {
                trackId, this.sessionId), false);
    }
 
+   /**
+    * Command to clear the Now Playing cue.
+    */
+   public void controlClearCue() {
+      this.fireAction(String.format("%s/ctrl-int/1/cue?command=clear&session-id=%s", getRequestBase(), sessionId), false);
+   }
+
    public void controlPlayAlbum(final String albumId, final int tracknum) {
 
       // http://192.168.254.128:3689/ctrl-int/1/cue?command=clear&session-id=130883770
@@ -316,22 +322,19 @@ public class Session {
          }
       });
    }
-   
+
    // Query the media server about the content codes it handles
    // print to stderr as a csv file
    public void listContentCodes() {
-	   try {
-		   Response contentcodes = RequestHelper.requestParsed(String.format("%s/content-codes?session-id=%s", this
-				   .getRequestBase(), this.sessionId), false);
+      try {
+         Response contentcodes = RequestHelper.requestParsed(String.format("%s/content-codes?session-id=%s", this.getRequestBase(), this.sessionId), false);
 
-		   for (Response resp : contentcodes.getNested("mccr").findArray("mdcl")) {
-			   System.err.println("\"" + resp.getString("mcnm") + "\", \"" +
-					   resp.getString("mcna") + "\", \"" +
-					   resp.getNumberLong("mcty") + "\"");
+         for (Response resp : contentcodes.getNested("mccr").findArray("mdcl")) {
+            System.err.println("\"" + resp.getString("mcnm") + "\", \"" + resp.getString("mcna") + "\", \"" + resp.getNumberLong("mcty") + "\"");
 
-		   }
-	   } catch (Exception e) {
-		   e.printStackTrace();
-	   }
+         }
+      } catch (Exception e) {
+         e.printStackTrace();
+      }
    }
 }

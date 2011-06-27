@@ -58,6 +58,7 @@
   <string name="control_menu_shuffle_off">Shuffle is on</string>
   <string name="control_menu_nowplaying">Now Playing</string>
   <string name="control_menu_speakers">Speakers</string>
+  <string name="control_menu_clearcue">Clear Cue</string>
   <string name="library_menu_refresh">Refresh</string>
   <string name="library_menu_manual">Manual Add</string>
   <string name="library_menu_forget">Forget All</string>

@@ -230,13 +230,12 @@ public class Library {
    public boolean readNowPlaying(String albumid, TagListener listener) {
 
       // Try Wilco (Alex W)'s nowplaying extension /ctrl-int/1/items
-
       try {
-         String temp = String
+         String query = String
                   .format("%s/ctrl-int/1/items?session-id=%s&meta=dmap.itemname,dmap.itemid,daap.songartist,daap.songalbum,daap.songalbum,daap.songtime,daap.songuserrating,daap.songtracknumber&type=music&sort=album&query='daap.songalbumid:%s'",
                            session.getRequestBase(), session.sessionId, albumid);
 
-         byte[] raw = RequestHelper.request(temp, false);
+         byte[] raw = RequestHelper.request(query, false);
 
          // parse list, passing off events in the process
          ResponseParser.performSearch(raw, listener, MLIT_PATTERN, false);

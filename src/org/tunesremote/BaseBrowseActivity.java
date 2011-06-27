@@ -62,7 +62,7 @@ public class BaseBrowseActivity extends ListActivity {
          }
       });
 
-      MenuItem playlists = menu.add("Playlists");
+      MenuItem playlists = menu.add(R.string.control_menu_playlists);
       playlists.setIcon(R.drawable.ic_search_category_music_song);
       playlists.setOnMenuItemClickListener(new OnMenuItemClickListener() {
          public boolean onMenuItemClick(MenuItem item) {

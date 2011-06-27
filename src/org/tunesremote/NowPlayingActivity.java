@@ -45,6 +45,9 @@ import android.os.IBinder;
 import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -71,22 +74,36 @@ public class NowPlayingActivity extends ListActivity {
             if (session == null)
                return;
 
-            adapter.results.clear();
-
             // begin search now that we have a backend
             library = new Library(session);
-            iTunes = library.readNowPlaying(albumid, adapter);
+
+            // execute the Now Playing query for results
+            refreshNowPlaying();
          } catch (Exception e) {
-            Log.e(TAG, "onServiceConnected:" + e.getMessage());
+            Log.e(TAG, "onServiceConnected:" + e.getMessage(), e);
          }
       }
 
       public void onServiceDisconnected(ComponentName className) {
          backend = null;
          session = null;
-
       }
    };
+
+   /**
+    * Refreshes the Now Playing results based on what is current on the server.
+    */
+   public void refreshNowPlaying() {
+      adapter.results.clear();
+      iTunes = library.readNowPlaying(albumid, adapter);
+   }
+
+   /**
+    * Execute the command to clear the server side cue.
+    */
+   public void clearCurrentCue() {
+      session.controlClearCue();
+   }
 
    public Handler resultsUpdated = new Handler() {
       @Override
@@ -130,6 +147,37 @@ public class NowPlayingActivity extends ListActivity {
 
       this.adapter = new NowPlayingAdapter(this);
       this.setListAdapter(adapter);
+   }
+
+   @Override
+   public boolean onCreateOptionsMenu(Menu menu) {
+      super.onCreateOptionsMenu(menu);
+
+      MenuItem refresh = menu.add(R.string.library_menu_refresh);
+      refresh.setIcon(android.R.drawable.ic_menu_rotate);
+      refresh.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+         public boolean onMenuItemClick(MenuItem item) {
+            try {
+               refreshNowPlaying();
+            } catch (Exception e) {
+               Log.d(TAG, String.format("Refresh Error: %s", e.getMessage()));
+            }
+            return true;
+         }
+      });
+      MenuItem clearcue = menu.add(R.string.control_menu_clearcue);
+      clearcue.setIcon(android.R.drawable.ic_menu_revert);
+      clearcue.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+         public boolean onMenuItemClick(MenuItem item) {
+            try {
+               clearCurrentCue();
+            } catch (Exception e) {
+               Log.d(TAG, String.format("Clear Cue Error: %s", e.getMessage()));
+            }
+            return true;
+         }
+      });
+      return true;
    }
 
    protected class NowPlayingAdapter extends BaseAdapter implements TagListener {
@@ -216,7 +264,6 @@ public class NowPlayingActivity extends ListActivity {
       public void searchDone() {
          resultsUpdated.removeMessages(-1);
          resultsUpdated.sendEmptyMessage(-1);
-
       }
 
    }
