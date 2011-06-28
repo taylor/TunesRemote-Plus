@@ -336,7 +336,7 @@ org.tunesremote.daap.RequestHelper:
 org.tunesremote.daap.Response:
     private static final long serialVersionUID
 org.tunesremote.daap.Session:
-    324:336:public void listContentCodes()
+    330:339:public void listContentCodes()
 org.tunesremote.daap.Status:
     public static final int REPEAT_OFF
     public static final int REPEAT_SINGLE
@@ -362,7 +362,6 @@ org.tunesremote.util.PairingDatabase:
     public static final java.lang.String FIELD_PAIR_LIBRARY
     public static final java.lang.String FIELD_PAIR_ADDRESS
     public static final java.lang.String FIELD_PAIR_GUID
-    155:161:public boolean libraryExists(java.lang.String)
 org.tunesremote.util.RecentProvider:
     public static final java.lang.String AUTHORITY
     public static final int MODE

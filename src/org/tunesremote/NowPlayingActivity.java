@@ -171,6 +171,8 @@ public class NowPlayingActivity extends ListActivity {
          public boolean onMenuItemClick(MenuItem item) {
             try {
                clearCurrentCue();
+               Thread.sleep(250);
+               refreshNowPlaying();
             } catch (Exception e) {
                Log.d(TAG, String.format("Clear Cue Error: %s", e.getMessage()));
             }

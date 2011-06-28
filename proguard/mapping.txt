@@ -1430,8 +1430,8 @@ org.tunesremote.LibraryActivity$6$2 -> org.tunesremote.bc:
 org.tunesremote.LibraryActivity$LibraryAdapter -> org.tunesremote.bd:
     android.view.LayoutInflater inflater -> c
     android.view.View footerView -> a
-    java.util.List known -> b
-    void notifyFound(java.lang.String) -> a
+    java.util.LinkedList known -> b
+    boolean notifyFound(java.lang.String) -> a
     java.lang.Object getItem(int) -> getItem
     boolean hasStableIds() -> hasStableIds
     int getCount() -> getCount
@@ -1447,9 +1447,12 @@ org.tunesremote.NowPlayingActivity -> org.tunesremote.NowPlayingActivity:
     boolean iTunes -> g
     android.content.ServiceConnection connection -> i
     android.os.Handler resultsUpdated -> h
+    void refreshNowPlaying() -> a
+    void clearCurrentCue() -> b
     void onStart() -> onStart
     void onStop() -> onStop
     void onCreate(android.os.Bundle) -> onCreate
+    boolean onCreateOptionsMenu(android.view.Menu) -> onCreateOptionsMenu
 org.tunesremote.NowPlayingActivity$1 -> org.tunesremote.be:
     org.tunesremote.NowPlayingActivity this$0 -> a
     void onServiceConnected(android.content.ComponentName,android.os.IBinder) -> onServiceConnected
@@ -1460,7 +1463,13 @@ org.tunesremote.NowPlayingActivity$2 -> org.tunesremote.bf:
 org.tunesremote.NowPlayingActivity$3 -> org.tunesremote.bg:
     org.tunesremote.NowPlayingActivity this$0 -> a
     void onItemClick(android.widget.AdapterView,android.view.View,int,long) -> onItemClick
-org.tunesremote.NowPlayingActivity$NowPlayingAdapter -> org.tunesremote.bh:
+org.tunesremote.NowPlayingActivity$4 -> org.tunesremote.bh:
+    org.tunesremote.NowPlayingActivity this$0 -> a
+    boolean onMenuItemClick(android.view.MenuItem) -> onMenuItemClick
+org.tunesremote.NowPlayingActivity$5 -> org.tunesremote.bi:
+    org.tunesremote.NowPlayingActivity this$0 -> a
+    boolean onMenuItemClick(android.view.MenuItem) -> onMenuItemClick
+org.tunesremote.NowPlayingActivity$NowPlayingAdapter -> org.tunesremote.bj:
     android.view.LayoutInflater inflater -> b
     java.text.SimpleDateFormat format -> c
     java.util.Date date -> d
@@ -1486,16 +1495,16 @@ org.tunesremote.PairingActivity -> org.tunesremote.PairingActivity:
     org.tunesremote.daap.PairingServer access$200(org.tunesremote.PairingActivity) -> c
     javax.jmdns.ServiceInfo access$300(org.tunesremote.PairingActivity) -> d
     org.tunesremote.daap.PairingServer access$202$41e024f8(org.tunesremote.PairingActivity) -> e
-org.tunesremote.PairingActivity$1 -> org.tunesremote.bi:
+org.tunesremote.PairingActivity$1 -> org.tunesremote.bk:
     org.tunesremote.PairingActivity this$0 -> a
     void handleMessage(android.os.Message) -> handleMessage
-org.tunesremote.PairingActivity$2 -> org.tunesremote.bj:
+org.tunesremote.PairingActivity$2 -> org.tunesremote.bl:
     org.tunesremote.PairingActivity this$0 -> a
     void run() -> run
-org.tunesremote.PairingActivity$3 -> org.tunesremote.bk:
+org.tunesremote.PairingActivity$3 -> org.tunesremote.bm:
     org.tunesremote.PairingActivity this$0 -> a
     void run() -> run
-org.tunesremote.PlaylistListener -> org.tunesremote.bl:
+org.tunesremote.PlaylistListener -> org.tunesremote.bn:
     void foundPlaylist(org.tunesremote.daap.Playlist) -> a
     void searchDone() -> a
 org.tunesremote.PlaylistsActivity -> org.tunesremote.PlaylistsActivity:
@@ -1511,22 +1520,26 @@ org.tunesremote.PlaylistsActivity -> org.tunesremote.PlaylistsActivity:
     void onCreate(android.os.Bundle) -> onCreate
     void onCreateContextMenu(android.view.ContextMenu,android.view.View,android.view.ContextMenu$ContextMenuInfo) -> onCreateContextMenu
     void onActivityResult(int,int,android.content.Intent) -> onActivityResult
-org.tunesremote.PlaylistsActivity$1 -> org.tunesremote.bm:
+org.tunesremote.PlaylistsActivity$1 -> org.tunesremote.bo:
     org.tunesremote.PlaylistsActivity this$0 -> a
     void onServiceConnected(android.content.ComponentName,android.os.IBinder) -> onServiceConnected
     void onServiceDisconnected(android.content.ComponentName) -> onServiceDisconnected
-org.tunesremote.PlaylistsActivity$2 -> org.tunesremote.bn:
+org.tunesremote.PlaylistsActivity$2 -> org.tunesremote.bp:
     org.tunesremote.PlaylistsActivity this$0 -> a
     void handleMessage(android.os.Message) -> handleMessage
-org.tunesremote.PlaylistsActivity$3 -> org.tunesremote.bo:
+org.tunesremote.PlaylistsActivity$3 -> org.tunesremote.bq:
     org.tunesremote.PlaylistsActivity this$0 -> a
     void onItemClick(android.widget.AdapterView,android.view.View,int,long) -> onItemClick
-org.tunesremote.PlaylistsActivity$4 -> org.tunesremote.bp:
+org.tunesremote.PlaylistsActivity$4 -> org.tunesremote.br:
     java.lang.String val$playlistid -> a
     org.tunesremote.daap.Playlist val$ply -> b
     org.tunesremote.PlaylistsActivity this$0 -> c
     boolean onMenuItemClick(android.view.MenuItem) -> onMenuItemClick
-org.tunesremote.PlaylistsAdapter -> org.tunesremote.bq:
+org.tunesremote.PlaylistsActivity$5 -> org.tunesremote.bs:
+    org.tunesremote.daap.Playlist val$ply -> a
+    org.tunesremote.PlaylistsActivity this$0 -> b
+    boolean onMenuItemClick(android.view.MenuItem) -> onMenuItemClick
+org.tunesremote.PlaylistsAdapter -> org.tunesremote.bt:
     android.content.Context context -> b
     android.view.LayoutInflater inflater -> c
     java.util.List results -> a
@@ -1556,30 +1569,34 @@ org.tunesremote.SearchActivity -> org.tunesremote.SearchActivity:
     void onStop() -> onStop
     void onCreate(android.os.Bundle) -> onCreate
     void onCreateContextMenu(android.view.ContextMenu,android.view.View,android.view.ContextMenu$ContextMenuInfo) -> onCreateContextMenu
-org.tunesremote.SearchActivity$1 -> org.tunesremote.br:
+org.tunesremote.SearchActivity$1 -> org.tunesremote.bu:
     org.tunesremote.SearchActivity this$0 -> a
     void onServiceConnected(android.content.ComponentName,android.os.IBinder) -> onServiceConnected
     void onServiceDisconnected(android.content.ComponentName) -> onServiceDisconnected
-org.tunesremote.SearchActivity$2 -> org.tunesremote.bs:
+org.tunesremote.SearchActivity$2 -> org.tunesremote.bv:
     org.tunesremote.SearchActivity this$0 -> a
     void handleMessage(android.os.Message) -> handleMessage
-org.tunesremote.SearchActivity$3 -> org.tunesremote.bt:
+org.tunesremote.SearchActivity$3 -> org.tunesremote.bw:
     org.tunesremote.SearchActivity this$0 -> a
     void onItemClick(android.widget.AdapterView,android.view.View,int,long) -> onItemClick
-org.tunesremote.SearchActivity$4 -> org.tunesremote.bu:
+org.tunesremote.SearchActivity$4 -> org.tunesremote.bx:
     android.widget.AdapterView$AdapterContextMenuInfo val$info -> a
     org.tunesremote.SearchActivity this$0 -> b
     boolean onMenuItemClick(android.view.MenuItem) -> onMenuItemClick
-org.tunesremote.SearchActivity$5 -> org.tunesremote.bv:
+org.tunesremote.SearchActivity$5 -> org.tunesremote.by:
     java.lang.String val$artistName -> a
     org.tunesremote.SearchActivity this$0 -> b
     boolean onMenuItemClick(android.view.MenuItem) -> onMenuItemClick
-org.tunesremote.SearchActivity$LoadPhotoTask -> org.tunesremote.bw:
+org.tunesremote.SearchActivity$6 -> org.tunesremote.bz:
+    java.lang.String val$trackid -> a
+    org.tunesremote.SearchActivity this$0 -> b
+    boolean onMenuItemClick(android.view.MenuItem) -> onMenuItemClick
+org.tunesremote.SearchActivity$LoadPhotoTask -> org.tunesremote.ca:
     org.tunesremote.SearchActivity this$0 -> a
     java.lang.Object[] doInBackground(java.lang.Object[]) -> a
     void onPostExecute(java.lang.Object) -> onPostExecute
     java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
-org.tunesremote.SearchActivity$SearchAdapter -> org.tunesremote.bx:
+org.tunesremote.SearchActivity$SearchAdapter -> org.tunesremote.cb:
     android.view.LayoutInflater inflater -> h
     org.tunesremote.daap.Library library -> a
     java.lang.String search -> b
@@ -1601,7 +1618,7 @@ org.tunesremote.SearchActivity$SearchAdapter -> org.tunesremote.bx:
     android.view.View getView(int,android.view.View,android.view.ViewGroup) -> getView
     void onScroll(android.widget.AbsListView,int,int,int) -> onScroll
     void onScrollStateChanged(android.widget.AbsListView,int) -> onScrollStateChanged
-org.tunesremote.SearchActivity$SearchAdapter$1 -> org.tunesremote.by:
+org.tunesremote.SearchActivity$SearchAdapter$1 -> org.tunesremote.cc:
     org.tunesremote.SearchActivity$SearchAdapter this$1 -> a
     void run() -> run
 org.tunesremote.ServerActivity -> org.tunesremote.ServerActivity:
@@ -1615,22 +1632,22 @@ org.tunesremote.ServerActivity -> org.tunesremote.ServerActivity:
     org.tunesremote.BackendService access$002(org.tunesremote.ServerActivity,org.tunesremote.BackendService) -> a
     org.tunesremote.BackendService access$000(org.tunesremote.ServerActivity) -> a
     java.lang.String access$100() -> a
-org.tunesremote.ServerActivity$1 -> org.tunesremote.bz:
+org.tunesremote.ServerActivity$1 -> org.tunesremote.cd:
     org.tunesremote.ServerActivity this$0 -> a
     void onServiceConnected(android.content.ComponentName,android.os.IBinder) -> onServiceConnected
     void onServiceDisconnected(android.content.ComponentName) -> onServiceDisconnected
-org.tunesremote.ServerActivity$2 -> org.tunesremote.ca:
+org.tunesremote.ServerActivity$2 -> org.tunesremote.ce:
     org.tunesremote.ServerActivity this$0 -> a
     void onItemClick(android.widget.AdapterView,android.view.View,int,long) -> onItemClick
-org.tunesremote.ServerActivity$3 -> org.tunesremote.cb:
+org.tunesremote.ServerActivity$3 -> org.tunesremote.cf:
     org.tunesremote.ServerActivity this$0 -> a
     boolean onMenuItemClick(android.view.MenuItem) -> onMenuItemClick
-org.tunesremote.ServerActivity$3$1 -> org.tunesremote.cc:
+org.tunesremote.ServerActivity$3$1 -> org.tunesremote.cg:
     void onClick(android.content.DialogInterface,int) -> onClick
-org.tunesremote.ServerActivity$3$2 -> org.tunesremote.cd:
+org.tunesremote.ServerActivity$3$2 -> org.tunesremote.ch:
     org.tunesremote.ServerActivity$3 this$1 -> a
     void onClick(android.content.DialogInterface,int) -> onClick
-org.tunesremote.TagListener -> org.tunesremote.ce:
+org.tunesremote.TagListener -> org.tunesremote.ci:
     void foundTag$535923e9(org.tunesremote.daap.Response) -> a
     void searchDone() -> a
 org.tunesremote.TracksActivity -> org.tunesremote.TracksActivity:
@@ -1639,9 +1656,9 @@ org.tunesremote.TracksActivity -> org.tunesremote.TracksActivity:
     org.tunesremote.daap.Session session -> c
     org.tunesremote.daap.Library library -> d
     org.tunesremote.TracksActivity$TracksAdapter adapter -> e
-    java.lang.String albumid -> f
-    boolean allAlbums -> g
-    java.lang.String artist -> h
+    boolean allAlbums -> f
+    java.lang.String artist -> g
+    java.lang.String albumid -> h
     java.lang.String playlistId -> i
     java.lang.String playlistPersistentId -> j
     android.content.ServiceConnection connection -> l
@@ -1650,35 +1667,39 @@ org.tunesremote.TracksActivity -> org.tunesremote.TracksActivity:
     void onStop() -> onStop
     void onCreate(android.os.Bundle) -> onCreate
     void onCreateContextMenu(android.view.ContextMenu,android.view.View,android.view.ContextMenu$ContextMenuInfo) -> onCreateContextMenu
-org.tunesremote.TracksActivity$1 -> org.tunesremote.cf:
+org.tunesremote.TracksActivity$1 -> org.tunesremote.cj:
     org.tunesremote.TracksActivity this$0 -> a
     void onServiceConnected(android.content.ComponentName,android.os.IBinder) -> onServiceConnected
     void onServiceDisconnected(android.content.ComponentName) -> onServiceDisconnected
-org.tunesremote.TracksActivity$2 -> org.tunesremote.cg:
+org.tunesremote.TracksActivity$2 -> org.tunesremote.ck:
     org.tunesremote.TracksActivity this$0 -> a
     void handleMessage(android.os.Message) -> handleMessage
-org.tunesremote.TracksActivity$3 -> org.tunesremote.ch:
+org.tunesremote.TracksActivity$3 -> org.tunesremote.cl:
     org.tunesremote.TracksActivity this$0 -> a
     void onItemClick(android.widget.AdapterView,android.view.View,int,long) -> onItemClick
-org.tunesremote.TracksActivity$4 -> org.tunesremote.ci:
+org.tunesremote.TracksActivity$4 -> org.tunesremote.cm:
     java.lang.String val$containerItemId -> a
     org.tunesremote.TracksActivity this$0 -> b
     boolean onMenuItemClick(android.view.MenuItem) -> onMenuItemClick
-org.tunesremote.TracksActivity$5 -> org.tunesremote.cj:
-    org.tunesremote.TracksActivity this$0 -> a
-    boolean onMenuItemClick(android.view.MenuItem) -> onMenuItemClick
-org.tunesremote.TracksActivity$6 -> org.tunesremote.ck:
-    org.tunesremote.TracksActivity this$0 -> a
-    boolean onMenuItemClick(android.view.MenuItem) -> onMenuItemClick
-org.tunesremote.TracksActivity$7 -> org.tunesremote.cl:
-    android.widget.AdapterView$AdapterContextMenuInfo val$info -> a
-    org.tunesremote.TracksActivity this$0 -> b
-    boolean onMenuItemClick(android.view.MenuItem) -> onMenuItemClick
-org.tunesremote.TracksActivity$8 -> org.tunesremote.cm:
+org.tunesremote.TracksActivity$5 -> org.tunesremote.cn:
     java.lang.String val$trackid -> a
     org.tunesremote.TracksActivity this$0 -> b
     boolean onMenuItemClick(android.view.MenuItem) -> onMenuItemClick
-org.tunesremote.TracksActivity$TracksAdapter -> org.tunesremote.cn:
+org.tunesremote.TracksActivity$6 -> org.tunesremote.co:
+    org.tunesremote.TracksActivity this$0 -> a
+    boolean onMenuItemClick(android.view.MenuItem) -> onMenuItemClick
+org.tunesremote.TracksActivity$7 -> org.tunesremote.cp:
+    org.tunesremote.TracksActivity this$0 -> a
+    boolean onMenuItemClick(android.view.MenuItem) -> onMenuItemClick
+org.tunesremote.TracksActivity$8 -> org.tunesremote.cq:
+    android.widget.AdapterView$AdapterContextMenuInfo val$info -> a
+    org.tunesremote.TracksActivity this$0 -> b
+    boolean onMenuItemClick(android.view.MenuItem) -> onMenuItemClick
+org.tunesremote.TracksActivity$9 -> org.tunesremote.cr:
+    java.lang.String val$trackid -> a
+    org.tunesremote.TracksActivity this$0 -> b
+    boolean onMenuItemClick(android.view.MenuItem) -> onMenuItemClick
+org.tunesremote.TracksActivity$TracksAdapter -> org.tunesremote.cs:
     android.view.LayoutInflater inflater -> b
     java.util.List results -> a
     java.text.SimpleDateFormat format -> c
@@ -1700,10 +1721,10 @@ org.tunesremote.WizardActivity -> org.tunesremote.WizardActivity:
     boolean isFirstDisplayed() -> a
     boolean isLastDisplayed() -> b
     void updateButtons() -> c
-org.tunesremote.WizardActivity$1 -> org.tunesremote.co:
+org.tunesremote.WizardActivity$1 -> org.tunesremote.ct:
     org.tunesremote.WizardActivity this$0 -> a
     void onClick(android.view.View) -> onClick
-org.tunesremote.WizardActivity$2 -> org.tunesremote.cp:
+org.tunesremote.WizardActivity$2 -> org.tunesremote.cu:
     org.tunesremote.WizardActivity this$0 -> a
     void onClick(android.view.View) -> onClick
 org.tunesremote.daap.Library -> org.tunesremote.a.a:
@@ -1778,6 +1799,7 @@ org.tunesremote.daap.Session -> org.tunesremote.a.g:
     void controlShuffle(int) -> b
     void controlRepeat(int) -> c
     void controlRating(long,long) -> a
+    void controlClearCue() -> h
     void controlPlayAlbum(java.lang.String,int) -> a
     void controlQueueAlbum(java.lang.String) -> a
     void controlPlayArtist(java.lang.String,int) -> b
@@ -1924,6 +1946,7 @@ org.tunesremote.util.PairingDatabase -> org.tunesremote.util.a:
     android.database.Cursor fetchAllServers() -> a
     void deleteAll() -> b
     void insertCode(java.lang.String,java.lang.String,java.lang.String) -> a
+    boolean libraryExists(java.lang.String) -> c
     void updateAddress(java.lang.String,java.lang.String) -> a
 org.tunesremote.util.RecentProvider -> org.tunesremote.util.RecentProvider:
 org.tunesremote.util.ThreadExecutor -> org.tunesremote.util.b:

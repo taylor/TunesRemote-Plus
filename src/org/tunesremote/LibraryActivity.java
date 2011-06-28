@@ -118,13 +118,13 @@ public class LibraryActivity extends Activity implements ServiceListener {
 
       zeroConf = JmDNS.create(addr, HOSTNAME);
       zeroConf.addServiceListener(TOUCH_ABLE_TYPE, this);
-      // zeroConf.addServiceListener(DACP_TYPE, this);
+      zeroConf.addServiceListener(DACP_TYPE, this);
 
    }
 
    protected void stopProbe() {
       zeroConf.removeServiceListener(TOUCH_ABLE_TYPE, this);
-      // zeroConf.removeServiceListener(DACP_TYPE, this);
+      zeroConf.removeServiceListener(DACP_TYPE, this);
 
       try {
          zeroConf.close();
@@ -382,12 +382,19 @@ public class LibraryActivity extends Activity implements ServiceListener {
                return result; // nothing to add since serviceInfo is NULL
             }
 
-            final String databaseId = serviceInfo.getPropertyString("DbId");
+            String libraryName = serviceInfo.getPropertyString("CtlN");
+            if (libraryName == null) {
+               libraryName = serviceInfo.getName();
+            }
 
             // check if we already have this DatabaseId
             for (ServiceInfo service : known) {
-               if (databaseId.equalsIgnoreCase(service.getPropertyString("DbId"))) {
-                  Log.w(TAG, "Already have DatabaseId loaded = " + databaseId);
+               String knownName = service.getPropertyString("CtlN");
+               if (knownName == null) {
+                  knownName = service.getName();
+               }
+               if (libraryName.equalsIgnoreCase(knownName)) {
+                  Log.w(TAG, "Already have DatabaseId loaded = " + libraryName);
                   return result;
                }
             }
