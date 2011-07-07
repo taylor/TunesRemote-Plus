@@ -37,59 +37,71 @@ import java.util.List;
  */
 public class Response extends HashMap<String, Object> {
 
-	private static final long serialVersionUID = -6250046829864074559L;
+   private static final long serialVersionUID = -6250046829864074559L;
 
-	public Response getNested(String key) throws Exception {
-		return (Response) this.get(key);
-	}
+   public Response getNested(String key) throws Exception {
+      return (Response) this.get(key);
+   }
 
-	public String getString(String key) throws Exception {
-		Object obj = this.get(key);
-		if (obj instanceof String)
-			return (String) obj;
-		else
-			return "";
-	}
+   public String getString(String key) throws Exception {
+      Object obj = this.get(key);
+      if (obj instanceof String)
+         return (String) obj;
+      else
+         return "";
+   }
 
-	public BigInteger getNumber(String key) throws Exception {
-		Object obj = this.get(key);
-		if (obj instanceof BigInteger)
-			return (BigInteger) obj;
-		else
-			return new BigInteger("-1");
-	}
+   public BigInteger getNumber(String key) throws Exception {
+      Object obj = this.get(key);
+      if (obj instanceof BigInteger)
+         return (BigInteger) obj;
+      else
+         return new BigInteger("-1");
+   }
 
-	public long getNumberLong(String key) throws Exception {
-		return getNumber(key).longValue();
-	}
+   public long getNumberLong(String key) throws Exception {
+      return getNumber(key).longValue();
+   }
 
-	public String getNumberString(String key) throws Exception {
-		return getNumber(key).toString();
-	}
+   public String getNumberString(String key) throws Exception {
+      return getNumber(key).toString();
+   }
 
-	public String getNumberHex(String key) throws Exception {
-		return Long.toHexString(getNumberLong(key));
-	}
+   public String getNumberHex(String key) throws Exception {
+      return Long.toHexString(getNumberLong(key));
+   }
 
-	public byte[] getRaw(String key) throws Exception {
-		Object obj = this.get(key);
-		return (byte[]) obj;
-	}
+   public byte[] getRaw(String key) throws Exception {
+      Object obj = this.get(key);
+      return (byte[]) obj;
+   }
 
-	public List<Response> findArray(String prefix) throws Exception {
-		List<Response> found = new LinkedList<Response>();
+   public List<Response> findArray(String prefix) throws Exception {
+      List<Response> found = new LinkedList<Response>();
 
-		// find all values with same key prefix
-		// sort keys to make sure we return in original order
+      // find all values with same key prefix
+      // sort keys to make sure we return in original order
 
-		String[] keys = this.keySet().toArray(new String[] {});
-		Arrays.sort(keys);
+      String[] keys = this.keySet().toArray(new String[] {});
+      Arrays.sort(keys);
 
-		for (String key : keys) {
-			if (key.startsWith(prefix))
-				found.add((Response) this.get(key));
-		}
+      for (String key : keys) {
+         if (key.startsWith(prefix))
+            found.add((Response) this.get(key));
+      }
 
-		return found;
-	}
+      return found;
+   }
+
+   /**
+    * Convert milliseconds to m:ss string format for track lengths.
+    * <p>
+    * @param milliseconds the milliseconds value to convert
+    * @return a String formatted in m:ss format
+    */
+   public static String convertTime(long milliseconds) {
+      final int seconds = (int) ((milliseconds / 1000) % 60);
+      final int minutes = (int) ((milliseconds / 1000) / 60);
+      return String.format("%d:%02d", minutes, seconds);
+   }
 }

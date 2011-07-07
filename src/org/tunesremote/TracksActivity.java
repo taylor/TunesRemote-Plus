@@ -25,8 +25,6 @@
 
 package org.tunesremote;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -290,9 +288,6 @@ public class TracksActivity extends BaseBrowseActivity {
          return position;
       }
 
-      protected SimpleDateFormat format = new SimpleDateFormat("m:ss");
-      protected Date date = new Date(0);
-
       public View getView(int position, View convertView, ViewGroup parent) {
 
          if (convertView == null)
@@ -304,8 +299,8 @@ public class TracksActivity extends BaseBrowseActivity {
             final Response resp = (Response) this.getItem(position);
 
             final String title = resp.getString("minm");
-            date.setTime(resp.getNumberLong("astm"));
-            final String length = format.format(date);
+            final String length = Response.convertTime(resp.getNumberLong("astm"));
+
             final long trackId = resp.getNumberLong("miid");
             final long currentTrackId = ControlActivity.status.getTrackId();
 

@@ -25,10 +25,9 @@
 
 package org.tunesremote;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
+import org.tunesremote.daap.Response;
 import org.tunesremote.daap.Session;
 import org.tunesremote.daap.Speaker;
 import org.tunesremote.daap.Status;
@@ -182,15 +181,13 @@ public class ControlActivity extends Activity implements ViewFactory {
                      : android.R.drawable.ic_media_play);
             seekBar.setMax(status.getProgressTotal());
 
-            // TODO: update menu items for shuffle, etc?
-
          case Status.UPDATE_PROGRESS:
             if (ignoreNextTick) {
                ignoreNextTick = false;
                return;
             }
-            seekPosition.setText(formatTime(status.getProgress()));
-            seekRemain.setText("-" + formatTime(status.getRemaining()));
+            seekPosition.setText(Response.convertTime(status.getProgress() * 1000));
+            seekRemain.setText("-" + Response.convertTime(status.getRemaining() * 1000));
             if (!dragging) {
                seekBar.setProgress(status.getProgress());
             }
@@ -270,13 +267,6 @@ public class ControlActivity extends Activity implements ViewFactory {
    protected SeekBar seekBar;
    protected ImageSwitcher cover;
    protected ImageButton controlPrev, controlPause, controlNext;
-   protected SimpleDateFormat format = new SimpleDateFormat("m:ss");
-   protected Date date = new Date(0);
-
-   protected synchronized String formatTime(int seconds) {
-      date.setTime(seconds * 1000);
-      return format.format(date);
-   }
 
    public View makeView() {
       ImageView view = new ImageView(this);

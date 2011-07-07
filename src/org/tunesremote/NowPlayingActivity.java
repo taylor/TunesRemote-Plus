@@ -24,8 +24,6 @@
  */
 package org.tunesremote;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -185,8 +183,6 @@ public class NowPlayingActivity extends ListActivity {
    protected class NowPlayingAdapter extends BaseAdapter implements TagListener {
       protected Context context;
       protected LayoutInflater inflater;
-      protected SimpleDateFormat format = new SimpleDateFormat("m:ss");
-      protected Date date = new Date(0);
 
       protected List<Response> results = new LinkedList<Response>();
 
@@ -219,8 +215,7 @@ public class NowPlayingActivity extends ListActivity {
 
             final String title = resp.getString("minm");
             final String artist = resp.getString("asar");
-            date.setTime(resp.getNumberLong("astm"));
-            final String length = format.format(date);
+            final String length = Response.convertTime(resp.getNumberLong("astm"));
             final long trackId = resp.getNumberLong("miid");
             final long currentTrackId = ControlActivity.status.getTrackId();
 
