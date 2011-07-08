@@ -39,9 +39,12 @@ public class Session {
    private final String host;
    private Status singleton = null;
    public String sessionId;
-   public long databaseId, musicId, libraryId;
-   public String databasePersistentId;
+   public long databaseId, radioDatabaseId, musicId, libraryId;
+   public String databasePersistentId, radioPersistentId;
    public final List<Playlist> playlists = new LinkedList<Playlist>();
+
+   public String radioDatabaseName = null;
+   private List<Playlist> radioGenres = null;
 
    public Session(String host, String pairingGuid) throws Exception {
       // start a session with the itunes server
@@ -55,9 +58,31 @@ public class Session {
 
       // http://192.168.254.128:3689/databases?session-id=1301749047
       Response databases = RequestHelper.requestParsed(String.format("%s/databases?session-id=%s", this.getRequestBase(), this.sessionId), false);
-      this.databaseId = databases.getNested("avdb").getNested("mlcl").getNested("mlit").getNumberLong("miid");
-      this.databasePersistentId = databases.getNested("avdb").getNested("mlcl").getNested("mlit").getNumberHex("mper");
-      Log.d(TAG, String.format("found database-id=%s", this.databaseId));
+      for (Response resp : databases.getNested("avdb").getNested("mlcl").findArray("mlit")) {
+         // Local DB - mdbk = 1?
+         if (resp.getNumberLong("mdbk") == 1) {
+            this.databaseId = resp.getNumberLong("miid");
+            this.databasePersistentId = resp.getNumberHex("mper");
+            Log.d(TAG, String.format("found database-id=%s", this.databaseId));
+
+            // Radio DB - mdbk = 100?
+         } else if (resp.getNumberLong("mdbk") == 100) {
+            this.radioDatabaseName = resp.getString("minm");
+            this.radioDatabaseId = resp.getNumberLong("miid");
+            this.radioPersistentId = resp.getNumberHex("mper");
+            Log.d(TAG, String.format("found radio-database-id=%s", this.radioDatabaseId));
+
+            // Other DB
+            // mdbk = 2 = shared db?
+         } else {
+            // We have found another database
+            // I've seen shared libraries appear here
+            Log.d(TAG, "found other-database = " + resp.getString("minm"));
+            this.databaseId = resp.getNumberLong("miid");
+            this.databasePersistentId = resp.getNumberHex("mper");
+            Log.d(TAG, String.format("found database-id=%s", this.databaseId));
+         }
+      }
 
       // fetch playlists to find the overall magic "Music" playlist
       Response playlists = RequestHelper
@@ -91,7 +116,6 @@ public class Session {
       final Status stat = new Status(this, handler);
       stat.fetchUpdate();
       return stat;
-
    }
 
    public Status singletonStatus(Handler handler) {
@@ -323,6 +347,16 @@ public class Session {
       });
    }
 
+   public void controlVisualiser(boolean enabled) {
+      // GET /ctrl-int/1/setproperty?dacp.visualizer=1&session-id=283658916
+      this.fireAction(String.format("%s/ctrl-int/1/setproperty?dacp.visualizer=%d&session-id=%s", this.getRequestBase(), enabled ? 1 : 0, this.sessionId), true);
+   }
+
+   public void controlFullscreen(boolean enabled) {
+      // GET /ctrl-int/1/setproperty?dacp.fullscreen=1&session-id=283658916
+      this.fireAction(String.format("%s/ctrl-int/1/setproperty?dacp.fullscreen=%d&session-id=%s", this.getRequestBase(), enabled ? 1 : 0, this.sessionId), true);
+   }
+
    // Query the media server about the content codes it handles
    // print to stderr as a csv file
    public void listContentCodes() {
@@ -336,5 +370,54 @@ public class Session {
       } catch (Exception e) {
          e.printStackTrace();
       }
+   }
+
+   // Radio commands
+   public boolean supportsRadio() {
+      return radioDatabaseName != null;
+   }
+
+   public String getRadioDatabaseName() {
+      return radioDatabaseName;
+   }
+
+   public List<Playlist> getRadioGenres() {
+      if (radioGenres == null) {
+         radioGenres = new LinkedList<Playlist>();
+
+         try {
+            // fetch radio playlists
+            Response playlists = RequestHelper
+                     .requestParsed(
+                              String.format(
+                                       "%s/databases/%d/containers?session-id=%s&meta=dmap.itemname,dmap.itemcount,dmap.itemid,dmap.persistentid,daap.baseplaylist,com.apple.itunes.special-playlist,com.apple.itunes.smart-playlist,com.apple.itunes.saved-genius,dmap.parentcontainerid,dmap.editcommandssupported",
+                                       this.getRequestBase(), this.radioDatabaseId, this.sessionId), false);
+
+            for (Response resp : playlists.getNested("aply").getNested("mlcl").findArray("mlit")) {
+               String name = resp.getString("minm");
+               Log.d(TAG, String.format("found radio genre=%s", name));
+               this.radioGenres.add(new Playlist(resp.getNumberLong("miid"), name, resp.getNumberLong("mimc"), resp.getNumberHex("mper")));
+            }
+         } catch (Exception e) {
+            Log.w(TAG, "getRadioGenres Exception:" + e.getMessage());
+         }
+      }
+      return radioGenres;
+   }
+
+   public void playSpec(final long databaseId, final long containerId, final long itemId) {
+      // GET
+      // /ctrl-int/1/playspec?database-spec='dmap.itemid:0x6073'&container-spec='dmap.itemid:0x607B'&item-spec='dmap.itemid:0x7cbe'&session-id=345827905
+      ThreadExecutor.runTask(new Runnable() {
+         public void run() {
+            RequestHelper.attemptRequest(String.format("%s/ctrl-int/1/playspec?" + "database-spec='dmap.itemid:0x%x'" + "&container-spec='dmap.itemid:0x%x'"
+                     + "&item-spec='dmap.itemid:0x%x'" + "&session-id=%s", getRequestBase(), databaseId, containerId, itemId, sessionId));
+            notifyStatus();
+         }
+      });
+   }
+
+   public void controlPlayRadio(final long genreId, final long itemId) {
+      playSpec(radioDatabaseId, genreId, itemId);
    }
 }

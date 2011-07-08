@@ -126,6 +126,7 @@ public class RequestHelper {
       HttpURLConnection connection = (HttpURLConnection) url.openConnection();
       connection.setAllowUserInteraction(false);
       connection.setRequestProperty("Viewer-Only-Client", "1");
+      connection.setRequestProperty("Client-Daap-Version", "3.10");
       // allow both GZip and Deflate (ZLib) encodings
       connection.setRequestProperty("Accept-Encoding", "gzip, deflate");
 
