@@ -60,27 +60,20 @@ public class Session {
       Response databases = RequestHelper.requestParsed(String.format("%s/databases?session-id=%s", this.getRequestBase(), this.sessionId), false);
       for (Response resp : databases.getNested("avdb").getNested("mlcl").findArray("mlit")) {
          // Local DB - mdbk = 1?
-         if (resp.getNumberLong("mdbk") == 1) {
+         if (resp.getNumberLong("mdbk") == 1 || !resp.containsKey("mdbk")) {
             this.databaseId = resp.getNumberLong("miid");
             this.databasePersistentId = resp.getNumberHex("mper");
             Log.d(TAG, String.format("found database-id=%s", this.databaseId));
-
-            // Radio DB - mdbk = 100?
          } else if (resp.getNumberLong("mdbk") == 100) {
+            // Radio DB - mdbk = 100?
             this.radioDatabaseName = resp.getString("minm");
             this.radioDatabaseId = resp.getNumberLong("miid");
             this.radioPersistentId = resp.getNumberHex("mper");
             Log.d(TAG, String.format("found radio-database-id=%s", this.radioDatabaseId));
-
-            // Other DB
-            // mdbk = 2 = shared db?
          } else {
-            // We have found another database
-            // I've seen shared libraries appear here
+            // Other DB (mdbk = 2 = shared db?)
+            // We have found another database I've seen shared libraries appear here
             Log.d(TAG, "found other-database = " + resp.getString("minm"));
-            this.databaseId = resp.getNumberLong("miid");
-            this.databasePersistentId = resp.getNumberHex("mper");
-            Log.d(TAG, String.format("found database-id=%s", this.databaseId));
          }
       }
 
