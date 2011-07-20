@@ -220,19 +220,19 @@ public class ControlActivity extends Activity implements ViewFactory {
             switch (state) {
             case android.telephony.TelephonyManager.CALL_STATE_IDLE:
                if (wasPlaying && session != null && ControlActivity.status.getPlayStatus() == Status.STATE_PAUSED) {
-                  session.controlPlayPause();
+                  session.controlPlay();
                   wasPlaying = false;
                }
                break;
             case android.telephony.TelephonyManager.CALL_STATE_OFFHOOK:
                if (session != null && ControlActivity.status.getPlayStatus() == Status.STATE_PLAYING) {
-                  session.controlPlayPause();
+                  session.controlPause();
                   wasPlaying = true;
                }
                break;
             case android.telephony.TelephonyManager.CALL_STATE_RINGING:
                if (session != null && ControlActivity.status.getPlayStatus() == Status.STATE_PLAYING) {
-                  session.controlPlayPause();
+                  session.controlPause();
                   wasPlaying = true;
                }
                break;
@@ -631,7 +631,11 @@ public class ControlActivity extends Activity implements ViewFactory {
 
       this.controlPause.setOnClickListener(new OnClickListener() {
          public void onClick(View v) {
-            session.controlPlayPause();
+        	 if (session != null && ControlActivity.status.getPlayStatus() == Status.STATE_PLAYING) {
+        	     session.controlPause();
+        	 } else {
+        		 session.controlPlay();
+        	 }
             if (vibrate)
                vibrator.vibrate(VIBRATE_LEN);
          }

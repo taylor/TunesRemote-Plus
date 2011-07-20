@@ -27,6 +27,7 @@ package org.tunesremote.daap;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
+import java.io.EOFException;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.regex.Pattern;
@@ -72,11 +73,16 @@ public class ResponseParser {
       int progress = 0;
       int hits = 0;
 
-      // loop until done with the section weve been assigned
+      // loop until done with the section we have been assigned
       while (handle > 0) {
          final String key = ResponseParser.readString(raw, 4);
          // Log.d(TAG, key);
-         final int length = raw.readInt();
+         int length = -1;
+         try {
+            length = raw.readInt();
+         } catch (EOFException eofe) {
+            return hits;
+         }
          handle -= 8 + length;
          progress += 8 + length;
 

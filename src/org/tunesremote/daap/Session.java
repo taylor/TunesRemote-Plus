@@ -156,10 +156,15 @@ public class Session {
       this.fireAction(String.format("%s/logout?session-id=%s", this.getRequestBase(), this.sessionId), false);
    }
 
-   public void controlPlayPause() {
-      // http://192.168.254.128:3689/ctrl-int/1/playpause?session-id=130883770
-      this.fireAction(String.format("%s/ctrl-int/1/playpause?session-id=%s", this.getRequestBase(), this.sessionId), true);
+   public void controlPause() {
+      // http://192.168.254.128:3689/ctrl-int/1/pause?session-id=130883770
+      this.fireAction(String.format("%s/ctrl-int/1/pause?session-id=%s", this.getRequestBase(), this.sessionId), true);
    }
+   
+   public void controlPlay() {
+	      // http://192.168.254.128:3689/ctrl-int/1/playpause?session-id=130883770
+	      this.fireAction(String.format("%s/ctrl-int/1/playpause?session-id=%s", this.getRequestBase(), this.sessionId), true);
+	   }
 
    public void controlNext() {
       // http://192.168.254.128:3689/ctrl-int/1/nextitem?session-id=130883770
