@@ -36,11 +36,13 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -48,6 +50,7 @@ import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
@@ -60,6 +63,7 @@ public class NowPlayingActivity extends ListActivity {
    protected Session session;
    protected Library library;
    protected NowPlayingAdapter adapter;
+   protected SharedPreferences prefs;
    protected String albumid;
    protected boolean iTunes = false;
 
@@ -145,6 +149,8 @@ public class NowPlayingActivity extends ListActivity {
 
       this.adapter = new NowPlayingAdapter(this);
       this.setListAdapter(adapter);
+
+      this.prefs = PreferenceManager.getDefaultSharedPreferences(this);
    }
 
    @Override
@@ -178,6 +184,19 @@ public class NowPlayingActivity extends ListActivity {
          }
       });
       return true;
+   }
+
+   @Override
+   protected void onResume() {
+      final boolean fullscreen = this.prefs.getBoolean(this.getString(R.string.pref_fullscreen), true);
+      if (fullscreen) {
+         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+      } else {
+         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+      }
+      super.onResume();
    }
 
    protected class NowPlayingAdapter extends BaseAdapter implements TagListener {

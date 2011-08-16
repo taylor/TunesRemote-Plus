@@ -26,14 +26,25 @@ package org.tunesremote;
 
 import android.app.ListActivity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
+import android.view.WindowManager;
 
 public class BaseBrowseActivity extends ListActivity {
 
    public static final int RESULT_SWITCH_TO_ARTISTS = RESULT_FIRST_USER + 1;
    public static final int RESULT_SWITCH_TO_PLAYLISTS = RESULT_FIRST_USER + 2;
+   protected SharedPreferences prefs;
+
+   @Override
+   public void onCreate(Bundle savedInstanceState) {
+      super.onCreate(savedInstanceState);
+      this.prefs = PreferenceManager.getDefaultSharedPreferences(this);
+   }
 
    @Override
    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -71,6 +82,20 @@ public class BaseBrowseActivity extends ListActivity {
             return true;
          }
       });
+
       return true;
+   }
+
+   @Override
+   protected void onResume() {
+      final boolean fullscreen = this.prefs.getBoolean(this.getString(R.string.pref_fullscreen), true);
+      if (fullscreen) {
+         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+      } else {
+         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+      }
+      super.onResume();
    }
 }
