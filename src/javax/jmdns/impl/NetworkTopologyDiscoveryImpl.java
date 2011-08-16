@@ -110,4 +110,22 @@ public class NetworkTopologyDiscoveryImpl implements NetworkTopologyDiscovery {
       }
    }
 
+   /*
+    * (non-Javadoc)
+    * @see javax.jmdns.NetworkTopologyDiscovery#lockInetAddress(java.net.InetAddress)
+    */
+
+   public void lockInetAddress(InetAddress interfaceAddress) {
+      // Default implementation does nothing.
+   }
+
+   /*
+    * (non-Javadoc)
+    * @see javax.jmdns.NetworkTopologyDiscovery#unlockInetAddress(java.net.InetAddress)
+    */
+
+   public void unlockInetAddress(InetAddress interfaceAddress) {
+      // Default implementation does nothing.
+   }
+
 }

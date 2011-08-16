@@ -61,6 +61,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
@@ -88,12 +89,45 @@ public class ControlActivity extends Activity implements ViewFactory {
     * ID of the speakers dialog
     */
    private static final int DIALOG_SPEAKERS = 1;
+   public final static int VIBRATE_LEN = 150;
+   // keep volume cache for 10 seconds
+   public final static long CACHE_TIME = 10000;
+   public final static String EULA = "eula";
 
    protected static BackendService backend;
    protected static Session session;
    protected static Status status;
-   protected boolean dragging = false;
    protected String showingAlbumId = null;
+   protected RatingBar ratingBar;
+   protected TextView trackName, trackArtist, trackAlbum, seekPosition, seekRemain;
+   protected SeekBar seekBar;
+   protected ImageSwitcher cover;
+   protected ImageButton controlPrev, controlPause, controlNext;
+   protected View volume;
+   protected ProgressBar volumeBar;
+   protected Toast volumeToast;
+   protected FadeView fadeview;
+   protected Toast shuffleToast;
+   protected Toast repeatToast;
+   protected MenuItem repeat;
+   protected MenuItem shuffle;
+   protected MenuItem speakersMenuItem;
+   protected boolean dragging = false, agreed = false, autoPause = false, stayConnected = false, fadeDetails = true, fadeUpNew = true, vibrate = true,
+            cropImage = true, fullScreen = true, ignoreNextTick = false;
+   protected Vibrator vibrator;
+   protected SharedPreferences prefs;
+   protected long cachedTime = -1;
+   protected long cachedVolume = -1;
+
+   /**
+    * List of available speakers
+    */
+   protected List<Speaker> speakers;
+
+   /**
+    * Instance of the speaker list adapter used in the speakers dialog
+    */
+   protected SpeakersAdapter speakersAdapter;
 
    public ServiceConnection connection = new ServiceConnection() {
       public void onServiceConnected(ComponentName className, IBinder service) {
@@ -262,28 +296,16 @@ public class ControlActivity extends Activity implements ViewFactory {
       }
    };
 
-   protected RatingBar ratingBar;
-   protected TextView trackName, trackArtist, trackAlbum, seekPosition, seekRemain;
-   protected SeekBar seekBar;
-   protected ImageSwitcher cover;
-   protected ImageButton controlPrev, controlPause, controlNext;
-
    public View makeView() {
       ImageView view = new ImageView(this);
-      view.setScaleType(ImageView.ScaleType.CENTER_CROP);
+      if (this.cropImage) {
+         view.setScaleType(ImageView.ScaleType.CENTER_CROP);
+      } else {
+         view.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+      }
       view.setLayoutParams(new ImageSwitcher.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
       return view;
    }
-
-   protected View volume;
-   protected ProgressBar volumeBar;
-   protected Toast volumeToast;
-   protected FadeView fadeview;
-   protected Toast shuffleToast;
-   protected Toast repeatToast;
-
-   protected boolean stayConnected = false, fadeDetails = true, fadeUpNew = true, vibrate = true;
-   protected boolean autoPause = false;
 
    @Override
    public void onStart() {
@@ -351,12 +373,6 @@ public class ControlActivity extends Activity implements ViewFactory {
       Log.w(TAG, "Destroyed TunesRemote!");
    }
 
-   protected Vibrator vibrator;
-   protected SharedPreferences prefs;
-   protected boolean agreed = false;
-
-   public final static String EULA = "eula";
-
    @Override
    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -372,21 +388,6 @@ public class ControlActivity extends Activity implements ViewFactory {
       }
 
    }
-
-   public final static int VIBRATE_LEN = 150;
-   protected boolean ignoreNextTick = false;
-
-   // public boolean shouldPause = false;
-
-   /**
-    * List of available speakers
-    */
-   protected List<Speaker> speakers;
-
-   /**
-    * Instance of the speaker list adapter used in the speakers dialog
-    */
-   protected SpeakersAdapter speakersAdapter;
 
    /**
     * OnSeekBarChangeListener that controls the volume for a certain speaker
@@ -526,11 +527,6 @@ public class ControlActivity extends Activity implements ViewFactory {
       }
    }
 
-   /**
-    * {@inheritDoc}
-    * @see android.app.Activity#onCreateDialog(int)
-    */
-
    @Override
    protected Dialog onCreateDialog(int id) {
       if (id == DIALOG_SPEAKERS) {
@@ -542,16 +538,30 @@ public class ControlActivity extends Activity implements ViewFactory {
    }
 
    @Override
+   protected void onResume() {
+      this.fullScreen = this.prefs.getBoolean(this.getString(R.string.pref_fullscreen), true);
+      if (this.fullScreen) {
+         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+      } else {
+         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+      }
+      super.onResume();
+   }
+
+   @Override
    public void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
 
       // before we go any further, make sure theyve agreed to EULA
       this.prefs = PreferenceManager.getDefaultSharedPreferences(this);
       this.agreed = prefs.getBoolean(EULA, false);
+      this.cropImage = this.prefs.getBoolean(this.getString(R.string.pref_cropimage), true);
+
       if (!this.agreed) {
          // show eula wizard
          this.startActivityForResult(new Intent(this, WizardActivity.class), 1);
-
       }
 
       setContentView(R.layout.act_control);
@@ -631,11 +641,11 @@ public class ControlActivity extends Activity implements ViewFactory {
 
       this.controlPause.setOnClickListener(new OnClickListener() {
          public void onClick(View v) {
-        	 if (session != null && ControlActivity.status.getPlayStatus() == Status.STATE_PLAYING) {
-        	     session.controlPause();
-        	 } else {
-        		 session.controlPlay();
-        	 }
+            if (session != null && ControlActivity.status.getPlayStatus() == Status.STATE_PLAYING) {
+               session.controlPause();
+            } else {
+               session.controlPlay();
+            }
             if (vibrate)
                vibrator.vibrate(VIBRATE_LEN);
          }
@@ -658,14 +668,7 @@ public class ControlActivity extends Activity implements ViewFactory {
       speakersAdapter = new SpeakersAdapter(this);
    }
 
-   protected long cachedTime = -1;
-   protected long cachedVolume = -1;
-
-   // keep volume cache for 10 seconds
-   public final static long CACHE_TIME = 10000;
-
    protected void incrementVolume(long increment) {
-
       checkCachedVolume();
 
       // increment the volume and send control signal off
@@ -726,10 +729,6 @@ public class ControlActivity extends Activity implements ViewFactory {
       }
       return true;
    }
-
-   protected MenuItem repeat;
-   protected MenuItem shuffle;
-   protected MenuItem speakersMenuItem;
 
    @Override
    public boolean onCreateOptionsMenu(Menu menu) {

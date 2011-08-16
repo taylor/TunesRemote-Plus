@@ -79,6 +79,20 @@
 			android:defaultValue="true"
 			/>
 		
+		<CheckBoxPreference
+            android:key="@string/pref_cropimage"
+            android:title="Crop album cover"
+            android:summary="Crop album cover to fill the screen by scaling it"
+            android:defaultValue="true"
+            />
+       <CheckBoxPreference
+            android:key="@string/pref_fullscreen"
+            android:title="Fullscreen"
+            android:summary="Hides the status bar while running"
+            android:defaultValue="true"
+            />
+            
+		
 	</PreferenceCategory>
 
 </PreferenceScreen>
