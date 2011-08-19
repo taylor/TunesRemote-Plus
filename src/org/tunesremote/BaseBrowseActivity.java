@@ -32,6 +32,7 @@ import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
+import android.view.Window;
 import android.view.WindowManager;
 
 public class BaseBrowseActivity extends ListActivity {
@@ -44,6 +45,9 @@ public class BaseBrowseActivity extends ListActivity {
    public void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       this.prefs = PreferenceManager.getDefaultSharedPreferences(this);
+      if (this.prefs.getBoolean(this.getString(R.string.pref_fullscreen), true)) {
+         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+      }
    }
 
    @Override

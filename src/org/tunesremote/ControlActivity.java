@@ -60,13 +60,11 @@ import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
+import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
-import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
@@ -75,13 +73,12 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ViewSwitcher.ViewFactory;
 
 /**
  * Main activity of TunesRemote. This controls the player and drives all the other activities.
  * <p>
  */
-public class ControlActivity extends Activity implements ViewFactory {
+public class ControlActivity extends Activity {
 
    public final static String TAG = ControlActivity.class.toString();
 
@@ -101,7 +98,7 @@ public class ControlActivity extends Activity implements ViewFactory {
    protected RatingBar ratingBar;
    protected TextView trackName, trackArtist, trackAlbum, seekPosition, seekRemain;
    protected SeekBar seekBar;
-   protected ImageSwitcher cover;
+   protected ImageView coverImage;
    protected ImageButton controlPrev, controlPause, controlNext;
    protected View volume;
    protected ProgressBar volumeBar;
@@ -203,10 +200,10 @@ public class ControlActivity extends Activity implements ViewFactory {
             if (shouldUpdate) {
                if (status.coverEmpty) {
                   // fade down if no coverart
-                  cover.setImageDrawable(new ColorDrawable(Color.BLACK));
+                  coverImage.setImageDrawable(new ColorDrawable(Color.BLACK));
                } else if (status.coverCache != null) {
                   // fade over to new coverart
-                  cover.setImageDrawable(new BitmapDrawable(status.coverCache));
+                  coverImage.setImageDrawable(new BitmapDrawable(status.coverCache));
                }
                showingAlbumId = status.albumId;
             }
@@ -295,17 +292,6 @@ public class ControlActivity extends Activity implements ViewFactory {
          StartNowPlaying();
       }
    };
-
-   public View makeView() {
-      ImageView view = new ImageView(this);
-      if (this.cropImage) {
-         view.setScaleType(ImageView.ScaleType.CENTER_CROP);
-      } else {
-         view.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-      }
-      view.setLayoutParams(new ImageSwitcher.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
-      return view;
-   }
 
    @Override
    public void onStart() {
@@ -459,6 +445,12 @@ public class ControlActivity extends Activity implements ViewFactory {
        * @param speaker the speaker to be activated or deactivated
        */
       public void setSpeakerActive(boolean active, final Speaker speaker) {
+         if (speaker == null) {
+            return;
+         }
+         if (status == null) {
+            return;
+         }
          speaker.setActive(active);
          status.setSpeakers(speakers);
          speakers = status.getSpeakers();
@@ -547,6 +539,12 @@ public class ControlActivity extends Activity implements ViewFactory {
          getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
          getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
       }
+      this.cropImage = this.prefs.getBoolean(this.getString(R.string.pref_cropimage), true);
+      if (this.cropImage) {
+         this.coverImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
+      } else {
+         this.coverImage.setScaleType(ImageView.ScaleType.FIT_XY);
+      }
       super.onResume();
    }
 
@@ -557,7 +555,9 @@ public class ControlActivity extends Activity implements ViewFactory {
       // before we go any further, make sure theyve agreed to EULA
       this.prefs = PreferenceManager.getDefaultSharedPreferences(this);
       this.agreed = prefs.getBoolean(EULA, false);
-      this.cropImage = this.prefs.getBoolean(this.getString(R.string.pref_cropimage), true);
+      if (this.prefs.getBoolean(this.getString(R.string.pref_fullscreen), true)) {
+         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+      }
 
       if (!this.agreed) {
          // show eula wizard
@@ -592,10 +592,13 @@ public class ControlActivity extends Activity implements ViewFactory {
       this.trackAlbum = (TextView) findViewById(R.id.info_album);
       this.ratingBar = (RatingBar) findViewById(R.id.rating_bar);
 
-      this.cover = (ImageSwitcher) findViewById(R.id.cover);
-      this.cover.setFactory(this);
-      this.cover.setInAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_in));
-      this.cover.setOutAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_out));
+      this.coverImage = (ImageView) findViewById(R.id.cover);
+      this.cropImage = this.prefs.getBoolean(this.getString(R.string.pref_cropimage), true);
+      if (this.cropImage) {
+         this.coverImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
+      } else {
+         this.coverImage.setScaleType(ImageView.ScaleType.FIT_XY);
+      }
 
       this.seekBar = (SeekBar) findViewById(R.id.seek);
       this.seekPosition = (TextView) findViewById(R.id.seek_position);
@@ -625,6 +628,9 @@ public class ControlActivity extends Activity implements ViewFactory {
 
       this.controlPrev.setOnClickListener(new OnClickListener() {
          public void onClick(View v) {
+            if (session == null) {
+               return;
+            }
             session.controlPrev();
             if (vibrate)
                vibrator.vibrate(VIBRATE_LEN);
@@ -633,6 +639,9 @@ public class ControlActivity extends Activity implements ViewFactory {
 
       this.controlNext.setOnClickListener(new OnClickListener() {
          public void onClick(View v) {
+            if (session == null) {
+               return;
+            }
             session.controlNext();
             if (vibrate)
                vibrator.vibrate(VIBRATE_LEN);
@@ -641,6 +650,9 @@ public class ControlActivity extends Activity implements ViewFactory {
 
       this.controlPause.setOnClickListener(new OnClickListener() {
          public void onClick(View v) {
+            if (session == null) {
+               return;
+            }
             if (session != null && ControlActivity.status.getPlayStatus() == Status.STATE_PLAYING) {
                session.controlPause();
             } else {
@@ -698,21 +710,21 @@ public class ControlActivity extends Activity implements ViewFactory {
       int increment = 5;
       try {
          increment = Integer.parseInt(backend.getPrefs().getString(getResources().getString(R.string.pref_volumeincrement), "5"));
+
+         // check for volume keys
+         if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
+            this.incrementVolume(+increment);
+            return true;
+         } else if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
+            this.incrementVolume(-increment);
+            return true;
+         }
+
+         // regardless of key, make sure we keep view alive
+         this.fadeview.keepAwake();
       } catch (Exception e) {
          Log.e(TAG, "Volume Increment Exception:" + e.getMessage());
       }
-      // check for volume keys
-      if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
-         this.incrementVolume(+increment);
-         return true;
-      } else if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
-         this.incrementVolume(-increment);
-         return true;
-      }
-
-      // regardless of key, make sure we keep view alive
-      this.fadeview.keepAwake();
-
       return super.onKeyDown(keyCode, event);
    }
 

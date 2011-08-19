@@ -50,6 +50,7 @@ import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -131,6 +132,12 @@ public class NowPlayingActivity extends ListActivity {
    @Override
    public void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
+
+      this.prefs = PreferenceManager.getDefaultSharedPreferences(this);
+      if (this.prefs.getBoolean(this.getString(R.string.pref_fullscreen), true)) {
+         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+      }
+
       setContentView(R.layout.act_nowplaying);
 
       this.albumid = this.getIntent().getStringExtra(Intent.EXTRA_TITLE);
@@ -149,8 +156,6 @@ public class NowPlayingActivity extends ListActivity {
 
       this.adapter = new NowPlayingAdapter(this);
       this.setListAdapter(adapter);
-
-      this.prefs = PreferenceManager.getDefaultSharedPreferences(this);
    }
 
    @Override
