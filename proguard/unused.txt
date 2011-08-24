@@ -29,6 +29,8 @@ javax.jmdns.JmmDNS$Factory
 javax.jmdns.JmmDNS$Factory$ClassDelegate
 javax.jmdns.NetworkTopologyDiscovery:
     public abstract boolean useInetAddress(java.net.NetworkInterface,java.net.InetAddress)
+    public abstract void lockInetAddress(java.net.InetAddress)
+    public abstract void unlockInetAddress(java.net.InetAddress)
 javax.jmdns.NetworkTopologyDiscovery$Factory:
     89:90:public static void setClassDelegate(javax.jmdns.NetworkTopologyDiscovery$Factory$ClassDelegate)
     100:100:public static javax.jmdns.NetworkTopologyDiscovery$Factory$ClassDelegate classDelegate()
@@ -93,18 +95,18 @@ javax.jmdns.impl.DNSQuestion:
     296:296:public boolean isStale(long)
 javax.jmdns.impl.DNSRecord:
     abstract javax.jmdns.impl.DNSOutgoing addAnswer(javax.jmdns.impl.JmDNSImpl,javax.jmdns.impl.DNSIncoming,java.net.InetAddress,int,javax.jmdns.impl.DNSOutgoing)
-    978:979:public void setTTL(int)
+    1019:1020:public void setTTL(int)
 javax.jmdns.impl.DNSRecord$Address:
-    283:283:boolean same(javax.jmdns.impl.DNSRecord)
-    369:369:javax.jmdns.impl.DNSOutgoing addAnswer(javax.jmdns.impl.JmDNSImpl,javax.jmdns.impl.DNSIncoming,java.net.InetAddress,int,javax.jmdns.impl.DNSOutgoing)
+    283:286:boolean same(javax.jmdns.impl.DNSRecord)
+    385:385:javax.jmdns.impl.DNSOutgoing addAnswer(javax.jmdns.impl.JmDNSImpl,javax.jmdns.impl.DNSIncoming,java.net.InetAddress,int,javax.jmdns.impl.DNSOutgoing)
 javax.jmdns.impl.DNSRecord$HostInformation:
-    840:840:javax.jmdns.impl.DNSOutgoing addAnswer(javax.jmdns.impl.JmDNSImpl,javax.jmdns.impl.DNSIncoming,java.net.InetAddress,int,javax.jmdns.impl.DNSOutgoing)
+    872:872:javax.jmdns.impl.DNSOutgoing addAnswer(javax.jmdns.impl.JmDNSImpl,javax.jmdns.impl.DNSIncoming,java.net.InetAddress,int,javax.jmdns.impl.DNSOutgoing)
 javax.jmdns.impl.DNSRecord$Pointer:
-    462:462:javax.jmdns.impl.DNSOutgoing addAnswer(javax.jmdns.impl.JmDNSImpl,javax.jmdns.impl.DNSIncoming,java.net.InetAddress,int,javax.jmdns.impl.DNSOutgoing)
+    485:485:javax.jmdns.impl.DNSOutgoing addAnswer(javax.jmdns.impl.JmDNSImpl,javax.jmdns.impl.DNSIncoming,java.net.InetAddress,int,javax.jmdns.impl.DNSOutgoing)
 javax.jmdns.impl.DNSRecord$Service:
-    763:770:javax.jmdns.impl.DNSOutgoing addAnswer(javax.jmdns.impl.JmDNSImpl,javax.jmdns.impl.DNSIncoming,java.net.InetAddress,int,javax.jmdns.impl.DNSOutgoing)
+    795:802:javax.jmdns.impl.DNSOutgoing addAnswer(javax.jmdns.impl.JmDNSImpl,javax.jmdns.impl.DNSIncoming,java.net.InetAddress,int,javax.jmdns.impl.DNSOutgoing)
 javax.jmdns.impl.DNSRecord$Text:
-    572:572:javax.jmdns.impl.DNSOutgoing addAnswer(javax.jmdns.impl.JmDNSImpl,javax.jmdns.impl.DNSIncoming,java.net.InetAddress,int,javax.jmdns.impl.DNSOutgoing)
+    601:601:javax.jmdns.impl.DNSOutgoing addAnswer(javax.jmdns.impl.JmDNSImpl,javax.jmdns.impl.DNSIncoming,java.net.InetAddress,int,javax.jmdns.impl.DNSOutgoing)
 javax.jmdns.impl.DNSStatefulObject:
     public abstract javax.jmdns.impl.JmDNSImpl getDns()
     public abstract void associateWithTask(javax.jmdns.impl.tasks.DNSTask,javax.jmdns.impl.constants.DNSState)
@@ -136,8 +138,8 @@ javax.jmdns.impl.DNSTaskStarter$Factory:
     71:72:public static void setClassDelegate(javax.jmdns.impl.DNSTaskStarter$Factory$ClassDelegate)
     81:81:public static javax.jmdns.impl.DNSTaskStarter$Factory$ClassDelegate classDelegate()
 javax.jmdns.impl.HostInfo:
-    276:276:public javax.jmdns.impl.JmDNSImpl getDns()
-    356:356:public boolean isAnnouncing()
+    285:285:public javax.jmdns.impl.JmDNSImpl getDns()
+    365:365:public boolean isAnnouncing()
 javax.jmdns.impl.HostInfo$HostInfoState:
     private static final long serialVersionUID
 javax.jmdns.impl.JmDNSImpl:
@@ -183,6 +185,9 @@ javax.jmdns.impl.ListenerStatus:
     public static final boolean ASYNCHONEOUS
 javax.jmdns.impl.ListenerStatus$ServiceTypeListenerStatus:
     165:167:public ListenerStatus$ServiceTypeListenerStatus(javax.jmdns.ServiceTypeListener,boolean)
+javax.jmdns.impl.NetworkTopologyDiscoveryImpl:
+    120:120:public void lockInetAddress(java.net.InetAddress)
+    129:129:public void unlockInetAddress(java.net.InetAddress)
 javax.jmdns.impl.NetworkTopologyEventImpl
 javax.jmdns.impl.ServiceEventImpl:
     private static final long serialVersionUID
@@ -292,9 +297,9 @@ org.tunesremote.BaseBrowseActivity:
     public static final int RESULT_SWITCH_TO_PLAYLISTS
 org.tunesremote.ControlActivity:
     private static final int DIALOG_SPEAKERS
-    public static final java.lang.String EULA
     public static final int VIBRATE_LEN
     public static final long CACHE_TIME
+    public static final java.lang.String EULA
 org.tunesremote.FadeView:
     protected static final long FADE_DELAY
     public static final long DOUBLE_TIME
@@ -326,6 +331,8 @@ org.tunesremote.SearchActivity:
 org.tunesremote.daap.Library:
     public static final int RESULT_INCREMENT
     133:161:public void readAlbums(org.tunesremote.TagListener)
+    231:237:public void readRadioPlaylists(org.tunesremote.PlaylistListener)
+    240:261:public void readRadioPlaylist(java.lang.String,org.tunesremote.TagListener)
 org.tunesremote.daap.PairingServer:
     public static final int PORT
 org.tunesremote.daap.RequestHelper:
@@ -336,7 +343,15 @@ org.tunesremote.daap.RequestHelper:
 org.tunesremote.daap.Response:
     private static final long serialVersionUID
 org.tunesremote.daap.Session:
-    330:339:public void listContentCodes()
+    350:351:public void controlVisualiser(boolean)
+    355:356:public void controlFullscreen(boolean)
+    362:371:public void listContentCodes()
+    375:375:public boolean supportsRadio()
+    379:379:public java.lang.String getRadioDatabaseName()
+    383:403:public java.util.List getRadioGenres()
+    409:416:public void playSpec(long,long,long)
+    419:420:public void controlPlayRadio(long,long)
+org.tunesremote.daap.Session$10
 org.tunesremote.daap.Status:
     public static final int REPEAT_OFF
     public static final int REPEAT_SINGLE
@@ -351,9 +366,13 @@ org.tunesremote.daap.Status:
     public static final int UPDATE_COVER
     public static final int UPDATE_RATING
     private static final int MAX_FAILURES
-    574:574:public java.lang.String getTrackGenre()
-    578:578:public long getContainerItemId()
-    582:582:public long getPlaylistId()
+    597:597:public java.lang.String getTrackGenre()
+    601:601:public long getContainerItemId()
+    605:605:public long getDatabaseId()
+    609:609:public long getPlaylistId()
+    625:625:public boolean isVisualizerOn()
+    629:629:public boolean isFullscreen()
+    633:633:public boolean isGeniusSelectable()
 org.tunesremote.util.PairingDatabase:
     public static final java.lang.String DB_NAME
     public static final int DB_VERSION

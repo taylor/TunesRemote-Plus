@@ -32,6 +32,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.database.Cursor;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
@@ -53,8 +54,8 @@ public class BackendService extends Service {
 
    public Session getSession() {
       // make sure we have an active session
-      // create from last-known connection if needed
 
+      // FIRST, try and create the session from the last known connection
       if (session == null) {
          // try finding last library opened by user
          this.lastaddress = prefs.getString(PREF_LASTADDR, null);
@@ -64,6 +65,28 @@ public class BackendService extends Service {
                this.setLibrary(this.lastaddress, null, null);
             } catch (Exception e) {
                Log.w(TAG, "getSession:" + e.getMessage());
+            }
+         }
+
+         // SECOND, if session is still NULL try and loop through all known servers stopping at the first one connected
+         if (session == null) {
+            Cursor cursor = pairdb.fetchAllServers();
+            try {
+               cursor.moveToFirst();
+               while (cursor.isAfterLast() == false) {
+                  try {
+                     final String address = cursor.getString(cursor.getColumnIndexOrThrow(PairingDatabase.FIELD_PAIR_ADDRESS));
+                     final String library = cursor.getString(cursor.getColumnIndexOrThrow(PairingDatabase.FIELD_PAIR_LIBRARY));
+                     final String code = cursor.getString(cursor.getColumnIndexOrThrow(PairingDatabase.FIELD_PAIR_GUID));
+                     this.setLibrary(address, library, code);
+                     break;
+                  } catch (Exception e) {
+                     Log.w(TAG, "getSession Failed trying next server:" + e.getMessage());
+                  }
+                  cursor.moveToNext();
+               }
+            } finally {
+               cursor.close();
             }
          }
       }

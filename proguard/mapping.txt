@@ -270,6 +270,7 @@ javax.jmdns.impl.DNSRecord -> a.a.a.u:
     int getTTL() -> p
 javax.jmdns.impl.DNSRecord$Address -> a.a.a.v:
     java.net.InetAddress _addr -> c
+    boolean sameName(javax.jmdns.impl.DNSRecord) -> d
     boolean sameValue(javax.jmdns.impl.DNSRecord) -> a
     boolean isSingleValued() -> m
     java.net.InetAddress getAddress() -> q
@@ -435,6 +436,7 @@ javax.jmdns.impl.HostInfo -> a.a.a.aj:
     java.net.Inet4Address getInet4Address() -> c
     java.net.Inet6Address getInet6Address() -> d
     java.net.NetworkInterface getInterface() -> e
+    boolean conflictWithRecord(javax.jmdns.impl.DNSRecord$Address) -> a
     java.lang.String incrementHostName() -> f
     boolean shouldIgnorePacket(java.net.DatagramPacket) -> a
     javax.jmdns.impl.DNSRecord$Address getDNSAddressRecord$5cb90664(javax.jmdns.impl.constants.DNSRecordType,boolean) -> a
@@ -1140,8 +1142,11 @@ org.tunesremote.BackendService -> org.tunesremote.BackendService:
 org.tunesremote.BackendService$BackendBinder -> org.tunesremote.q:
     org.tunesremote.BackendService this$0 -> a
 org.tunesremote.BaseBrowseActivity -> org.tunesremote.BaseBrowseActivity:
+    android.content.SharedPreferences prefs -> a
+    void onCreate(android.os.Bundle) -> onCreate
     void onActivityResult(int,int,android.content.Intent) -> onActivityResult
     boolean onCreateOptionsMenu(android.view.Menu) -> onCreateOptionsMenu
+    void onResume() -> onResume
 org.tunesremote.BaseBrowseActivity$1 -> org.tunesremote.r:
     org.tunesremote.BaseBrowseActivity this$0 -> a
     boolean onMenuItemClick(android.view.MenuItem) -> onMenuItemClick
@@ -1158,55 +1163,54 @@ org.tunesremote.ControlActivity -> org.tunesremote.ControlActivity:
     org.tunesremote.BackendService backend -> b
     org.tunesremote.daap.Session session -> c
     org.tunesremote.daap.Status status -> d
-    boolean dragging -> e
-    java.lang.String showingAlbumId -> f
-    android.content.ServiceConnection connection -> B
-    android.os.Handler statusUpdate -> g
-    android.telephony.PhoneStateListener psListener -> C
-    android.os.Handler doubleTapHandler -> D
-    android.widget.RatingBar ratingBar -> h
-    android.widget.TextView trackName -> i
-    android.widget.TextView trackArtist -> j
-    android.widget.TextView trackAlbum -> k
-    android.widget.TextView seekPosition -> l
-    android.widget.TextView seekRemain -> m
-    android.widget.SeekBar seekBar -> n
-    android.widget.ImageSwitcher cover -> o
-    android.widget.ImageButton controlPrev -> E
-    android.widget.ImageButton controlPause -> p
-    android.widget.ImageButton controlNext -> F
-    java.text.SimpleDateFormat format -> G
-    java.util.Date date -> H
-    android.view.View volume -> I
-    android.widget.ProgressBar volumeBar -> J
-    android.widget.Toast volumeToast -> K
-    org.tunesremote.FadeView fadeview -> q
-    android.widget.Toast shuffleToast -> r
-    android.widget.Toast repeatToast -> s
-    boolean stayConnected -> L
-    boolean fadeDetails -> M
-    boolean fadeUpNew -> t
-    boolean vibrate -> u
-    boolean autoPause -> v
-    android.os.Vibrator vibrator -> w
+    java.lang.String showingAlbumId -> e
+    android.widget.RatingBar ratingBar -> f
+    android.widget.TextView trackName -> g
+    android.widget.TextView trackArtist -> h
+    android.widget.TextView trackAlbum -> i
+    android.widget.TextView seekPosition -> j
+    android.widget.TextView seekRemain -> k
+    android.widget.SeekBar seekBar -> l
+    android.widget.ImageView coverImage -> m
+    android.widget.ImageButton controlPrev -> B
+    android.widget.ImageButton controlPause -> n
+    android.widget.ImageButton controlNext -> C
+    android.view.View volume -> D
+    android.widget.ProgressBar volumeBar -> E
+    android.widget.Toast volumeToast -> F
+    org.tunesremote.FadeView fadeview -> o
+    android.widget.Toast shuffleToast -> p
+    android.widget.Toast repeatToast -> q
+    android.view.MenuItem repeat -> G
+    android.view.MenuItem shuffle -> H
+    android.view.MenuItem speakersMenuItem -> I
+    boolean dragging -> r
+    boolean agreed -> s
+    boolean autoPause -> t
+    boolean stayConnected -> J
+    boolean fadeDetails -> K
+    boolean fadeUpNew -> u
+    boolean vibrate -> v
+    boolean cropImage -> L
+    boolean fullScreen -> M
+    boolean ignoreNextTick -> w
+    android.os.Vibrator vibrator -> x
     android.content.SharedPreferences prefs -> N
-    boolean agreed -> x
-    boolean ignoreNextTick -> y
+    long cachedTime -> O
+    long cachedVolume -> y
     java.util.List speakers -> z
-    org.tunesremote.ControlActivity$SpeakersAdapter speakersAdapter -> O
-    long cachedTime -> P
-    long cachedVolume -> A
-    android.view.MenuItem repeat -> Q
-    android.view.MenuItem shuffle -> R
-    android.view.MenuItem speakersMenuItem -> S
+    org.tunesremote.ControlActivity$SpeakersAdapter speakersAdapter -> P
+    android.content.ServiceConnection connection -> Q
+    android.os.Handler statusUpdate -> A
+    android.telephony.PhoneStateListener psListener -> R
+    android.os.Handler doubleTapHandler -> S
     void StartNowPlaying() -> a
-    java.lang.String formatTime(int) -> a
-    android.view.View makeView() -> makeView
     void onStart() -> onStart
     void onStop() -> onStop
     void onDestroy() -> onDestroy
     void onActivityResult(int,int,android.content.Intent) -> onActivityResult
     android.app.Dialog onCreateDialog(int) -> onCreateDialog
+    void onResume() -> onResume
     void onCreate(android.os.Bundle) -> onCreate
     void incrementVolume(long) -> a
     void checkCachedVolume() -> b
@@ -1443,9 +1447,10 @@ org.tunesremote.NowPlayingActivity -> org.tunesremote.NowPlayingActivity:
     org.tunesremote.daap.Session session -> c
     org.tunesremote.daap.Library library -> d
     org.tunesremote.NowPlayingActivity$NowPlayingAdapter adapter -> e
+    android.content.SharedPreferences prefs -> i
     java.lang.String albumid -> f
     boolean iTunes -> g
-    android.content.ServiceConnection connection -> i
+    android.content.ServiceConnection connection -> j
     android.os.Handler resultsUpdated -> h
     void refreshNowPlaying() -> a
     void clearCurrentCue() -> b
@@ -1453,6 +1458,7 @@ org.tunesremote.NowPlayingActivity -> org.tunesremote.NowPlayingActivity:
     void onStop() -> onStop
     void onCreate(android.os.Bundle) -> onCreate
     boolean onCreateOptionsMenu(android.view.Menu) -> onCreateOptionsMenu
+    void onResume() -> onResume
 org.tunesremote.NowPlayingActivity$1 -> org.tunesremote.be:
     org.tunesremote.NowPlayingActivity this$0 -> a
     void onServiceConnected(android.content.ComponentName,android.os.IBinder) -> onServiceConnected
@@ -1471,10 +1477,8 @@ org.tunesremote.NowPlayingActivity$5 -> org.tunesremote.bi:
     boolean onMenuItemClick(android.view.MenuItem) -> onMenuItemClick
 org.tunesremote.NowPlayingActivity$NowPlayingAdapter -> org.tunesremote.bj:
     android.view.LayoutInflater inflater -> b
-    java.text.SimpleDateFormat format -> c
-    java.util.Date date -> d
     java.util.List results -> a
-    org.tunesremote.NowPlayingActivity this$0 -> e
+    org.tunesremote.NowPlayingActivity this$0 -> c
     int getCount() -> getCount
     java.lang.Object getItem(int) -> getItem
     long getItemId(int) -> getItemId
@@ -1702,9 +1706,7 @@ org.tunesremote.TracksActivity$9 -> org.tunesremote.cr:
 org.tunesremote.TracksActivity$TracksAdapter -> org.tunesremote.cs:
     android.view.LayoutInflater inflater -> b
     java.util.List results -> a
-    java.text.SimpleDateFormat format -> c
-    java.util.Date date -> d
-    org.tunesremote.TracksActivity this$0 -> e
+    org.tunesremote.TracksActivity this$0 -> c
     void foundTag$535923e9(org.tunesremote.daap.Response) -> a
     void searchDone() -> a
     java.lang.Object getItem(int) -> getItem
@@ -1767,6 +1769,7 @@ org.tunesremote.daap.Response -> org.tunesremote.a.e:
     java.lang.String getString(java.lang.String) -> a
     java.math.BigInteger getNumber(java.lang.String) -> b
     java.util.List findArray(java.lang.String) -> c
+    java.lang.String convertTime(long) -> a
 org.tunesremote.daap.ResponseParser -> org.tunesremote.a.f:
     java.util.regex.Pattern BRANCHES -> a
     java.util.regex.Pattern STRINGS -> b
@@ -1782,24 +1785,26 @@ org.tunesremote.daap.Session -> org.tunesremote.a.g:
     org.tunesremote.daap.Status singleton -> f
     java.lang.String sessionId -> a
     long databaseId -> b
-    long musicId -> g
+    long radioDatabaseId -> g
+    long musicId -> h
     long libraryId -> c
-    java.lang.String databasePersistentId -> h
+    java.lang.String databasePersistentId -> i
     java.util.List playlists -> d
     org.tunesremote.daap.Status singletonStatus(android.os.Handler) -> a
     java.lang.String getRequestBase() -> a
     void purgeAllStatus() -> b
     void notifyStatus() -> c
     void logout() -> d
-    void controlPlayPause() -> e
-    void controlNext() -> f
-    void controlPrev() -> g
+    void controlPause() -> e
+    void controlPlay() -> f
+    void controlNext() -> g
+    void controlPrev() -> h
     void controlVolume(long) -> a
     void controlProgress(int) -> a
     void controlShuffle(int) -> b
     void controlRepeat(int) -> c
     void controlRating(long,long) -> a
-    void controlClearCue() -> h
+    void controlClearCue() -> i
     void controlPlayAlbum(java.lang.String,int) -> a
     void controlQueueAlbum(java.lang.String) -> a
     void controlPlayArtist(java.lang.String,int) -> b
@@ -1875,22 +1880,26 @@ org.tunesremote.daap.Status -> org.tunesremote.a.r:
     int repeatStatus -> d
     int shuffleStatus -> e
     int playStatus -> f
+    boolean visualizer -> i
+    boolean fullscreen -> j
+    boolean geniusSelectable -> k
     java.util.concurrent.atomic.AtomicBoolean destroyThread -> g
-    long rating -> i
-    long playlistId -> j
-    long containerItemId -> k
-    long trackId -> l
-    java.lang.String trackName -> m
-    java.lang.String trackArtist -> n
-    java.lang.String trackAlbum -> o
-    long progressTotal -> p
-    long progressRemain -> q
-    org.tunesremote.daap.Session session -> r
-    android.os.Handler update -> s
-    java.util.concurrent.atomic.AtomicInteger failures -> t
-    long revision -> u
-    java.lang.Thread progress -> v
-    java.lang.Thread keepalive -> w
+    long rating -> l
+    long databaseId -> m
+    long playlistId -> n
+    long containerItemId -> o
+    long trackId -> p
+    java.lang.String trackName -> q
+    java.lang.String trackArtist -> r
+    java.lang.String trackAlbum -> s
+    long progressTotal -> t
+    long progressRemain -> u
+    org.tunesremote.daap.Session session -> v
+    android.os.Handler update -> w
+    java.util.concurrent.atomic.AtomicInteger failures -> x
+    long revision -> y
+    java.lang.Thread progress -> z
+    java.lang.Thread keepalive -> A
     void updateHandler(android.os.Handler) -> a
     void destroy() -> a
     void fetchUpdate() -> b
@@ -1920,7 +1929,8 @@ org.tunesremote.daap.Status -> org.tunesremote.a.r:
     long access$300(org.tunesremote.daap.Status) -> d
     java.util.concurrent.atomic.AtomicInteger access$400(org.tunesremote.daap.Status) -> e
     long access$500(org.tunesremote.daap.Status) -> f
-    long access$602(org.tunesremote.daap.Status,long) -> b
+    long access$600(org.tunesremote.daap.Status) -> g
+    long access$702(org.tunesremote.daap.Status,long) -> b
 org.tunesremote.daap.Status$1 -> org.tunesremote.a.s:
     org.tunesremote.daap.Status this$0 -> a
     void run() -> run
