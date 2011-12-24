@@ -502,7 +502,7 @@ javax.jmdns.impl.JmDNSImpl -> a.a.a.am:
     javax.jmdns.impl.DNSCache getCache() -> q
     java.lang.String getName() -> r
     javax.jmdns.impl.HostInfo getLocalHost() -> s
-    java.net.InetAddress getInterface() -> t
+    java.net.InetAddress getInetAddress() -> t
     javax.jmdns.ServiceInfo getServiceInfo(java.lang.String,java.lang.String) -> a
     javax.jmdns.impl.ServiceInfoImpl resolveServiceInfo(java.lang.String,java.lang.String,java.lang.String,boolean) -> a
     javax.jmdns.impl.ServiceInfoImpl getServiceInfoFromCache(java.lang.String,java.lang.String,java.lang.String,boolean) -> b
@@ -1949,7 +1949,7 @@ org.tunesremote.daap.Status$5 -> org.tunesremote.a.w:
 org.tunesremote.util.PairingDatabase -> org.tunesremote.util.a:
     void onCreate(android.database.sqlite.SQLiteDatabase) -> onCreate
     void onUpgrade(android.database.sqlite.SQLiteDatabase,int,int) -> onUpgrade
-    java.lang.String findCode(java.lang.String,java.lang.String) -> b
+    java.lang.String findCode(java.lang.String,java.lang.String) -> a
     java.lang.String findCodeLibrary(java.lang.String) -> a
     java.lang.String findCodeAddress(java.lang.String) -> b
     android.database.Cursor fetchServer(long) -> a
@@ -1957,7 +1957,7 @@ org.tunesremote.util.PairingDatabase -> org.tunesremote.util.a:
     void deleteAll() -> b
     void insertCode(java.lang.String,java.lang.String,java.lang.String) -> a
     boolean libraryExists(java.lang.String) -> c
-    void updateAddress(java.lang.String,java.lang.String) -> a
+    void updateAddressAndCode(java.lang.String,java.lang.String,java.lang.String) -> b
 org.tunesremote.util.RecentProvider -> org.tunesremote.util.RecentProvider:
 org.tunesremote.util.ThreadExecutor -> org.tunesremote.util.b:
     java.util.concurrent.BlockingQueue sWorkQueue -> a

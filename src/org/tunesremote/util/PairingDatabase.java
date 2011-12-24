@@ -162,15 +162,15 @@ public class PairingDatabase extends SQLiteOpenHelper {
 
    }
 
-   public void updateAddress(String library, String address) {
+   public void updateAddressAndCode(String library, String address, String code) {
       SQLiteDatabase db = this.getWritableDatabase();
 
       ContentValues values = new ContentValues();
       values.put(FIELD_PAIR_ADDRESS, address);
+      values.put(FIELD_PAIR_GUID, code);
 
-      Log.d(TAG, String.format("updateAddress library=%s, address=%s", library, address));
+      Log.d(TAG, String.format("updateAddress library=%s, address=%s, code=%s", library, address, code));
       db.update(TABLE_PAIR, values, FIELD_PAIR_LIBRARY + " = ?", new String[] { library });
-
    }
 
 }

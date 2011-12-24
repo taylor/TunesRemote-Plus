@@ -121,7 +121,7 @@ public class BackendService extends Service {
          if (!pairdb.libraryExists(library)) {
             pairdb.insertCode(address, library, code);
          } else {
-            pairdb.updateAddress(library, address);
+            pairdb.updateAddressAndCode(library, address, code);
          }
       }
 

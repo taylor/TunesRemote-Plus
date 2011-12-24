@@ -123,8 +123,10 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, DNSStat
     * @param text
     * @see javax.jmdns.ServiceInfo#create(String, String, int, int, int, String)
     */
-   public ServiceInfoImpl(String type, String name, String subtype, int port, int weight, int priority, boolean persistent, String text) {
-      this(ServiceInfoImpl.decodeQualifiedNameMap(type, name, subtype), port, weight, priority, persistent, (byte[]) null);
+   public ServiceInfoImpl(String type, String name, String subtype, int port, int weight, int priority,
+            boolean persistent, String text) {
+      this(ServiceInfoImpl.decodeQualifiedNameMap(type, name, subtype), port, weight, priority, persistent,
+               (byte[]) null);
       _server = text;
       try {
          ByteArrayOutputStream out = new ByteArrayOutputStream(text.length());
@@ -146,8 +148,10 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, DNSStat
     * @param props
     * @see javax.jmdns.ServiceInfo#create(String, String, int, int, int, Map)
     */
-   public ServiceInfoImpl(String type, String name, String subtype, int port, int weight, int priority, boolean persistent, Map<String, ?> props) {
-      this(ServiceInfoImpl.decodeQualifiedNameMap(type, name, subtype), port, weight, priority, persistent, textFromProperties(props));
+   public ServiceInfoImpl(String type, String name, String subtype, int port, int weight, int priority,
+            boolean persistent, Map<String, ?> props) {
+      this(ServiceInfoImpl.decodeQualifiedNameMap(type, name, subtype), port, weight, priority, persistent,
+               textFromProperties(props));
    }
 
    /**
@@ -161,15 +165,18 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, DNSStat
     * @param text
     * @see javax.jmdns.ServiceInfo#create(String, String, int, int, int, byte[])
     */
-   public ServiceInfoImpl(String type, String name, String subtype, int port, int weight, int priority, boolean persistent, byte text[]) {
+   public ServiceInfoImpl(String type, String name, String subtype, int port, int weight, int priority,
+            boolean persistent, byte text[]) {
       this(ServiceInfoImpl.decodeQualifiedNameMap(type, name, subtype), port, weight, priority, persistent, text);
    }
 
-   public ServiceInfoImpl(Map<Fields, String> qualifiedNameMap, int port, int weight, int priority, boolean persistent, Map<String, ?> props) {
+   public ServiceInfoImpl(Map<Fields, String> qualifiedNameMap, int port, int weight, int priority, boolean persistent,
+            Map<String, ?> props) {
       this(qualifiedNameMap, port, weight, priority, persistent, textFromProperties(props));
    }
 
-   ServiceInfoImpl(Map<Fields, String> qualifiedNameMap, int port, int weight, int priority, boolean persistent, String text) {
+   ServiceInfoImpl(Map<Fields, String> qualifiedNameMap, int port, int weight, int priority, boolean persistent,
+            String text) {
       this(qualifiedNameMap, port, weight, priority, persistent, (byte[]) null);
       _server = text;
       try {
@@ -181,7 +188,8 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, DNSStat
       }
    }
 
-   ServiceInfoImpl(Map<Fields, String> qualifiedNameMap, int port, int weight, int priority, boolean persistent, byte text[]) {
+   ServiceInfoImpl(Map<Fields, String> qualifiedNameMap, int port, int weight, int priority, boolean persistent,
+            byte text[]) {
       Map<Fields, String> map = ServiceInfoImpl.checkQualifiedNameMap(qualifiedNameMap);
 
       this._domain = map.get(Fields.Domain);
@@ -286,8 +294,14 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, DNSStat
             index = aType.indexOf("_" + protocol.toLowerCase() + ".");
             int start = index + protocol.length() + 2;
             int end = aType.length() - (aType.endsWith(".") ? 1 : 0);
-            domain = casePreservedType.substring(start, end);
-            application = casePreservedType.substring(0, index - 1);
+            if (end > start) {
+               domain = casePreservedType.substring(start, end);
+            }
+            if (index > 0) {
+               application = casePreservedType.substring(0, index - 1);
+            } else {
+               application = "";
+            }
          }
          index = application.toLowerCase().indexOf("._sub");
          if (index > 0) {
@@ -325,7 +339,8 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, DNSStat
       protocol = removeSeparators(protocol);
       checkedQualifiedNameMap.put(Fields.Protocol, protocol);
       // Application
-      String application = (qualifiedNameMap.containsKey(Fields.Application) ? qualifiedNameMap.get(Fields.Application) : "");
+      String application = (qualifiedNameMap.containsKey(Fields.Application) ? qualifiedNameMap.get(Fields.Application)
+               : "");
       if ((application == null) || (application.length() == 0)) {
          application = "";
       }
@@ -377,7 +392,8 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, DNSStat
       String domain = this.getDomain();
       String protocol = this.getProtocol();
       String application = this.getApplication();
-      return (application.length() > 0 ? "_" + application + "." : "") + (protocol.length() > 0 ? "_" + protocol + "." : "") + domain + ".";
+      return (application.length() > 0 ? "_" + application + "." : "")
+               + (protocol.length() > 0 ? "_" + protocol + "." : "") + domain + ".";
    }
 
    /**
@@ -431,9 +447,10 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, DNSStat
       String application = this.getApplication();
       String instance = this.getName();
       // String subtype = this.getSubtype();
-      // return (instance.length() > 0 ? instance + "." : "") + (application.length() > 0 ? "_" + application + "." :
-      // "") + (protocol.length() > 0 ? "_" + protocol + (subtype.length() > 0 ? ",_" + subtype.toLowerCase() + "." :
-      // ".") : "") + domain
+      // return (instance.length() > 0 ? instance + "." : "") +
+      // (application.length() > 0 ? "_" + application + "." : "") +
+      // (protocol.length() > 0 ? "_" + protocol + (subtype.length() > 0 ? ",_"
+      // + subtype.toLowerCase() + "." : ".") : "") + domain
       // + ".";
       return (instance.length() > 0 ? instance + "." : "") + (application.length() > 0 ? "_" + application + "." : "")
                + (protocol.length() > 0 ? "_" + protocol + "." : "") + domain + ".";
@@ -909,14 +926,16 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, DNSStat
                if (serverChanged) {
                   _ipv4Addresses.clear();
                   _ipv6Addresses.clear();
-                  for (DNSEntry entry : dnsCache.getDNSEntryList(_server, DNSRecordType.TYPE_A, DNSRecordClass.CLASS_IN)) {
+                  for (DNSEntry entry : dnsCache
+                           .getDNSEntryList(_server, DNSRecordType.TYPE_A, DNSRecordClass.CLASS_IN)) {
                      this.updateRecord(dnsCache, now, entry);
                   }
-                  for (DNSEntry entry : dnsCache.getDNSEntryList(_server, DNSRecordType.TYPE_AAAA, DNSRecordClass.CLASS_IN)) {
+                  for (DNSEntry entry : dnsCache.getDNSEntryList(_server, DNSRecordType.TYPE_AAAA,
+                           DNSRecordClass.CLASS_IN)) {
                      this.updateRecord(dnsCache, now, entry);
                   }
-                  // We do not want to trigger the listener in this case as it will be triggered if the address
-                  // resolves.
+                  // We do not want to trigger the listener in this case as it
+                  // will be triggered if the address resolves.
                } else {
                   serviceUpdated = true;
                }
@@ -926,6 +945,7 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, DNSStat
             if (rec.getName().equalsIgnoreCase(this.getQualifiedName())) {
                DNSRecord.Text txt = (DNSRecord.Text) rec;
                _text = txt.getText();
+               _props = null; // set it null for apply update text data
                serviceUpdated = true;
             }
             break;
@@ -946,7 +966,8 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, DNSStat
                dns.handleServiceResolved(event);
             }
          }
-         // This is done, to notify the wait loop in method JmDNS.waitForInfoData(ServiceInfo info, int timeout);
+         // This is done, to notify the wait loop in method
+         // JmDNS.waitForInfoData(ServiceInfo info, int timeout);
          synchronized (this) {
             this.notifyAll();
          }
@@ -955,14 +976,16 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, DNSStat
 
    /**
     * Returns true if the service info is filled with data.
-    * @return <code>true</code> if the service info has data, <code>false</code> otherwise.
+    * @return <code>true</code> if the service info has data, <code>false</code>
+    *         otherwise.
     */
 
    @Override
    public synchronized boolean hasData() {
-      return this.getServer() != null && this.hasInetAddress() && this.getTextBytes() != null && this.getTextBytes().length > 0;
-      // return this.getServer() != null && (this.getAddress() != null || (this.getTextBytes() != null &&
-      // this.getTextBytes().length > 0));
+      return this.getServer() != null && this.hasInetAddress() && this.getTextBytes() != null
+               && this.getTextBytes().length > 0;
+      // return this.getServer() != null && (this.getAddress() != null ||
+      // (this.getTextBytes() != null && this.getTextBytes().length > 0));
    }
 
    private final boolean hasInetAddress() {
@@ -1155,7 +1178,8 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, DNSStat
 
    @Override
    public ServiceInfoImpl clone() {
-      ServiceInfoImpl serviceInfo = new ServiceInfoImpl(this.getQualifiedNameMap(), _port, _weight, _priority, _persistent, _text);
+      ServiceInfoImpl serviceInfo = new ServiceInfoImpl(this.getQualifiedNameMap(), _port, _weight, _priority,
+               _persistent, _text);
       Inet6Address[] ipv6Addresses = this.getInet6Addresses();
       for (Inet6Address address : ipv6Addresses) {
          serviceInfo._ipv6Addresses.add(address);
@@ -1216,10 +1240,13 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, DNSStat
    public Collection<DNSRecord> answers(boolean unique, int ttl, HostInfo localHost) {
       List<DNSRecord> list = new ArrayList<DNSRecord>();
       if (this.getSubtype().length() > 0) {
-         list.add(new Pointer(this.getTypeWithSubtype(), DNSRecordClass.CLASS_IN, DNSRecordClass.NOT_UNIQUE, ttl, this.getQualifiedName()));
+         list.add(new Pointer(this.getTypeWithSubtype(), DNSRecordClass.CLASS_IN, DNSRecordClass.NOT_UNIQUE, ttl, this
+                  .getQualifiedName()));
       }
-      list.add(new Pointer(this.getType(), DNSRecordClass.CLASS_IN, DNSRecordClass.NOT_UNIQUE, ttl, this.getQualifiedName()));
-      list.add(new Service(this.getQualifiedName(), DNSRecordClass.CLASS_IN, unique, ttl, _priority, _weight, _port, localHost.getName()));
+      list.add(new Pointer(this.getType(), DNSRecordClass.CLASS_IN, DNSRecordClass.NOT_UNIQUE, ttl, this
+               .getQualifiedName()));
+      list.add(new Service(this.getQualifiedName(), DNSRecordClass.CLASS_IN, unique, ttl, _priority, _weight, _port,
+               localHost.getName()));
       list.add(new Text(this.getQualifiedName(), DNSRecordClass.CLASS_IN, unique, ttl, this.getTextBytes()));
       return list;
    }
@@ -1282,7 +1309,8 @@ public class ServiceInfoImpl extends ServiceInfo implements DNSListener, DNSStat
                }
                byte data[] = out2.toByteArray();
                if (data.length > 255) {
-                  throw new IOException("Cannot have individual values larger that 255 chars. Offending value: " + key + (val != null ? "" : "=" + val));
+                  throw new IOException("Cannot have individual values larger that 255 chars. Offending value: " + key
+                           + (val != null ? "" : "=" + val));
                }
                out.write((byte) data.length);
                out.write(data, 0, data.length);
